@@ -1,0 +1,32 @@
+/* LoginPage layout */
+.login-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Left panel — background image, left 60% of viewport */
+.login-page__bg {
+  flex: 0 0 60%;
+  /* contain keeps the full image visible; padding gives ~12% breathing room on each side */
+  background-image: url("/eye-1.png");
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* ~12% horizontal padding so image never touches the panel edges */
+  padding: 0 12%;
+  background-origin: content-box;
+  background-color: var(--bg, #fff);
+}
+
+/* Right panel — card area, right 40% of viewport */
+.login-page__panel {
+  flex: 0 0 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--bg, #fff);
+  border-left: 1px solid var(--border, #e5e4e7);
+}

@@ -1,0 +1,105 @@
+/* LoginCard styles */
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  border: 1px solid var(--border, #e5e4e7);
+  box-shadow: var(--shadow, rgba(0,0,0,0.1) 0 10px 15px -3px, rgba(0,0,0,0.05) 0 4px 6px -2px);
+  background-color: var(--bg, #fff);
+}
+
+.login-card__body {
+  padding: 2.5rem 2rem;
+}
+
+.login-card__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  color: var(--text-h, #08060d);
+}
+
+.login-card__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text, #6b6375);
+  margin-bottom: 0.375rem;
+  display: block;
+}
+
+.login-card__input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  background-color: var(--bg, #fff);
+  color: var(--text-h, #08060d);
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-card__input:focus {
+  outline: none;
+  border-color: var(--accent, #aa3bff);
+  box-shadow: 0 0 0 3px var(--accent-bg, rgba(170, 59, 255, 0.1));
+}
+
+.login-card__input--error {
+  border-color: #dc3545;
+}
+
+.login-card__input--error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+.login-card__input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-card__field {
+  margin-bottom: 1.25rem;
+}
+
+.login-card__field--last {
+  margin-bottom: 1rem;
+}
+
+.login-card__error {
+  font-size: 0.85rem;
+  color: #dc3545;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(220, 53, 69, 0.08);
+  border-radius: 6px;
+  border-left: 3px solid #dc3545;
+}
+
+.login-card__btn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent, #aa3bff);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.login-card__btn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.login-card__btn:active:not(:disabled) {
+  opacity: 0.75;
+}
+
+.login-card__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
