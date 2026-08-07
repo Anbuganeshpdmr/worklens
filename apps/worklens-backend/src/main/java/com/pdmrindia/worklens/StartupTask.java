@@ -1,9 +1,9 @@
 package com.pdmrindia.worklens;
 
-import com.pdmrindia.worklens.model.user.mapperDtos.NewUserDto;
-import com.pdmrindia.worklens.model.user.User;
-import com.pdmrindia.worklens.repository.UserRepo;
-import com.pdmrindia.worklens.service.UserService;
+import com.pdmrindia.worklens.module_user.mapperDtos.NewUserDto;
+import com.pdmrindia.worklens.module_user.User;
+import com.pdmrindia.worklens.module_user.UserRepo;
+import com.pdmrindia.worklens.module_user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
