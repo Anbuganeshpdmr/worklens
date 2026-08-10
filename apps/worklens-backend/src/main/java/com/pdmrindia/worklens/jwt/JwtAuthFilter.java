@@ -2,8 +2,8 @@ package com.pdmrindia.worklens.jwt;
 
 import jakarta.servlet.DispatcherType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pdmrindia.worklens.model.user.mapperDtos.LoginDto;
-import com.pdmrindia.worklens.model.user.User;
+import com.pdmrindia.worklens.module_user.mapperDtos.LoginDto;
+import com.pdmrindia.worklens.module_user.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
