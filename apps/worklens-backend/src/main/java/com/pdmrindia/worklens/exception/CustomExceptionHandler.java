@@ -47,4 +47,14 @@ public class CustomExceptionHandler {
         return new ErrorResponse(ex.getMessage());
     }
 
+    @ExceptionHandler({
+            RecordStatusException.DefaultStatusException.class,
+            RecordStatusException.NoDefaultStatusException.class,
+            RecordStatusException.DefaultStatusNotAllowedException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestExceptions(RuntimeException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
 }

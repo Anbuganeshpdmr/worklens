@@ -1,7 +1,7 @@
 package com.pdmrindia.worklens.module_record_status;
 
 import com.pdmrindia.worklens.module_record.Record;
-import com.pdmrindia.worklens.module_sprint.Status;
+import com.pdmrindia.worklens.module_status.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "record_statuses")
+@Table(
+        name = "record_statuses",
+        uniqueConstraints = @UniqueConstraint(columnNames = {
+                "record_name",
+                "status_id"
+        }))
 public class RecordStatus {
 
     @Id

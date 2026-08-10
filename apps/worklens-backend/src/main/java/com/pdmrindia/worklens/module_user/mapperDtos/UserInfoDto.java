@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UserInfoDto {
 
-    private String uuid;
+    private long id;
     private String name;
     private String emailId;
     private String empId;

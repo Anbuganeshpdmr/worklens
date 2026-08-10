@@ -12,7 +12,7 @@ public class UserInfoMapper {
     //  shall later add Profile-pic
     public UserInfoDto createSimpleUserInfo(User user){
         UserInfoDto userInfoDto = new UserInfoDto();
-        userInfoDto.setUuid(user.getUuid());
+        userInfoDto.setId(user.getId());
         userInfoDto.setName(user.getName());
         userInfoDto.setEmailId(user.getEmailId());
         userInfoDto.setEmpId(user.getEmpId());

@@ -1,4 +1,4 @@
-package com.pdmrindia.worklens.module_activity;
+package com.pdmrindia.worklens.module_status;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,15 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "activity_types")
-public class ActivityType {
+@Table(name = "statuses")
+public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    private String colorCode;
+    @Column(unique = true, nullable = false)
+    private String colourCode;
+
+
 }

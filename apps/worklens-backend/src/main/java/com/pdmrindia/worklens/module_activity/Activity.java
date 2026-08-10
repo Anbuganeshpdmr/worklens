@@ -1,5 +1,6 @@
 package com.pdmrindia.worklens.module_activity;
 
+import com.pdmrindia.worklens.module_activity_type.ActivityType;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
 import jakarta.persistence.*;
@@ -21,7 +22,11 @@ public class Activity {
 
     private String name;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_type_id")
     private ActivityType activityType;
+
     private String openProjectTicketId;
 
     @ManyToOne
