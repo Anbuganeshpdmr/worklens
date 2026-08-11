@@ -50,7 +50,10 @@ public class CustomExceptionHandler {
     @ExceptionHandler({
             RecordStatusException.DefaultStatusException.class,
             RecordStatusException.NoDefaultStatusException.class,
-            RecordStatusException.DefaultStatusNotAllowedException.class
+            RecordStatusException.DefaultStatusNotAllowedException.class,
+            RecordStatusException.RecordStatusMismatchException.class,
+            RecordStatusException.RecordStatusNotAllowedException.class,
+            ProjectException.ProjectNotFoundException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestExceptions(RuntimeException ex) {

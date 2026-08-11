@@ -18,7 +18,7 @@ public class RecordStatusController {
     private final RecordStatusService recordStatusService;
     private final RecordStatusDisplayDtoMapper recordStatusDisplayDtoMapper;
 
-    @GetMapping("/record/{recordName}")
+    @GetMapping("/records/{recordName}")
     public List<RecordStatusDisplayDto> getRecordStatus(@PathVariable("recordName") String recordName){
         Record record = Record.valueOf(recordName.toUpperCase());
         List<RecordStatus> recordStatusList = recordStatusService.getRecordStatusesByRecord(record);
@@ -26,7 +26,7 @@ public class RecordStatusController {
     }
 
     // validate All and correct 'RecordStatus' objects-IDs are loaded from client
-    @PutMapping("/record/{recordName}")
+    @PutMapping("/records/{recordName}")
     public List<RecordStatusDisplayDto> processRecordStatuses(@PathVariable("recordName") String recordName,
                                                               @RequestBody List<RecordStatusInputDto> recordStatusInputDtoList){
         Record record = Record.valueOf(recordName.toUpperCase());
@@ -35,6 +35,12 @@ public class RecordStatusController {
     }
 
     //  List of All Allowed status (RS)
+    @GetMapping("records/{recordName}/allowed")
+    public List<RecordStatusDisplayDto> getAllowedRecordStatus(@PathVariable("recordName") String recordName){
+        Record record = Record.valueOf(recordName.toUpperCase());
+        return recordStatusService.getAllowedRecordStatuses(record);
+    }
+
     //  Default status
 
 }

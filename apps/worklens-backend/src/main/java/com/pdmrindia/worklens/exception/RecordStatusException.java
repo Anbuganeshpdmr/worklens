@@ -19,4 +19,22 @@ public class RecordStatusException {
             super(message);
         }
     }
+
+    public static class NoSuchRecordStatusException extends RuntimeException{
+        public NoSuchRecordStatusException(String message){
+            super(message);
+        }
+    }
+
+    public static class RecordStatusNotAllowedException extends RuntimeException{
+        public RecordStatusNotAllowedException(String message){
+            super(message);
+        }
+    }
+
+    public static class RecordStatusMismatchException extends RuntimeException{
+        public RecordStatusMismatchException(String message){
+            super(message);
+        }
+    }
 }

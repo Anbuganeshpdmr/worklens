@@ -1,5 +1,6 @@
 package com.pdmrindia.worklens.module_sprint;
 
+import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
 import jakarta.persistence.*;
@@ -22,14 +23,16 @@ public class Sprint {
     @Column(nullable = false, unique = true)
     private String name;
 
-    private boolean isActive;
-
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     @OneToMany(mappedBy = "sprint")
     private List<SprintActivity> sprintActivities = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "record_status_id", nullable = false)
+    private RecordStatus recordStatus;
 
     @Override
     public boolean equals(Object o) {

@@ -2,6 +2,8 @@ package com.pdmrindia.worklens.module_record_status;
 
 import com.pdmrindia.worklens.exception.RecordStatusException;
 import com.pdmrindia.worklens.module_record.Record;
+import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
+import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDtoMapper;
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusInputDto;
 import com.pdmrindia.worklens.module_status.Status;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class RecordStatusService {
 
     private final RecordStatusRepo recordStatusRepo;
+    private final RecordStatusDisplayDtoMapper recordStatusDisplayDtoMapper;
 
     public void addRecordStatusForNewStatus(Status status){
         for(Record record: Record.values()){
@@ -68,6 +71,37 @@ public class RecordStatusService {
         }
         if(!filteredDefaultRecordStatusList.get(0).isAllowed()){
             throw new RecordStatusException.DefaultStatusNotAllowedException("Default Status should be allowed");
+        }
+    }
+
+    public RecordStatus getDefaultRecordStatus(Record record){
+        List<RecordStatus> recordStatusList = recordStatusRepo.findByRecord(record);
+        return  recordStatusList.stream()
+                .filter(RecordStatus::isDefault)
+                .findFirst()
+                .orElseThrow(()->new RecordStatusException.NoDefaultStatusException("No default status available"));
+
+    }
+
+    public List<RecordStatusDisplayDto> getAllowedRecordStatuses(Record record){
+        return recordStatusRepo.findByRecord(record)
+                .stream()
+                .filter(RecordStatus::isAllowed)
+                .map(recordStatusDisplayDtoMapper::getRecordStatusDisplayDto)
+                .toList();
+    }
+
+    public RecordStatus getRecordStatusById(int id){
+        return recordStatusRepo.findById(id)
+                .orElseThrow(()->new RecordStatusException.NoSuchRecordStatusException("No valid record status found"));
+    }
+
+    public void validateRecordStatusOfRecord(Record record, RecordStatus recordStatus){
+        if(recordStatus.getRecord()!=record){
+            throw new RecordStatusException.RecordStatusMismatchException("Record Mismatch");
+        }
+        if(!recordStatus.isAllowed()){
+            throw new RecordStatusException.RecordStatusNotAllowedException("Status Not Allowed");
         }
     }
 
