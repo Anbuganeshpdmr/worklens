@@ -36,7 +36,7 @@ public class ProjectService {
         RecordStatus updatedRecordStatus = recordStatusService.getRecordStatusById(projectDto.getSelectedRecordStatusId());
         recordStatusService.validateRecordStatusOfRecord(Record.PROJECT,updatedRecordStatus);
 
-        project.setRecordStatus(recordStatusService.getRecordStatusById(projectDto.getSelectedRecordStatusId()));
+        project.setRecordStatus(updatedRecordStatus);
         return projectRepo.save(project);
     }
 

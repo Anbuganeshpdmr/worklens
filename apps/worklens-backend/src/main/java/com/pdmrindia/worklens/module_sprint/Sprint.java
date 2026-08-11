@@ -3,10 +3,12 @@ package com.pdmrindia.worklens.module_sprint;
 import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
+import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,12 @@ public class Sprint {
     @ManyToOne
     @JoinColumn(name = "record_status_id", nullable = false)
     private RecordStatus recordStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", nullable = false)
+    private User createdBy;
+
+    private Instant createdOn;
 
     @Override
     public boolean equals(Object o) {
