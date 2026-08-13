@@ -1,0 +1,236 @@
+.record-status-page {
+  padding: 30px;
+  background: #f8faff;
+  min-height: 100vh;
+}
+
+/* Header */
+
+.record-card-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.record-card-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: #2563eb;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.record-card-header h3 span {
+  color: #172554;
+  font-weight: 400;
+  display: inline;
+}
+
+.expand-icon {
+  color: #2563eb;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Refresh */
+
+.refresh-button {
+  padding: 10px 20px;
+  border: 1px solid #2563eb;
+  background: white;
+  color: #2563eb;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.refresh-button:hover {
+  background: #eff6ff;
+}
+
+/* Tabs */
+
+.record-status-tabs {
+  display: flex;
+  gap: 30px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #172554;
+}
+
+.tab.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+/* Content */
+
+.record-status-content h2 {
+  font-size: 20px;
+  color: #172554;
+  margin-bottom: 15px;
+}
+
+/* Record card */
+
+.record-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.record-card-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.record-card-header h3 {
+  margin: 0;
+  color: #2563eb;
+  font-size: 16px;
+}
+
+.record-card-header h3 span {
+  color: #172554;
+}
+
+/* Table */
+
+.record-table-header,
+.record-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.record-table-header {
+  padding: 14px 20px;
+  background: #fafcff;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 600;
+  color: #172554;
+}
+
+.record-row {
+  padding: 14px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #172554;
+}
+
+.record-row:last-child {
+  border-bottom: none;
+}
+
+/* Status colours */
+
+.status-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.active-color {
+  background: #22c55e;
+}
+
+.inactive-color {
+  background: #94a3b8;
+}
+
+.started-color {
+  background: #0ea5e9;
+}
+
+.progress-color {
+  background: #f59e0b;
+}
+
+.completed-color {
+  background: #8b5cf6;
+}
+
+.hold-color {
+  background: #f59e0b;
+}
+
+.cancelled-color {
+  background: #ef4444;
+}
+
+/* Buttons */
+
+.record-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.save-button,
+.close-button {
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-button {
+  background: #2563eb;
+  color: white;
+  border: 1px solid #2563eb;
+}
+
+.saved-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.close-button {
+  background: white;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+/* Simple toast for save confirmation */
+.rs-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+  z-index: 9999;
+  font-weight: 600;
+}
+
+/* Banner fallback (top of content) */
+.rs-banner {
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 10px 0 0 0;
+  font-weight: 600;
+}
+.rs-banner-success { background: #22c55e; color: white; }
+.rs-banner-error { background: #ef4444; color: white; }

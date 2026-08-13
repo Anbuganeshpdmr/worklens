@@ -1,7 +1,7 @@
-import AppRoutes from "./routes/AppRoutes";
+import RecordStatusPage from "./pages/RecordStatusPage";
 
 function App() {
-  return <AppRoutes />;
+  return <RecordStatusPage />;
 }
 
 export default App;

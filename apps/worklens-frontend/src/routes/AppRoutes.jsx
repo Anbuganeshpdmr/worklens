@@ -1,46 +1,231 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
-import UserManagement from "../pages/UserManagement";
-import ProtectedRoute from "./ProtectedRoute";
+import { useState } from "react";
+import "../styles/RecordStatus.css";
 
-/** Returns true only when both auth keys are present in localStorage */
-function isAuthenticated() {
-  return !!(localStorage.getItem("token") && localStorage.getItem("userInfo"));
-}
+const recordTypes = [
+  "PROJECT",
+  "SPRINT",
+  "ACTIVITY",
+  "ENTRY",
+  "MEMBER",
+];
 
-export default function AppRoutes() {
+const projectStatuses = [
+  {
+    name: "Active",
+    isDefault: true,
+    available: true,
+    color: "active-color",
+  },
+  {
+    name: "Inactive",
+    isDefault: false,
+    available: true,
+    color: "inactive-color",
+  },
+  {
+    name: "Started",
+    isDefault: false,
+    available: false,
+    color: "started-color",
+  },
+  {
+    name: "In Progress",
+    isDefault: false,
+    available: false,
+    color: "progress-color",
+  },
+  {
+    name: "Completed",
+    isDefault: false,
+    available: true,
+    color: "completed-color",
+  },
+  {
+    name: "On Hold",
+    isDefault: false,
+    available: false,
+    color: "hold-color",
+  },
+  {
+    name: "Cancelled",
+    isDefault: false,
+    available: true,
+    color: "cancelled-color",
+  },
+];
+
+function RecordStatusPage() {
+  const [activeTab, setActiveTab] = useState("Records");
+  const [expandedRecord, setExpandedRecord] = useState("PROJECT");
+
+  const toggleRecord = (record) => {
+    setExpandedRecord(
+      expandedRecord === record ? null : record
+    );
+  };
+
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public — redirect to /home if already logged in */}
-        <Route
-          path="/"
-          element={isAuthenticated() ? <Navigate to="/home" replace /> : <LoginPage />}
-        />
+    <div className="record-status-page">
 
-        {/* Protected routes — redirect to / if not authenticated */}
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          }
-        />
+      {/* Header */}
+      <div className="record-status-header">
+        <div>
+          <h1>Record Status</h1>
 
-         <Route
-            path="/user-management"
-            element={
-           <ProtectedRoute>
-          <UserManagement />
-          </ProtectedRoute>
-  }
-/>
+          <p>
+            Manage status and availability for different records in the system.
+          </p>
+        </div>
 
-        {/* Catch-all: unknown paths redirect to / */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+        <button className="refresh-button">
+          ↻ Refresh
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="record-status-tabs">
+
+        <button
+          className={`tab ${
+            activeTab === "Records" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("Records")}
+        >
+          Records
+        </button>
+
+        <button
+          className={`tab ${
+            activeTab === "Status" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("Status")}
+        >
+          Status
+        </button>
+
+      </div>
+
+      {/* Records tab */}
+      {activeTab === "Records" && (
+        <div className="record-status-content">
+
+          {recordTypes.map((record) => (
+            <div
+              className="record-card"
+              key={record}
+            >
+
+              {/* Record header */}
+              <div
+                className="record-card-header"
+                onClick={() => toggleRecord(record)}
+              >
+                <div>
+                  <h3>{record}</h3>
+
+                  {record === "PROJECT" && (
+                    <span className="default-label">
+                      Default
+                    </span>
+                  )}
+                </div>
+
+                <span className="expand-icon">
+                  {expandedRecord === record ? "⌃" : "⌄"}
+                </span>
+              </div>
+
+              {/* Expanded PROJECT section */}
+              {expandedRecord === record && (
+                <div className="record-card-body">
+
+                  {record === "PROJECT" ? (
+                    <>
+                      <div className="record-table">
+
+                        <div className="record-table-header">
+                          <span>Name</span>
+                          <span>Default</span>
+                          <span>Available</span>
+                          <span>Colour</span>
+                        </div>
+
+                        {projectStatuses.map((status) => (
+                          <div
+                            className="record-row"
+                            key={status.name}
+                          >
+
+                            <span>
+                              {status.name}
+                            </span>
+
+                            <span>
+                              <input
+                                type="radio"
+                                name="defaultStatus"
+                                defaultChecked={status.isDefault}
+                              />
+                            </span>
+
+                            <span>
+                              <input
+                                type="checkbox"
+                                defaultChecked={status.available}
+                              />
+                            </span>
+
+                            <span>
+                              <span
+                                className={`status-color ${status.color}`}
+                              />
+                            </span>
+
+                          </div>
+                        ))}
+
+                      </div>
+
+                      <div className="record-actions">
+
+                        <button className="save-button">
+                          Save
+                        </button>
+
+                        <button className="close-button">
+                          Close
+                        </button>
+
+                      </div>
+                    </>
+                  ) : (
+                    <div className="empty-record-message">
+                      Status configuration for {record} will be available here.
+                    </div>
+                  )}
+
+                </div>
+              )}
+
+            </div>
+          ))}
+
+        </div>
+      )}
+
+      {/* Status tab */}
+      {activeTab === "Status" && (
+        <div className="status-tab-content">
+          <h2>Status</h2>
+
+          <p>
+            Status configuration will be available here.
+          </p>
+        </div>
+      )}
+
+    </div>
   );
 }
+
+export default RecordStatusPage;

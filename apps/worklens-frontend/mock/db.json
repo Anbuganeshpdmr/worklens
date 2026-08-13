@@ -1,0 +1,62 @@
+{
+  "records": [
+    "PROJECT",
+    "SPRINT",
+    "ACTIVITY",
+    "ENTRY",
+    "MEMBER"
+  ],
+  "statuses": {
+    "PROJECT": [
+      {
+        "recordStatusId": 1,
+        "statusName": "Active",
+        "isAllowed": false,
+        "isDefault": true,
+        "colourCode": "#28a745"
+      },
+      {
+        "recordStatusId": 2,
+        "statusName": "Inactive",
+        "isAllowed": false,
+        "isDefault": false,
+        "colourCode": "#6c757d"
+      },
+      {
+        "recordStatusId": 3,
+        "statusName": "Started",
+        "isAllowed": true,
+        "isDefault": false,
+        "colourCode": "#0d6efd"
+      },
+      {
+        "recordStatusId": 4,
+        "statusName": "In Progress",
+        "isAllowed": false,
+        "isDefault": true,
+        "colourCode": "#ffc107"
+      },
+      {
+        "recordStatusId": 5,
+        "statusName": "Completed",
+        "isAllowed": true,
+        "isDefault": false,
+        "colourCode": "#198754"
+      },
+      {
+        "recordStatusId": 6,
+        "statusName": "On Hold",
+        "isAllowed": false,
+        "isDefault": false,
+        "colourCode": "#fd7e14"
+      },
+      {
+        "recordStatusId": 7,
+        "statusName": "Cancelled",
+        "isAllowed": true,
+        "isDefault": false,
+        "colourCode": "#dc3545"
+      }
+    ]
+  }
+}
