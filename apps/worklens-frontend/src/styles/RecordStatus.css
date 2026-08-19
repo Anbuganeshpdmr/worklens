@@ -1,236 +1,665 @@
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.record-status-shell {
+    display: flex;
+    min-height: 100vh;
+    background: #f7f8fa;
+}
+
+.record-status-main {
+    flex: 1;
+    min-width: 0;
+}
+
 .record-status-page {
-  padding: 30px;
-  background: #f8faff;
-  min-height: 100vh;
-}
-
-/* Header */
-
-.record-card-header {
-  padding: 18px 20px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
 }
 
 
-.record-card-header h3 {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin: 0;
-  color: #2563eb;
-  font-size: 16px;
-  font-weight: 600;
+/* =========================================================
+   HEADER
+========================================================= */
+
+.record-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
 }
 
-.record-card-header h3 span {
-  color: #172554;
-  font-weight: 400;
-  display: inline;
+.record-status-header h1 {
+    margin: 0 0 8px;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    color: #212529;
 }
 
-.expand-icon {
-  color: #2563eb;
-  font-size: 18px;
-  font-weight: 600;
+.record-status-header p {
+    margin: 0;
+
+    color: #6c757d;
+
+    font-size: 14px;
 }
 
-/* Refresh */
+
+/* =========================================================
+   RECORD / STATUS TABS
+========================================================= */
+
+.record-status-tabs {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-bottom: 26px;
+
+    padding: 5px;
+
+    background: #e9ecef;
+
+    border-radius: 8px;
+}
+
+.record-status-tabs .tab {
+    min-width: 110px;
+
+    padding: 10px 24px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #495057;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.record-status-tabs .tab:hover {
+    background: #dee2e6;
+
+    color: #212529;
+}
+
+.record-status-tabs .tab.active {
+    background: #0d6efd;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 2px 5px rgba(13, 110, 253, 0.25);
+}
+
+.record-status-tabs .tab:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.record-status-content {
+    width: 100%;
+}
+
+.record-status-content h2 {
+    margin: 0 0 16px;
+
+    font-size: 20px;
+
+    font-weight: 650;
+
+    color: #212529;
+}
+
+.record-status-content-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 16px;
+}
+
+.record-status-content-header h2 {
+    margin: 0;
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
 
 .refresh-button {
-  padding: 10px 20px;
-  border: 1px solid #2563eb;
-  background: white;
-  color: #2563eb;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 105px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #0d6efd;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #0d6efd;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.08);
+
+    transition: all 0.2s ease;
 }
 
 .refresh-button:hover {
-  background: #eff6ff;
+    background: #0d6efd;
+
+    color: #ffffff;
+
+    border-color: #0d6efd;
+
+    box-shadow:
+        0 3px 7px rgba(13, 110, 253, 0.20);
+
+    transform: translateY(-1px);
 }
 
-/* Tabs */
-
-.record-status-tabs {
-  display: flex;
-  gap: 30px;
-  border-bottom: 1px solid #e2e8f0;
-  margin-bottom: 20px;
+.refresh-button:active {
+    transform: translateY(0);
 }
 
-.tab {
-  border: none;
-  background: transparent;
-  padding: 12px 10px;
-  cursor: pointer;
-  font-size: 15px;
-  color: #172554;
+.refresh-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
 }
 
-.tab.active {
-  color: #2563eb;
-  border-bottom: 2px solid #2563eb;
-}
 
-/* Content */
-
-.record-status-content h2 {
-  font-size: 20px;
-  color: #172554;
-  margin-bottom: 15px;
-}
-
-/* Record card */
+/* =========================================================
+   RECORD CARD
+========================================================= */
 
 .record-card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
+    width: 100%;
+
+    margin-bottom: 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dee2e6;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.05);
+
+    transition: all 0.2s ease;
 }
 
+.record-card:hover {
+    border-color: #ced4da;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================================================
+   RECORD CARD HEADER
+========================================================= */
+
 .record-card-header {
-  padding: 18px 20px;
-  border-bottom: 1px solid #e2e8f0;
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 58px;
+
+    padding: 0 20px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.record-card-header:hover {
+    background: #f8f9fa;
 }
 
 .record-card-header h3 {
-  margin: 0;
-  color: #2563eb;
-  font-size: 16px;
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 650;
+
+    color: #212529;
 }
 
-.record-card-header h3 span {
-  color: #172554;
+.record-card-header span {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 28px;
+
+    height: 28px;
+
+    border-radius: 6px;
+
+    background: #f1f3f5;
+
+    color: #495057;
+
+    font-size: 18px;
+
+    font-weight: 700;
 }
 
-/* Table */
 
-.record-table-header,
-.record-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  align-items: center;
+/* =========================================================
+   RECORD CARD BODY
+========================================================= */
+
+.record-card-body {
+    width: 100%;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #fafbfc;
+
+    border-top: 1px solid #e9ecef;
+
+    overflow-x: auto;
 }
 
-.record-table-header {
-  padding: 14px 20px;
-  background: #fafcff;
-  border-bottom: 1px solid #e2e8f0;
-  font-weight: 600;
-  color: #172554;
+
+/* =========================================================
+   RECORD STATUS TABLE
+========================================================= */
+
+.record-status-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #dee2e6;
+
+    border-radius: 8px;
+
+    background: #ffffff;
 }
 
-.record-row {
-  padding: 14px 20px;
-  border-bottom: 1px solid #e2e8f0;
-  color: #172554;
+.record-status-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+    background: #ffffff;
 }
 
-.record-row:last-child {
-  border-bottom: none;
+.record-status-table th,
+.record-status-table td {
+    padding: 13px 16px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    text-align: left;
+
+    vertical-align: middle;
 }
 
-/* Status colours */
+.record-status-table th {
+    background: #f5f6f7;
 
-.status-color {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  display: inline-block;
+    color: #343a40;
+
+    font-size: 13px;
+
+    font-weight: 650;
 }
 
-.active-color {
-  background: #22c55e;
+.record-status-table td {
+    color: #495057;
+
+    font-size: 14px;
 }
 
-.inactive-color {
-  background: #94a3b8;
+.record-status-table th:nth-child(1) {
+    width: 40%;
 }
 
-.started-color {
-  background: #0ea5e9;
+.record-status-table th:nth-child(2) {
+    width: 18%;
+
+    text-align: center;
 }
 
-.progress-color {
-  background: #f59e0b;
+.record-status-table th:nth-child(3) {
+    width: 18%;
+
+    text-align: center;
 }
 
-.completed-color {
-  background: #8b5cf6;
+.record-status-table th:nth-child(4) {
+    width: 24%;
 }
 
-.hold-color {
-  background: #f59e0b;
+.record-status-table td:nth-child(2),
+.record-status-table td:nth-child(3) {
+    text-align: center;
 }
 
-.cancelled-color {
-  background: #ef4444;
+.record-status-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
-/* Buttons */
+.record-status-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+
+/* =========================================================
+   CHECKBOX / RADIO
+========================================================= */
+
+.record-status-table input[type="checkbox"],
+.record-status-table input[type="radio"] {
+    width: 17px;
+
+    height: 17px;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    accent-color: #0d6efd;
+}
+
+.record-status-table input:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   COLOUR DISPLAY
+========================================================= */
+
+.record-status-colour-cell {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.record-status-colour {
+    display: inline-block;
+
+    width: 20px;
+
+    height: 20px;
+
+    border-radius: 5px;
+
+    border: 1px solid rgba(0, 0, 0, 0.15);
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   SAVE / CLOSE ACTION AREA
+========================================================= */
 
 .record-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 18px 20px;
-  border-top: 1px solid #e2e8f0;
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e5e7eb;
 }
 
-.save-button,
-.close-button {
-  padding: 10px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
+
+/* =========================================================
+   SAVE BUTTON
+========================================================= */
+
+.record-actions .save-button {
+    min-width: 95px;
+
+    padding: 10px 20px;
+
+    border: 1px solid #198754;
+
+    border-radius: 7px;
+
+    background: #198754;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 4px rgba(25, 135, 84, 0.20);
+
+    transition: all 0.2s ease;
 }
 
-.save-button {
-  background: #2563eb;
-  color: white;
-  border: 1px solid #2563eb;
+.record-actions .save-button:hover {
+    background: #157347;
+
+    border-color: #157347;
+
+    box-shadow:
+        0 4px 8px rgba(25, 135, 84, 0.25);
+
+    transform: translateY(-1px);
 }
 
-.saved-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #ffffff;
-  font-weight: 600;
+.record-actions .save-button:active {
+    transform: translateY(0);
 }
 
-.close-button {
-  background: white;
-  color: #2563eb;
-  border: 1px solid #2563eb;
+.record-actions .save-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
 }
 
-/* Simple toast for save confirmation */
-.rs-toast {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background: #2563eb;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(37,99,235,0.12);
-  z-index: 9999;
-  font-weight: 600;
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.record-actions .close-button {
+    min-width: 95px;
+
+    padding: 10px 20px;
+
+    border: 1px solid #adb5bd;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #495057;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06);
+
+    transition: all 0.2s ease;
 }
 
-/* Banner fallback (top of content) */
-.rs-banner {
-  padding: 10px 14px;
-  border-radius: 6px;
-  margin: 10px 0 0 0;
-  font-weight: 600;
+.record-actions .close-button:hover {
+    background: #f1f3f5;
+
+    border-color: #868e96;
+
+    color: #212529;
+
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.10);
+
+    transform: translateY(-1px);
 }
-.rs-banner-success { background: #22c55e; color: white; }
-.rs-banner-error { background: #ef4444; color: white; }
+
+.record-actions .close-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.error-message {
+    margin-bottom: 20px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #f5c2c7;
+
+    border-radius: 7px;
+
+    background: #f8d7da;
+
+    color: #842029;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   LOADING / EMPTY MESSAGE
+========================================================= */
+
+.record-card-body > p {
+    margin: 10px 0;
+
+    color: #6c757d;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .record-status-page {
+        padding: 20px;
+    }
+
+    .record-status-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .record-status-tabs {
+        width: 100%;
+    }
+
+    .record-status-tabs .tab {
+        flex: 1;
+    }
+
+    .record-status-table {
+        min-width: 650px;
+    }
+
+    .record-card-body {
+        padding: 14px;
+    }
+
+    .record-actions {
+        flex-wrap: wrap;
+    }
+
+    .record-actions .save-button,
+    .record-actions .close-button {
+        min-width: 90px;
+    }
+}
