@@ -1,13 +1,17 @@
-/* Sidebar — left permanent panel */
 .sidebar {
   width: 220px;
   flex-shrink: 0;
-  background-color: var(--code-bg, #f4f3ec);
-  border-right: 1px solid var(--border, #e5e4e7);
+  height: calc(100vh - 64px);
+  position: fixed;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  background-color: #DCC3AA;
+  border-right: 1px solid #C9AA8C;
   display: flex;
   flex-direction: column;
   padding: 1.5rem 0;
-  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .sidebar__role-badge {
@@ -15,9 +19,9 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent, #aa3bff);
+  color: #810B38;
   padding: 0 1.25rem 1rem;
-  border-bottom: 1px solid var(--border, #e5e4e7);
+  border-bottom: 1px solid #C9AA8C;
   margin-bottom: 0.75rem;
 }
 
@@ -29,10 +33,12 @@
 }
 
 .sidebar__nav-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 0.65rem 1.25rem;
   font-size: 0.9rem;
-  color: var(--text, #6b6375);
+  color: #5F5147;
   cursor: pointer;
   border-radius: 0;
   transition: background-color 0.12s ease, color 0.12s ease;
@@ -41,16 +47,17 @@
 }
 
 .sidebar__nav-item:hover {
-  background-color: var(--accent-bg, rgba(170, 59, 255, 0.08));
-  color: var(--text-h, #08060d);
-  border-left-color: var(--accent, #aa3bff);
+  background-color: #F1E2D1;
+  color: #810B38;
 }
 
 .sidebar__nav-item--active {
-  background-color: var(--accent-bg, rgba(170, 59, 255, 0.08));
-  color: var(--accent, #aa3bff);
-  font-weight: 600;
-  border-left-color: var(--accent, #aa3bff);
+  background-color: #810B38;
+  color: #FFFFFF;
+}
+
+.sidebar__nav-item--active .sidebar__icon {
+  filter: brightness(0) invert(1);
 }
 
 .sidebar__section-label {
@@ -58,7 +65,60 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text, #6b6375);
+  color: #5F5147;
   padding: 1rem 1.25rem 0.4rem;
-  opacity: 0.6;
+  opacity: 0.7;
+}
+
+.sidebar__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.sidebar__logout-btn {
+  width: 100%;
+  border: none;
+  background: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* Collapsed Sidebar */
+
+.sidebar--collapsed {
+  width: 70px;
+}
+
+.sidebar--collapsed .sidebar__role-badge {
+  text-align: center;
+  padding: 0 0 1rem;
+}
+
+.sidebar--collapsed .sidebar__nav-item {
+  justify-content: center;
+  padding: 0.65rem 0;
+  gap: 0;
+}
+
+.sidebar--collapsed .sidebar__nav-item span {
+  display: none;
+}
+
+.sidebar--collapsed .sidebar__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Sidebar PNG icons filter */
+.sidebar__icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(35%)
+          saturate(3500%) hue-rotate(320deg) brightness(75%) contrast(105%);
 }

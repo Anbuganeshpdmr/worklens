@@ -1,0 +1,33 @@
+.app-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout__left {
+  width: 220px;
+  flex-shrink: 0;
+  height: 100vh;
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+.app-layout__left.collapsed {
+  width: 70px;
+}
+
+.app-layout__right {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-layout__work-area {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}

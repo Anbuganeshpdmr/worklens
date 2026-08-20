@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+//import Sidebar from "../components/Sidebar";
+//import Navbar from "../components/Navbar";
 import { getHome } from "../api/home";
 import "../styles/HomePage.css";
 
@@ -29,8 +30,11 @@ function HomePage() {
   }, []);
 
   return (
+    <>
+    {/* <Navbar /> */}
+
     <div className="home-page">
-      <Sidebar role={role} />
+      {/* <Sidebar role={role} /> */}
 
       <main className="home-page__main">
         <div className="home-page__header">
@@ -56,6 +60,7 @@ function HomePage() {
         </div>
       </main>
     </div>
+    </>
   );
 }
 
