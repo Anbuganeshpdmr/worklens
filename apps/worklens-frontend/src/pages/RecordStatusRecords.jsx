@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import RecordStatusTable
@@ -9,20 +8,14 @@ import RecordStatusForm
 
 import {
     getRecordStatuses,
-    updateRecordStatuses
+    updateRecordStatuses,
+    getRecordTypes
 } from "../api/recordStatus";
 
 
 export default function RecordStatusRecords() {
 
-    const recordTypes = [
-        "PROJECT",
-        "SPRINT",
-        "ACTIVITY",
-        "ENTRY",
-        "MEMBER"
-    ];
-
+    const [recordTypes, setRecordTypes] = useState([]);
 
     const [expandedRecord, setExpandedRecord] =
         useState(null);
@@ -48,6 +41,10 @@ export default function RecordStatusRecords() {
     ========================= */
 
     const loadStatuses = async (recordName) => {
+
+        if (!recordName) {
+            return;
+        }
 
         try {
 
@@ -138,21 +135,74 @@ export default function RecordStatusRecords() {
 
 
     /* =========================
-       INITIAL LOAD
+       LOAD RECORD TYPES
     ========================= */
 
     useEffect(() => {
 
-        const firstRecord =
-            recordTypes[0];
+        const loadRecordTypes = async () => {
 
-        setExpandedRecord(
-            firstRecord
-        );
+            try {
 
-        loadStatuses(
-            firstRecord
-        );
+                setError("");
+
+                const data =
+                    await getRecordTypes();
+
+                console.log(
+                    "GET /records-types",
+                    data
+                );
+
+
+                if (!Array.isArray(data)) {
+
+                    setRecordTypes([]);
+
+                    return;
+                }
+
+
+                setRecordTypes(data);
+
+
+                /*
+                 * Open the first record
+                 * automatically.
+                 */
+
+                if (data.length > 0) {
+
+                    setExpandedRecord(
+                        data[0]
+                    );
+
+                    await loadStatuses(
+                        data[0]
+                    );
+
+                }
+
+            } catch (err) {
+
+                console.error(
+                    "Failed to load record types:",
+                    err
+                );
+
+                setRecordTypes([]);
+
+                setError(
+                    err.message ||
+                    "Failed to load record types."
+                );
+
+            }
+
+        };
+
+
+        loadRecordTypes();
 
     }, []);
 
@@ -370,18 +420,11 @@ export default function RecordStatusRecords() {
 
             <div className="record-status-content-header">
 
-                <h2>
-                    Records
-                </h2>
-
-
                 <button
                     className="refresh-button"
                     onClick={() => {
 
-                        if (
-                            expandedRecord
-                        ) {
+                        if (expandedRecord) {
 
                             loadStatuses(
                                 expandedRecord
@@ -393,7 +436,14 @@ export default function RecordStatusRecords() {
                     disabled={loading}
                 >
 
-                    ↻ Refresh
+                    <span
+                        className="refresh-icon"
+                        aria-hidden="true"
+                    ></span>
+
+                    <span>
+                        Refresh
+                    </span>
 
                 </button>
 
@@ -448,7 +498,7 @@ export default function RecordStatusRecords() {
 
                                 {
                                     expandedRecord ===
-                                    recordName
+                                        recordName
 
                                         ? "⌃"
 
@@ -480,62 +530,62 @@ export default function RecordStatusRecords() {
                                     )
 
 
-                                    /* NO DATA */
+                                        /* NO DATA */
 
-                                    : statuses.length === 0 ? (
+                                        : statuses.length === 0 ? (
 
-                                        <p>
-                                            No statuses available.
-                                        </p>
+                                            <p>
+                                                No statuses available.
+                                            </p>
 
-                                    )
-
-
-                                    /* DATA */
-
-                                    : (
-
-                                        <>
-
-                                            <RecordStatusTable
-                                                statuses={
-                                                    statuses
-                                                }
-                                                onDefaultChange={
-                                                    handleDefaultChange
-                                                }
-                                                onAllowedChange={
-                                                    handleAllowedChange
-                                                }
-                                            />
+                                        )
 
 
-                                            <RecordStatusForm
-                                                onSave={
-                                                    handleSave
-                                                }
-                                                onClose={() => {
+                                            /* DATA */
 
-                                                    setExpandedRecord(
-                                                        null
-                                                    );
+                                            : (
 
-                                                    setStatuses(
-                                                        []
-                                                    );
+                                                <>
 
-                                                }}
-                                                saving={
-                                                    saving
-                                                }
-                                                saved={
-                                                    saved
-                                                }
-                                            />
+                                                    <RecordStatusTable
+                                                        statuses={
+                                                            statuses
+                                                        }
+                                                        onDefaultChange={
+                                                            handleDefaultChange
+                                                        }
+                                                        onAllowedChange={
+                                                            handleAllowedChange
+                                                        }
+                                                    />
 
-                                        </>
 
-                                    )}
+                                                    <RecordStatusForm
+                                                        onSave={
+                                                            handleSave
+                                                        }
+                                                        onClose={() => {
+
+                                                            setExpandedRecord(
+                                                                null
+                                                            );
+
+                                                            setStatuses(
+                                                                []
+                                                            );
+
+                                                        }}
+                                                        saving={
+                                                            saving
+                                                        }
+                                                        saved={
+                                                            saved
+                                                        }
+                                                    />
+
+                                                </>
+
+                                            )}
 
                                 </div>
 
@@ -552,4 +602,3 @@ export default function RecordStatusRecords() {
     );
 
 }
-

@@ -87,7 +87,11 @@ export const getRecordStatuses = async (
         )
     );
 };
-
+export const getRecordTypes = async () => {
+    return handleRequest(
+        apiClient.get("/records-types")
+    );
+};
 
 /*
  * PUT /records/{recordName}

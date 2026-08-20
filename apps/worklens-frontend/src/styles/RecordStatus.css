@@ -5,7 +5,7 @@
 .record-status-shell {
     display: flex;
     min-height: 100vh;
-    background: #f7f8fa;
+    background: #f8fafc;
 }
 
 .record-status-main {
@@ -28,24 +28,29 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 24px;
+
+    margin-bottom: 8px;
 }
 
 .record-status-header h1 {
     margin: 0 0 8px;
 
+    color: #0f172a;
+
     font-size: 28px;
     font-weight: 700;
+    line-height: 1.25;
 
-    color: #212529;
+    letter-spacing: -0.02em;
 }
 
 .record-status-header p {
     margin: 0;
 
-    color: #6c757d;
+    color: #64748b;
 
     font-size: 14px;
+    line-height: 1.6;
 }
 
 
@@ -54,152 +59,159 @@
 ========================================================= */
 
 .record-status-tabs {
-    display: inline-flex;
-
+    display: flex;
     align-items: center;
+    gap: 4px;
 
-    gap: 5px;
+    width: 100%;
 
-    margin-bottom: 26px;
+    margin-top: 24px;
+    padding: 4px 0 0;
 
-    padding: 5px;
+    border-bottom: 1px solid #e2e8f0;
 
-    background: #e9ecef;
-
-    border-radius: 8px;
+    box-sizing: border-box;
 }
 
 .record-status-tabs .tab {
-    min-width: 110px;
+    position: relative;
 
-    padding: 10px 24px;
+    padding: 11px 18px 12px;
 
     border: none;
-
-    border-radius: 6px;
+    border-radius: 8px 8px 0 0;
 
     background: transparent;
 
-    color: #495057;
+    color: #64748b;
 
+    font-family: inherit;
     font-size: 14px;
-
-    font-weight: 600;
+    font-weight: 500;
 
     cursor: pointer;
 
-    transition: all 0.2s ease;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
 }
 
 .record-status-tabs .tab:hover {
-    background: #dee2e6;
+    color: #2563eb;
 
-    color: #212529;
+    background: #f1f5ff;
 }
 
 .record-status-tabs .tab.active {
-    background: #0d6efd;
+    color: #2563eb;
 
-    color: #ffffff;
+    background: #eff6ff;
 
-    box-shadow:
-        0 2px 5px rgba(13, 110, 253, 0.25);
+    font-weight: 600;
+}
+
+.record-status-tabs .tab.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+
+    height: 2px;
+
+    border-radius: 2px;
+
+    background: #2563eb;
 }
 
 .record-status-tabs .tab:active {
-    transform: scale(0.98);
+    transform: none;
 }
 
 
 /* =========================================================
-   CONTENT
+   RECORD CONTENT HEADER / REFRESH
 ========================================================= */
-
-.record-status-content {
-    width: 100%;
-}
-
-.record-status-content h2 {
-    margin: 0 0 16px;
-
-    font-size: 20px;
-
-    font-weight: 650;
-
-    color: #212529;
-}
 
 .record-status-content-header {
     display: flex;
-
-    justify-content: space-between;
-
     align-items: center;
+    justify-content: flex-end;
 
-    margin-bottom: 16px;
-}
+    width: 100%;
+    min-height: 54px;
 
-.record-status-content-header h2 {
-    margin: 0;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   REFRESH BUTTON
+   MODERN REFRESH BUTTON
 ========================================================= */
 
 .refresh-button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
+    gap: 8px;
 
-    gap: 7px;
+    height: 36px;
+    padding: 0 13px;
 
-    min-width: 105px;
-
-    padding: 10px 18px;
-
-    border: 1px solid #0d6efd;
-
-    border-radius: 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
 
     background: #ffffff;
 
-    color: #0d6efd;
+    color: #475569;
 
-    font-size: 14px;
-
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.08);
+        0 1px 2px rgba(15, 23, 42, 0.04);
 
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
 }
 
 .refresh-button:hover {
-    background: #0d6efd;
+    background: #f8fbff;
 
-    color: #ffffff;
+    border-color: #bfdbfe;
 
-    border-color: #0d6efd;
+    color: #2563eb;
 
     box-shadow:
-        0 3px 7px rgba(13, 110, 253, 0.20);
+        0 3px 8px rgba(37, 99, 235, 0.10);
 
     transform: translateY(-1px);
 }
 
 .refresh-button:active {
     transform: translateY(0);
+
+    background: #eff6ff;
+
+    box-shadow:
+        0 1px 3px rgba(37, 99, 235, 0.08);
 }
 
 .refresh-button:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
 
     cursor: not-allowed;
 
@@ -208,7 +220,6 @@
     box-shadow: none;
 }
 
-
 /* =========================================================
    RECORD CARD
 ========================================================= */
@@ -216,29 +227,31 @@
 .record-card {
     width: 100%;
 
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 
     background: #ffffff;
 
-    border: 1px solid #dee2e6;
+    border: 1px solid #e2e8f0;
 
-    border-radius: 9px;
+    border-radius: 12px;
 
     overflow: hidden;
 
     box-sizing: border-box;
 
     box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.05);
+        0 1px 2px rgba(15, 23, 42, 0.04);
 
-    transition: all 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .record-card:hover {
-    border-color: #ced4da;
+    border-color: #d5deea;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.07);
+        0 5px 16px rgba(15, 23, 42, 0.07);
 }
 
 
@@ -265,43 +278,55 @@
 
     cursor: pointer;
 
-    transition: background 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .record-card-header:hover {
-    background: #f8f9fa;
+    background: #f8fafc;
 }
 
 .record-card-header h3 {
     margin: 0;
 
-    font-size: 15px;
+    color: #1e293b;
 
+    font-size: 14px;
     font-weight: 650;
 
-    color: #212529;
+    letter-spacing: 0.01em;
 }
 
 .record-card-header span {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    width: 28px;
+    width: 30px;
+    height: 30px;
 
-    height: 28px;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
 
-    border-radius: 6px;
+    background: #f8fafc;
 
-    background: #f1f3f5;
+    color: #64748b;
 
-    color: #495057;
+    font-size: 16px;
+    font-weight: 600;
 
-    font-size: 18px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
 
-    font-weight: 700;
+.record-card-header:hover span {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
 }
 
 
@@ -316,16 +341,16 @@
 
     box-sizing: border-box;
 
-    background: #fafbfc;
+    background: #f8fafc;
 
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid #e2e8f0;
 
     overflow-x: auto;
 }
 
 
 /* =========================================================
-   RECORD STATUS TABLE
+   RECORD STATUS TABLE WRAPPER
 ========================================================= */
 
 .record-status-table-wrapper {
@@ -333,12 +358,20 @@
 
     overflow-x: auto;
 
-    border: 1px solid #dee2e6;
+    border: 1px solid #e2e8f0;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: #ffffff;
+
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.03);
 }
+
+
+/* =========================================================
+   RECORD STATUS TABLE
+========================================================= */
 
 .record-status-table {
     width: 100%;
@@ -354,7 +387,7 @@
 .record-status-table td {
     padding: 13px 16px;
 
-    border-bottom: 1px solid #edf0f2;
+    border-bottom: 1px solid #eef2f7;
 
     text-align: left;
 
@@ -362,19 +395,25 @@
 }
 
 .record-status-table th {
-    background: #f5f6f7;
+    background: #f8fafc;
 
-    color: #343a40;
+    color: #64748b;
 
-    font-size: 13px;
+    font-size: 11px;
 
     font-weight: 650;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
 }
 
 .record-status-table td {
-    color: #495057;
+    color: #334155;
 
     font-size: 14px;
+
+    background: #ffffff;
 }
 
 .record-status-table th:nth-child(1) {
@@ -402,12 +441,16 @@
     text-align: center;
 }
 
-.record-status-table tbody tr:last-child td {
-    border-bottom: none;
+.record-status-table tbody tr {
+    transition: background-color 0.15s ease;
 }
 
-.record-status-table tbody tr:hover {
-    background: #f8f9fa;
+.record-status-table tbody tr:hover td {
+    background: #f8fbff;
+}
+
+.record-status-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 
@@ -418,20 +461,21 @@
 .record-status-table input[type="checkbox"],
 .record-status-table input[type="radio"] {
     width: 17px;
-
     height: 17px;
 
     margin: 0;
 
     cursor: pointer;
 
-    accent-color: #0d6efd;
+    accent-color: #2563eb;
+
+    vertical-align: middle;
 }
 
 .record-status-table input:disabled {
     cursor: not-allowed;
 
-    opacity: 0.6;
+    opacity: 0.55;
 }
 
 
@@ -451,17 +495,16 @@
     display: inline-block;
 
     width: 20px;
-
     height: 20px;
 
-    border-radius: 5px;
+    border-radius: 6px;
 
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(15, 23, 42, 0.12);
 
     flex-shrink: 0;
 
     box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.08);
+        0 1px 3px rgba(15, 23, 42, 0.10);
 }
 
 
@@ -476,13 +519,13 @@
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
 
-    margin-top: 20px;
+    margin-top: 18px;
 
-    padding-top: 18px;
+    padding-top: 16px;
 
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid #e2e8f0;
 }
 
 
@@ -493,35 +536,39 @@
 .record-actions .save-button {
     min-width: 95px;
 
-    padding: 10px 20px;
+    padding: 9px 18px;
 
-    border: 1px solid #198754;
+    border: 1px solid #2563eb;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
-    background: #198754;
+    background: #2563eb;
 
     color: #ffffff;
 
-    font-size: 14px;
-
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 2px 4px rgba(25, 135, 84, 0.20);
+        0 2px 5px rgba(37, 99, 235, 0.18);
 
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .record-actions .save-button:hover {
-    background: #157347;
+    background: #1d4ed8;
 
-    border-color: #157347;
+    border-color: #1d4ed8;
 
     box-shadow:
-        0 4px 8px rgba(25, 135, 84, 0.25);
+        0 4px 9px rgba(37, 99, 235, 0.22);
 
     transform: translateY(-1px);
 }
@@ -548,37 +595,42 @@
 .record-actions .close-button {
     min-width: 95px;
 
-    padding: 10px 20px;
+    padding: 9px 18px;
 
-    border: 1px solid #adb5bd;
+    border: 1px solid #d1d5db;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
     background: #ffffff;
 
-    color: #495057;
+    color: #475569;
 
-    font-size: 14px;
-
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.06);
+        0 1px 2px rgba(15, 23, 42, 0.04);
 
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .record-actions .close-button:hover {
-    background: #f1f3f5;
+    background: #f8fafc;
 
-    border-color: #868e96;
+    border-color: #cbd5e1;
 
-    color: #212529;
+    color: #1e293b;
 
     box-shadow:
-        0 3px 6px rgba(0, 0, 0, 0.10);
+        0 3px 7px rgba(15, 23, 42, 0.08);
 
     transform: translateY(-1px);
 }
@@ -597,13 +649,13 @@
 
     padding: 12px 15px;
 
-    border: 1px solid #f5c2c7;
+    border: 1px solid #fecaca;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
-    background: #f8d7da;
+    background: #fef2f2;
 
-    color: #842029;
+    color: #b91c1c;
 
     font-size: 14px;
 }
@@ -613,10 +665,10 @@
    LOADING / EMPTY MESSAGE
 ========================================================= */
 
-.record-card-body > p {
+.record-card-body>p {
     margin: 10px 0;
 
-    color: #6c757d;
+    color: #64748b;
 
     font-size: 14px;
 }
@@ -644,6 +696,12 @@
 
     .record-status-tabs .tab {
         flex: 1;
+
+        text-align: center;
+    }
+
+    .record-status-content-header {
+        min-height: 50px;
     }
 
     .record-status-table {
@@ -661,5 +719,35 @@
     .record-actions .save-button,
     .record-actions .close-button {
         min-width: 90px;
+    }
+}
+
+
+/* =========================================================
+   SMALL SCREEN
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .record-status-page {
+        padding: 16px;
+    }
+
+    .record-status-header h1 {
+        font-size: 24px;
+    }
+
+    .record-status-tabs .tab {
+        padding: 10px 12px;
+
+        font-size: 13px;
+    }
+
+    .record-card-header {
+        padding: 0 14px;
+    }
+
+    .record-card-body {
+        padding: 10px;
     }
 }

@@ -1,4 +1,3 @@
-
 /* =========================
    STATUS PAGE
 ========================= */
@@ -182,52 +181,30 @@
 .status-edit-button {
     width: 34px;
     height: 34px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
-    border: none;
-
-    border-radius: 5px;
-
-    background: transparent;
-
-    color: #333;
-
-    font-size: 18px;
-
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #64748b;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .status-edit-button:hover {
-    background: #eeeeee;
+    background: #f8fafc;
+    color: #334155;
+    border-color: #cbd5e1;
 }
 
-.status-edit-button:disabled {
-    opacity: 0.6;
-
-    cursor: not-allowed;
+.status-edit-button:active {
+    transform: scale(0.96);
 }
 
-
-/* =========================
-   ERROR MESSAGE
-========================= */
-
-.error-message {
-    margin-bottom: 16px;
-
-    padding: 10px 14px;
-
-    border-radius: 5px;
-
-    background: #f8d7da;
-
-    color: #842029;
-
-    font-size: 14px;
+.status-edit-button svg {
+    display: block;
 }
 
 
@@ -540,4 +517,3 @@
 
     cursor: not-allowed;
 }
-

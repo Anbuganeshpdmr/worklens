@@ -17,7 +17,7 @@ export default function RecordStatusPage() {
     return (
         <div className="record-status-shell">
 
-             <Sidebar role={role} />
+            <Sidebar role={role} />
 
             <main className="record-status-main">
 
@@ -44,11 +44,10 @@ export default function RecordStatusPage() {
                     <div className="record-status-tabs">
 
                         <button
-                            className={`tab ${
-                                activeTab === "records"
+                            className={`tab ${activeTab === "records"
                                     ? "active"
                                     : ""
-                            }`}
+                                }`}
                             onClick={() =>
                                 setActiveTab("records")
                             }
@@ -58,11 +57,10 @@ export default function RecordStatusPage() {
 
 
                         <button
-                            className={`tab ${
-                                activeTab === "status"
+                            className={`tab ${activeTab === "status"
                                     ? "active"
                                     : ""
-                            }`}
+                                }`}
                             onClick={() =>
                                 setActiveTab("status")
                             }

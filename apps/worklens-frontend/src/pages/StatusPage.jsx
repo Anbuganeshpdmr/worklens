@@ -239,11 +239,16 @@ export default function StatusPage() {
 
 
                 <button
-                    className="status-refresh-button"
-                    onClick={loadStatuses}
+                    className="refresh-button"
+                    onClick={() => {
+                        if (expandedRecord) {
+                            loadStatuses(expandedRecord);
+                        }
+                    }}
                     disabled={loading}
                 >
-                    ↻ Refresh
+                    <span className="refresh-icon" aria-hidden="true"></span>
+                    <span>Refresh</span>
                 </button>
 
             </div>
