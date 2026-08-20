@@ -1,0 +1,136 @@
+/* ── Activity Metrics Cards ─────────────────────────────────── */
+.sa-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sa-metrics__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sa-metrics__card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.sa-metrics__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sa-metrics__icon--total {
+  background: rgba(170, 59, 255, 0.12);
+  color: var(--accent, #aa3bff);
+}
+
+.sa-metrics__icon--passed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.sa-metrics__icon--failed {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.sa-metrics__icon--pending {
+  background: rgba(107, 114, 128, 0.12);
+  color: #6b7280;
+}
+
+.sa-metrics__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sa-metrics__content--full {
+  width: 100%;
+}
+
+.sa-metrics__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text, #6b6375);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sa-metrics__value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sa-metrics__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-h, #08060d);
+  line-height: 1.2;
+}
+
+.sa-metrics__sub {
+  font-size: 0.7rem;
+  color: var(--text, #6b6375);
+  white-space: nowrap;
+}
+
+/* Execution Progress card */
+.sa-metrics__progress-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.sa-metrics__progress-pct {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent, #aa3bff);
+}
+
+.sa-metrics__progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--code-bg, #f4f3ec);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.sa-metrics__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent, #aa3bff), #10b981);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .sa-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sa-metrics__card--progress {
+    grid-column: span 2;
+  }
+}

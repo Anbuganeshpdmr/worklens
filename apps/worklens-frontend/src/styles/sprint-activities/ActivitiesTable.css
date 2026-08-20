@@ -1,0 +1,204 @@
+/* ── ActivitiesTable Styles ─────────────────────────────────── */
+.sa-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  background: var(--bg, #fff);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.sa-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+.sa-table__head {
+  background: var(--code-bg, #f4f3ec);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.sa-table__th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text, #6b6375);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--border, #e5e4e7);
+  user-select: none;
+}
+
+.sa-table__th--sortable {
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.sa-table__th--sortable:hover {
+  color: var(--text-h, #08060d);
+}
+
+.sa-table__sort-icon {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  vertical-align: middle;
+}
+
+.sa-table__sort-icon--idle {
+  opacity: 0.35;
+}
+
+.sa-table__sort-icon--active {
+  color: var(--accent, #aa3bff);
+}
+
+.sa-table__th--toggle {
+  width: 48px;
+}
+
+.sa-table__th--title {
+  min-width: 260px;
+}
+
+.sa-table__th--actions {
+  text-align: right;
+  padding-right: 14px;
+  width: 80px;
+}
+
+/* ── States (Empty / Error) ────────────────────────────────── */
+.sa-table__state {
+  text-align: center;
+  padding: 48px 20px;
+}
+
+.sa-table__empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 380px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sa-table__empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--code-bg, #f4f3ec);
+  color: var(--text, #6b6375);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.sa-table__empty-icon--error {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.sa-table__empty-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+  margin: 0 0 6px;
+}
+
+.sa-table__empty-text {
+  font-size: 0.78rem;
+  color: var(--text, #6b6375);
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.sa-table__empty-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sa-table__empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s ease;
+}
+
+.sa-table__empty-btn--secondary {
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #e5e4e7);
+  color: var(--text, #6b6375);
+}
+
+.sa-table__empty-btn--secondary:hover {
+  border-color: var(--accent, #aa3bff);
+  color: var(--accent, #aa3bff);
+}
+
+.sa-table__empty-btn--primary {
+  background: var(--accent, #aa3bff);
+  border: 1px solid var(--accent, #aa3bff);
+  color: #fff;
+}
+
+.sa-table__empty-btn--primary:hover {
+  background: #9230e0;
+}
+
+/* ── Skeletons ─────────────────────────────────────────────── */
+.sa-table__skeleton-row {
+  border-bottom: 1px solid var(--border, #e5e4e7);
+}
+
+.sa-skeleton {
+  background: linear-gradient(90deg, #f0f0f2 25%, #e6e6e9 50%, #f0f0f2 75%);
+  background-size: 200% 100%;
+  animation: sa-skeleton-wave 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sa-skeleton {
+    background: linear-gradient(90deg, #242630 25%, #2e303d 50%, #242630 75%);
+    background-size: 200% 100%;
+  }
+}
+
+.sa-skeleton--text {
+  height: 12px;
+}
+
+.sa-skeleton--icon {
+  width: 22px;
+  height: 22px;
+}
+
+.sa-skeleton--badge {
+  width: 60px;
+  height: 18px;
+  border-radius: 999px;
+}
+
+.sa-skeleton--actions {
+  width: 50px;
+  height: 24px;
+  margin-left: auto;
+}
+
+@keyframes sa-skeleton-wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

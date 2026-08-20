@@ -1,0 +1,47 @@
+.sa-pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 2px; font-size: 0.78rem;
+  color: var(--text, #6b6375); flex-wrap: wrap; gap: 8px;
+}
+.sa-pagination__info { white-space: nowrap; }
+.sa-pagination__controls { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+
+.sa-pagination__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 30px; height: 30px; padding: 0 8px;
+  border: 1px solid var(--border, #e5e4e7); border-radius: 6px;
+  background: var(--bg, #fff); color: var(--text-h, #08060d);
+  font-size: 0.78rem; font-family: inherit; cursor: pointer;
+  transition: border-color 0.13s, background-color 0.13s, color 0.13s;
+}
+.sa-pagination__btn:hover:not(:disabled) {
+  border-color: var(--accent, #aa3bff); color: var(--accent, #aa3bff);
+}
+.sa-pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.sa-pagination__btn--active {
+  background: var(--accent, #aa3bff);
+  border-color: var(--accent, #aa3bff);
+  color: #fff; font-weight: 600;
+}
+.sa-pagination__btn--active:hover { background: #9230e0; border-color: #9230e0; color: #fff; }
+
+.sa-pagination__ellipsis {
+  padding: 0 4px; color: var(--text, #6b6375);
+  font-size: 0.78rem; line-height: 30px;
+}
+
+.sa-pagination__size {
+  height: 30px; padding: 0 22px 0 8px;
+  border: 1px solid var(--border, #e5e4e7); border-radius: 6px;
+  font-size: 0.78rem; font-family: inherit;
+  color: var(--text-h, #08060d); background: var(--bg, #fff);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b6375' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 7px center;
+  cursor: pointer; outline: none;
+  transition: border-color 0.13s;
+}
+.sa-pagination__size:focus {
+  border-color: var(--accent, #aa3bff);
+  box-shadow: 0 0 0 2px var(--accent-bg, rgba(170,59,255,0.1));
+}

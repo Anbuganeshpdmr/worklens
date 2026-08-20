@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
+import ProjectsAndSprintsPage from "../pages/ProjectsAndSprintsPage";
 import ProjectPage from "../pages/ProjectPage";
-
+import SprintActivitiesPage from "../pages/SprintActivitiesPage";
+import Layout from "./Layout";
+import HomePage from "../pages/HomePage";
+import ActivitiesPage     from "../pages/ActivitiesPage";
 import ProtectedRoute from "./ProtectedRoute";
-import Layout from "../pages/Layout";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -37,9 +38,17 @@ export default function AppRoutes() {
           <Route element={<Layout />}>
 
             {/* Work Area */}
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/home" element={<ProjectsAndSprintsPage />} />
 
             <Route path="/projects" element={<ProjectPage />} />
+
+            {/*
+          Sprint-Activities page
+          Entry point: user selects a sprint from the Active Sprints page
+          (or enters the URL directly while that page is in development).
+          Pattern mirrors the API: /sprint_activity/sprint/{sprintId}
+        */}
+            <Route path="/sprints/:sprintId/activities" element={<SprintActivitiesPage />} />
 
           </Route>
 

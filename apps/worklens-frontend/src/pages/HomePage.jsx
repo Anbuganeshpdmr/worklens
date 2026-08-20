@@ -16,9 +16,7 @@ function HomePage() {
     userInfo?.userId ||
     "User";
 
-  const role = userInfo?.role || "Member";
-
-  const [homeData, setHomeData] = useState(null);
+  const role = userInfo?.role || "Member";  const [homeData, setHomeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

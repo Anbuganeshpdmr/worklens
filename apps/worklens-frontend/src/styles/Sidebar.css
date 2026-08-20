@@ -32,6 +32,7 @@
   flex: 1;
 }
 
+/* shared base for both <a> and <button> nav items */
 .sidebar__nav-item {
   display: flex;
   align-items: center;
@@ -44,6 +45,11 @@
   transition: background-color 0.12s ease, color 0.12s ease;
   text-decoration: none;
   border-left: 3px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+  box-sizing: border-box;
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s;
 }
 
 .sidebar__nav-item:hover {

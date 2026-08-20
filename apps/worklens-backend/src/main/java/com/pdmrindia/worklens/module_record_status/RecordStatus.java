@@ -22,7 +22,7 @@ public class RecordStatus {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "record_name", nullable = false)
+    @Column(name = "record_name", nullable = false, length = 25)
     private Record record;
 
     @ManyToOne

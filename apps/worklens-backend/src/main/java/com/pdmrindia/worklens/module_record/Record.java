@@ -8,6 +8,7 @@ public enum Record {
     PROJECT,
     SPRINT,
     ACTIVITY,
+    SPRINT_ACTIVITY,
     ENTRY,
     MEMBER;
 
