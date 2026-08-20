@@ -1,6 +1,6 @@
-
 export default function StatusForm({
     status,
+    title,
     onChange,
     onSave,
     onCancel,
@@ -18,7 +18,7 @@ export default function StatusForm({
                 <div className="status-modal-header">
 
                     <h3>
-                        Edit Status
+                        {title}
                     </h3>
 
                     <button
@@ -51,10 +51,13 @@ export default function StatusForm({
                             )
                         }
                         disabled={saving}
+                        placeholder="Enter status name"
                     />
 
                 </div>
 
+
+                {/* COLOUR */}
 
                 {/* COLOUR */}
 
@@ -68,10 +71,7 @@ export default function StatusForm({
 
                         <input
                             type="color"
-                            value={
-                                status.colourCode ||
-                                "#000000"
-                            }
+                            value={status.colourCode}
                             onChange={(e) =>
                                 onChange(
                                     "colourCode",
@@ -81,13 +81,15 @@ export default function StatusForm({
                             disabled={saving}
                         />
 
-                        <span
-                            className="selected-colour"
-                            style={{
-                                backgroundColor:
-                                    status.colourCode
-                            }}
-                        />
+                        {status.colourCode && (
+                            <span
+                                className="selected-colour"
+                                style={{
+                                    backgroundColor:
+                                        status.colourCode
+                                }}
+                            />
+                        )}
 
                     </div>
 
@@ -115,7 +117,9 @@ export default function StatusForm({
                     >
                         {saving
                             ? "Saving..."
-                            : "Save"}
+                            : title === "Add Status"
+                                ? "Add Status"
+                                : "Save"}
                     </button>
 
                 </div>
@@ -125,5 +129,5 @@ export default function StatusForm({
         </div>
 
     );
-}
 
+}

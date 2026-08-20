@@ -22,11 +22,73 @@
 .status-page-header h2 {
     margin: 0;
     font-size: 24px;
+    font-weight: 600;
 }
 
 .status-page-header p {
     margin: 6px 0 0;
     color: #666;
+    font-size: 14px;
+}
+
+
+/* =========================
+   HEADER ACTIONS
+========================= */
+
+.status-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =========================
+   ADD STATUS BUTTON
+========================= */
+
+.add-status-button {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 14px;
+
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.add-status-button:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+
+    box-shadow:
+        0 2px 6px rgba(37, 99, 235, 0.20);
+}
+
+.add-status-button:active {
+    transform: scale(0.97);
+}
+
+.add-status-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 
@@ -35,22 +97,32 @@
 ========================= */
 
 .status-refresh-button {
-    padding: 8px 16px;
+    height: 36px;
 
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
+    padding: 0 14px;
 
-    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 
-    color: #333;
+    background: #ffffff;
+
+    color: #475569;
 
     cursor: pointer;
 
     font-size: 14px;
+    font-weight: 500;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease;
 }
 
 .status-refresh-button:hover {
-    background: #f5f5f5;
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
 }
 
 .status-refresh-button:disabled {
@@ -181,26 +253,40 @@
 .status-edit-button {
     width: 34px;
     height: 34px;
+
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
     padding: 0;
+
     border: 1px solid #e5e7eb;
     border-radius: 8px;
+
     background: #ffffff;
+
     color: #64748b;
+
     cursor: pointer;
-    transition: all 0.2s ease;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
 }
 
 .status-edit-button:hover {
-    background: #f8fafc;
-    color: #334155;
+    background: #f1f5f9;
+
+    color: #2563eb;
+
     border-color: #cbd5e1;
 }
 
 .status-edit-button:active {
-    transform: scale(0.96);
+    transform: scale(0.94);
 }
 
 .status-edit-button svg {
@@ -209,22 +295,15 @@
 
 
 /* ==================================================
-   STATUS EDIT MODAL
+   STATUS MODAL
 ================================================== */
-
-
-/* DARK BACKGROUND */
 
 .status-modal-overlay {
     position: fixed;
 
-    top: 0;
-    left: 0;
+    inset: 0;
 
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(15, 23, 42, 0.42);
 
     display: flex;
 
@@ -232,6 +311,10 @@
     justify-content: center;
 
     z-index: 9999;
+
+    padding: 20px;
+
+    box-sizing: border-box;
 }
 
 
@@ -240,18 +323,19 @@
 .status-modal {
     width: 420px;
 
-    max-width: 90%;
+    max-width: 100%;
 
     background: #ffffff;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     padding: 24px;
 
     box-sizing: border-box;
 
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.25);
+        0 20px 40px rgba(15, 23, 42, 0.16),
+        0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -276,11 +360,11 @@
 
     font-weight: 600;
 
-    color: #222;
+    color: #1e293b;
 }
 
 
-/* CLOSE X */
+/* CLOSE BUTTON */
 
 .status-modal-close {
     width: 32px;
@@ -295,23 +379,27 @@
 
     border: none;
 
-    border-radius: 50%;
+    border-radius: 8px;
 
     background: transparent;
 
-    color: #333333;
+    color: #64748b;
 
-    font-size: 26px;
+    font-size: 24px;
 
     line-height: 1;
 
     cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
 }
 
 .status-modal-close:hover {
-    background: #f2f2f2;
+    background: #f1f5f9;
 
-    color: #000000;
+    color: #1e293b;
 }
 
 .status-modal-close:disabled {
@@ -340,7 +428,7 @@
 
     font-size: 14px;
 
-    color: #333;
+    color: #334155;
 }
 
 
@@ -353,25 +441,36 @@
 
     padding: 10px 12px;
 
-    border: 1px solid #ccc;
+    border: 1px solid #cbd5e1;
 
-    border-radius: 6px;
+    border-radius: 8px;
 
     background: #ffffff;
 
-    color: #333;
+    color: #1e293b;
 
     font-size: 14px;
 
     outline: none;
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .status-form-field input[type="text"]:focus {
-    border-color: #555;
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.status-form-field input[type="text"]::placeholder {
+    color: #94a3b8;
 }
 
 .status-form-field input[type="text"]:disabled {
-    background: #f5f5f5;
+    background: #f8fafc;
 
     cursor: not-allowed;
 }
@@ -390,22 +489,23 @@
 }
 
 
-/* Actual browser colour picker */
+/* Browser colour picker */
 
 .colour-picker-row input[type="color"] {
-    width: 55px;
+    width: 42px;
+    height: 42px;
 
-    height: 40px;
+    padding: 3px;
 
-    padding: 2px;
+    border: 1px solid #cbd5e1;
 
-    border: 1px solid #ccc;
+    border-radius: 8px;
 
-    border-radius: 6px;
-
-    background: white;
+    background: #ffffff;
 
     cursor: pointer;
+
+    box-sizing: border-box;
 }
 
 .colour-picker-row input[type="color"]:disabled {
@@ -419,12 +519,11 @@
 
 .selected-colour {
     width: 30px;
-
     height: 30px;
 
     border-radius: 50%;
 
-    border: 1px solid #ccc;
+    border: 1px solid #cbd5e1;
 
     display: inline-block;
 }
@@ -444,8 +543,6 @@
     gap: 10px;
 
     margin-top: 28px;
-
-    margin-left: 0;
 }
 
 
@@ -454,27 +551,36 @@
 ========================= */
 
 .status-cancel-button {
-    padding: 9px 18px;
+    height: 36px;
 
-    border: 1px solid #cccccc;
+    padding: 0 16px;
 
-    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
 
     background: #ffffff;
 
-    color: #333333;
+    color: #475569;
 
     cursor: pointer;
 
     font-size: 14px;
 
     font-weight: 500;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease;
 }
 
 .status-cancel-button:hover {
-    background: #f5f5f5;
+    background: #f8fafc;
 
-    color: #333333;
+    border-color: #94a3b8;
+
+    color: #334155;
 }
 
 .status-cancel-button:disabled {
@@ -485,17 +591,19 @@
 
 
 /* =========================
-   SAVE BUTTON
+   SAVE / ADD BUTTON
 ========================= */
 
 .status-save-button {
-    padding: 9px 18px;
+    height: 36px;
 
-    border: 1px solid #005401;
+    padding: 0 16px;
 
-    border-radius: 6px;
+    border: 1px solid #2563eb;
 
-    background: #005401;
+    border-radius: 8px;
+
+    background: #2563eb;
 
     color: #ffffff;
 
@@ -504,12 +612,25 @@
     font-size: 14px;
 
     font-weight: 500;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .status-save-button:hover {
-    background: #004401;
+    background: #1d4ed8;
 
-    color: #ffffff;
+    border-color: #1d4ed8;
+
+    box-shadow:
+        0 2px 6px rgba(37, 99, 235, 0.20);
+}
+
+.status-save-button:active {
+    transform: scale(0.97);
 }
 
 .status-save-button:disabled {

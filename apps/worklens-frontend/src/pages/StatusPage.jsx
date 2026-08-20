@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from "react";
 
 import {
     getAllStatuses,
-    updateStatus
+    updateStatus,
+    createStatus
 } from "../api/recordStatus";
 
 import StatusTable
@@ -26,7 +26,16 @@ export default function StatusPage() {
     const [editingStatus, setEditingStatus] =
         useState(null);
 
+    const [addingStatus, setAddingStatus] =
+        useState(false);
+
     const [saving, setSaving] = useState(false);
+
+    const [addingStatusForm, setAddingStatusForm] =
+        useState({
+            name: "",
+            colourCode: ""
+        });
 
 
     /*
@@ -71,6 +80,7 @@ export default function StatusPage() {
             setLoading(false);
 
         }
+
     };
 
 
@@ -99,24 +109,58 @@ export default function StatusPage() {
 
 
     /*
-     * Close edit modal
+     * Open add modal
+     */
+    const handleAdd = () => {
+
+        setError("");
+
+        setAddingStatusForm({
+            name: "",
+            colourCode: ""
+        });
+
+        setAddingStatus(true);
+    };
+
+    /*
+     * Close modal
      */
     const handleCancel = () => {
 
         setEditingStatus(null);
+        setAddingStatus(false);
 
     };
 
 
     /*
-     * Change Name / Colour
+     * Change edit form
      */
-    const handleChange = (
+    const handleEditChange = (
         field,
         value
     ) => {
 
         setEditingStatus(
+            previous => ({
+                ...previous,
+                [field]: value
+            })
+        );
+
+    };
+
+
+    /*
+     * Change add form
+     */
+    const handleAddChange = (
+        field,
+        value
+    ) => {
+
+        setAddingStatusForm(
             previous => ({
                 ...previous,
                 [field]: value
@@ -137,12 +181,10 @@ export default function StatusPage() {
             return;
         }
 
-
         try {
 
             setSaving(true);
             setError("");
-
 
             const payload = {
 
@@ -154,12 +196,10 @@ export default function StatusPage() {
 
             };
 
-
             console.log(
                 `PUT /status/${editingStatus.id}`,
                 payload
             );
-
 
             const updatedStatus =
                 await updateStatus(
@@ -167,16 +207,11 @@ export default function StatusPage() {
                     payload
                 );
 
-
             console.log(
                 "Updated status:",
                 updatedStatus
             );
 
-
-            /*
-             * Update table immediately
-             */
             setStatuses(
                 previous =>
                     previous.map(status =>
@@ -186,12 +221,7 @@ export default function StatusPage() {
                     )
             );
 
-
-            /*
-             * Close modal
-             */
             setEditingStatus(null);
-
 
         } catch (err) {
 
@@ -203,6 +233,87 @@ export default function StatusPage() {
             setError(
                 err.message ||
                 "Failed to update status."
+            );
+
+        } finally {
+
+            setSaving(false);
+
+        }
+
+    };
+
+
+    /*
+     * Create new status
+     *
+     * POST /status
+     */
+    const handleCreate = async () => {
+
+        if (!addingStatusForm.name.trim()) {
+
+            setError(
+                "Status name is required."
+            );
+
+            return;
+        }
+
+        try {
+
+            setSaving(true);
+            setError("");
+
+            const payload = {
+
+                name:
+                    addingStatusForm.name.trim(),
+
+                colourCode:
+                    addingStatusForm.colourCode
+
+            };
+
+            console.log(
+                "POST /status",
+                payload
+            );
+
+            const newStatus =
+                await createStatus(
+                    payload
+                );
+
+            console.log(
+                "Created status:",
+                newStatus
+            );
+
+            setStatuses(
+                previous => [
+                    ...previous,
+                    newStatus
+                ]
+            );
+
+            setAddingStatus(false);
+
+            setAddingStatusForm({
+                name: "",
+                colourCode: ""
+            });
+
+        } catch (err) {
+
+            console.error(
+                "Failed to create status:",
+                err
+            );
+
+            setError(
+                err.message ||
+                "Failed to create status."
             );
 
         } finally {
@@ -238,18 +349,36 @@ export default function StatusPage() {
                 </div>
 
 
-                <button
-                    className="refresh-button"
-                    onClick={() => {
-                        if (expandedRecord) {
-                            loadStatuses(expandedRecord);
-                        }
-                    }}
-                    disabled={loading}
-                >
-                    <span className="refresh-icon" aria-hidden="true"></span>
-                    <span>Refresh</span>
-                </button>
+                <div className="status-page-actions">
+
+                    <button
+                        className="add-status-button"
+                        onClick={handleAdd}
+                        type="button"
+                    >
+                        + Add Status
+                    </button>
+
+
+                    <button
+                        className="refresh-button"
+                        onClick={loadStatuses}
+                        disabled={loading}
+                        type="button"
+                    >
+
+                        <span
+                            className="refresh-icon"
+                            aria-hidden="true"
+                        ></span>
+
+                        <span>
+                            Refresh
+                        </span>
+
+                    </button>
+
+                </div>
 
             </div>
 
@@ -303,9 +432,36 @@ export default function StatusPage() {
 
                     status={editingStatus}
 
-                    onChange={handleChange}
+                    title="Edit Status"
+
+                    onChange={handleEditChange}
 
                     onSave={handleSave}
+
+                    onCancel={handleCancel}
+
+                    saving={saving}
+
+                />
+
+            )}
+
+
+            {/* =========================
+                ADD MODAL
+            ========================= */}
+
+            {addingStatus && (
+
+                <StatusForm
+
+                    status={addingStatusForm}
+
+                    title="Add Status"
+
+                    onChange={handleAddChange}
+
+                    onSave={handleCreate}
 
                     onCancel={handleCancel}
 
@@ -320,4 +476,3 @@ export default function StatusPage() {
     );
 
 }
-
