@@ -1,12 +1,15 @@
 package com.pdmrindia.worklens.module_activity;
 
 import com.pdmrindia.worklens.module_activity_type.ActivityType;
+import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
+import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +23,48 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String title;
+
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "activity_type_id")
-    private ActivityType activityType;
-
-    private String openProjectTicketId;
+    @JoinColumn(name = "record_status_id", nullable = false)
+    private RecordStatus recordStatus;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
+    @JoinColumn(name = "project_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_type_id", nullable = false)
+    private ActivityType activityType;
+
+    private Integer externalTicketId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_activity_id")
+    private Activity parentActivity;
+
+    @OneToMany(mappedBy = "parentActivity")
+    private List<Activity> childActivities = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", nullable = false)
+    private User createdBy;
+
+    private Instant createdOn;
+
+    @ManyToOne
+    @JoinColumn(name = "updater_id")
+    private User updatedBy;
+
+    private Instant updatedOn;
 
     @OneToMany(mappedBy = "activity")
     private List<SprintActivity> sprintActivities = new ArrayList<>();
+
+    @Version
+    private Long version;
 
     @Override
     public boolean equals(Object o) {

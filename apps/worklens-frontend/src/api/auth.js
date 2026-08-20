@@ -37,17 +37,17 @@ export async function login(identifier, password) {
     if (error.response) {
       const status = error.response.status;
       if (status === 401 || status === 403) {
-        throw new Error("Invalid credentials. Please check your User ID and password.");
+        throw new Error("Invalid credentials. Please check your User ID and password.", { cause: error });
       }
       if (status === 404) {
-        throw new Error("User not found. Please check your User ID.");
+        throw new Error("User not found. Please check your User ID.", { cause: error });
       }
       if (status >= 500) {
-        throw new Error("Server error. Please try again later.");
+        throw new Error("Server error. Please try again later.", { cause: error });
       }
     }
     if (error.request) {
-      throw new Error("Unable to reach the server. Please check your network connection.");
+      throw new Error("Unable to reach the server. Please check your network connection.", { cause: error });
     }
     throw error;
   }

@@ -1,60 +1,75 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Sidebar.css";
 
-// Menu items per role.
-// TODO: Replace placeholder labels/paths with real feature routes as they are built.
-const ROLE_MENUS = {
-  FH: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // FH-only
-    { label: "Team Overview", path: "/team-overview" },       // TODO: FH feature
-    { label: "Approvals", path: "/approvals" },               // TODO: FH feature
-    { label: "Reports", path: "/reports" },                   // TODO: FH feature
-  ],
-  TL: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // TL-only
-    { label: "My Team", path: "/my-team" },                   // TODO: TL feature
-    { label: "Task Assignments", path: "/task-assignments" }, // TODO: TL feature
-    { label: "Reports", path: "/reports" },                   // TODO: TL feature
-  ],
-  Member: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // Member-only
-    { label: "My Tasks", path: "/my-tasks" },                 // TODO: Member feature
-    { label: "My Profile", path: "/profile" },               // TODO: Member feature
-  ],
-};
+/**
+ * Sidebar reads userInfo from localStorage directly — no role prop needed.
+ *
+ * Nav items are the same for all roles for now; role-gating can be
+ * layered in once the permission model is finalised.
+ *
+ * "Sprint Activities" links to /sprints/:sprintId/activities.
+ * Because the sprint is chosen from the Active Sprints page, the sidebar item
+ * is marked disabled until a sprint is in context.
+ */
 
-function Sidebar({ role }) {
-  const normalizedRole = role?.toUpperCase() === "FH"
-    ? "FH"
-    : role?.toUpperCase() === "TL"
-    ? "TL"
-    : "Member";
+const NAV_ITEMS = [
+  { label: "Home",               path: "/home",        icon: "bi-house" },
+  { label: "Dashboard",          path: "/dashboard",   icon: "bi-grid-1x2" },
+  { label: "Projects And Sprints", path: "/projects",  icon: "bi-kanban" },
+  // Sprint-Activities: navigated to from the sprints page; no fixed sidebar path
+  { label: "Sprint Activities",  path: null,           icon: "bi-activity",      sprintNav: true },
+  { label: "Activities",         path: "/activities",  icon: "bi-journal-text" },
+  { label: "Entries",            path: "/entries",     icon: "bi-pencil-square" },
+  { label: "Reports",            path: "/reports",     icon: "bi-bar-chart" },
+  { label: "Members",            path: "/members",     icon: "bi-people" },
+  { label: "Support Files",      path: "/support-files", icon: "bi-paperclip" },
+  { label: "Settings",           path: "/settings",    icon: "bi-gear" },
+];
 
-  const menuItems = ROLE_MENUS[normalizedRole] ?? ROLE_MENUS["Member"];
+function Sidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Derive active sprint from current URL if on sprint-activities page
+  const sprintMatch = location.pathname.match(/^\/sprints\/([^/]+)\/activities/);
+  const activeSprintId = sprintMatch?.[1] ?? null;
 
   return (
     <aside className="sidebar">
-      <div className="sidebar__role-badge">{normalizedRole}</div>
       <ul className="sidebar__nav">
-        {menuItems.map((item) => (
-          <li key={item.path}>
-            <a
-              href={item.path}
-              className={`sidebar__nav-item${
-                window.location.pathname === item.path
-                  ? " sidebar__nav-item--active"
-                  : ""
-              }`}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          /* Sprint Activities — only navigable when a sprint is in the URL */
+          if (item.sprintNav) {
+            const isActive = !!activeSprintId;
+            return (
+              <li key="sprint-activities">
+                <button
+                  className={`sidebar__nav-item${isActive ? " sidebar__nav-item--active" : " sidebar__nav-item--disabled"}`}
+                  onClick={() => activeSprintId && navigate(`/sprints/${activeSprintId}/activities`)}
+                  title={isActive ? undefined : "Select a sprint first"}
+                  disabled={!isActive}
+                >
+                  <i className={`bi ${item.icon} sidebar__nav-icon`} />
+                  {item.label}
+                </button>
+              </li>
+            );
+          }
+
+          /* Regular nav items */
+          const isActive = item.path && location.pathname === item.path;
+          return (
+            <li key={item.path}>
+              <a
+                href={item.path ?? "#"}
+                className={`sidebar__nav-item${isActive ? " sidebar__nav-item--active" : ""}`}
+              >
+                <i className={`bi ${item.icon} sidebar__nav-icon`} />
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </aside>
   );

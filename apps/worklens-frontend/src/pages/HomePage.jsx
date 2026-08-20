@@ -15,9 +15,7 @@ function HomePage() {
     userInfo?.userId ||
     "User";
 
-  const role = userInfo?.role || "Member";
-
-  const [homeData, setHomeData] = useState(null);
+  const role = userInfo?.role || "Member";  const [homeData, setHomeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -30,7 +28,7 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <Sidebar role={role} />
+      <Sidebar />
 
       <main className="home-page__main">
         <div className="home-page__header">

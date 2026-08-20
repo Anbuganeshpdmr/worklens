@@ -12,4 +12,8 @@ public class SprintException {
         public SprintNotFoundException(String message){super(message);}
     }
 
+    public static class SprintProjectMismatchException extends RuntimeException{
+        public SprintProjectMismatchException(String message){super(message);}
+    }
+
 }

@@ -13,6 +13,7 @@ public class StatusService {
     private final StatusRepo statusRepo;
     private final RecordStatusService recordStatusService;
 
+    @Transactional
     public Status createStatus(Status status){
 
         status =  statusRepo.save(status);
@@ -33,6 +34,8 @@ public class StatusService {
         return statusRepo.findById(statusId).orElseThrow(()->new StatusException.NoSuchStatusException("No Matching Status found"));
     }
 
-
+    public Status getStatusByName(String name){
+        return statusRepo.findByName(name).orElseThrow(()->new StatusException.NoSuchStatusException("No Matching Status found"));
+    }
 
 }

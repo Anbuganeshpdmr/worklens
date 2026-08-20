@@ -1,5 +1,9 @@
 package com.pdmrindia.worklens.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pdmrindia.worklens.exception.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,17 +29,22 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwtToken = extractJwtFromRequest(request);
-        if(jwtToken != null){
-            JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwtToken);
-            System.out.println("Checking Auth before Authenticating: "+jwtAuthenticationToken.isAuthenticated());
-            Authentication authentication = authenticationManager.authenticate(jwtAuthenticationToken);
-            if(authentication.isAuthenticated()){
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        try{
+            String jwtToken = extractJwtFromRequest(request);
+            if(jwtToken != null){
+                JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwtToken);
+                Authentication authentication = authenticationManager.authenticate(jwtAuthenticationToken);
+                if(authentication.isAuthenticated()){
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
+            filterChain.doFilter(request,response);
+        } catch (JwtException ex) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(new ErrorResponse(ex.getMessage())));
+            return;
         }
-
-        filterChain.doFilter(request,response);
     }
 
     public String extractJwtFromRequest(HttpServletRequest request){
