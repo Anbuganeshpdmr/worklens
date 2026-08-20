@@ -6,6 +6,7 @@ const ROLE_MENUS = {
   FH: [
     // Common
     { label: "Dashboard", path: "/home" },
+    { label: "Record Status", path: "/record-status" },
     // FH-only
     { label: "Team Overview", path: "/team-overview" },       // TODO: FH feature
     { label: "Approvals", path: "/approvals" },               // TODO: FH feature
@@ -14,6 +15,7 @@ const ROLE_MENUS = {
   TL: [
     // Common
     { label: "Dashboard", path: "/home" },
+    { label: "Record Status", path: "/record-status" },
     // TL-only
     { label: "My Team", path: "/my-team" },                   // TODO: TL feature
     { label: "Task Assignments", path: "/task-assignments" }, // TODO: TL feature
