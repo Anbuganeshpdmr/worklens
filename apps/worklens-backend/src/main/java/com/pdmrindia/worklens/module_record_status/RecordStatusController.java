@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @RestController
@@ -17,6 +18,13 @@ public class RecordStatusController {
 
     private final RecordStatusService recordStatusService;
     private final RecordStatusDisplayDtoMapper recordStatusDisplayDtoMapper;
+
+    @GetMapping("/records-types")
+    public List<String> getRecordTypes() {
+        return Arrays.stream(Record.values())
+                     .map(Enum::name)
+                     .collect(Collectors.toList());
+    }
 
     @GetMapping("/records/{recordName}")
     public List<RecordStatusDisplayDto> getRecordStatus(@PathVariable("recordName") String recordName){

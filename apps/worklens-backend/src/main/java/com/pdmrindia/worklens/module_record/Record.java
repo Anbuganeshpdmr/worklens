@@ -10,5 +10,5 @@ public enum Record {
     ACTIVITY,
     ENTRY,
     MEMBER;
-
+   
 }
