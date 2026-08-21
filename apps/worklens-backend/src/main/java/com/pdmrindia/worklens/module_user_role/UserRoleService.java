@@ -9,10 +9,25 @@ public class UserRoleService {
 
     private final UserRoleRepo userRoleRepo;
 
-    // Create, Update, Get,
+    public Role createNewRole(String name){
+        Role role = new Role();
+        role.setName(name.toUpperCase());
+        return userRoleRepo.save(role);
+    }
+
+    public Role updateRole(int id, String name){
+        Role existingRole = getRoleById(id);
+        existingRole.setName(name.toUpperCase());
+        return userRoleRepo.save(existingRole);
+    }
 
     public Role getRoleByName(String name){
         return userRoleRepo.findByName(name)
+                .orElseThrow(()->new RuntimeException("Role not found"));
+    }
+
+    public Role getRoleById(int id){
+        return userRoleRepo.findById(id)
                 .orElseThrow(()->new RuntimeException("Role not found"));
     }
 }

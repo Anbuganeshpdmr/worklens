@@ -4,9 +4,8 @@ import com.pdmrindia.worklens.module_project.Project;
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDtoMapper;
 import com.pdmrindia.worklens.module_sprint.Sprint;
-import lombok.Getter;
+import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintMetricsDtoMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class SprintDisplayDtoMapper {
 
     private final RecordStatusDisplayDtoMapper mapper;
+    private final SprintMetricsDtoMapper sprintMetricsDtoMapper;
 
     public SprintDisplayDto getSprintDisplayDto(Sprint sprint){
         SprintDisplayDto dto = new SprintDisplayDto();
@@ -30,6 +30,8 @@ public class SprintDisplayDtoMapper {
 
         RecordStatusDisplayDto recordStatusDisplayDto = mapper.getRecordStatusDisplayDto(sprint.getRecordStatus());
         dto.setCurrentStatus(recordStatusDisplayDto);
+
+        dto.setSprintMetricsDto(sprintMetricsDtoMapper.getSprintMetrics(sprint));
 
         return dto;
     }

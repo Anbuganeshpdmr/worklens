@@ -6,6 +6,7 @@ import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDispla
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDtoMapper;
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusInputDto;
 import com.pdmrindia.worklens.module_status.Status;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class RecordStatusService {
     private final RecordStatusRepo recordStatusRepo;
     private final RecordStatusDisplayDtoMapper recordStatusDisplayDtoMapper;
 
+    @Transactional
     public void addRecordStatusForNewStatus(Status status){
         for(Record record: Record.values()){
             RecordStatus rs = new RecordStatus();
@@ -104,5 +106,11 @@ public class RecordStatusService {
             throw new RecordStatusException.RecordStatusNotAllowedException("Status Not Allowed");
         }
     }
+
+    public RecordStatus getByRecordAndStatus(Record record, Status status){
+        return recordStatusRepo.findByRecordAndStatus(record, status)
+                .orElseThrow(()->new RecordStatusException.NoSuchRecordStatusException("No valid record status found"));
+    }
+
 
 }

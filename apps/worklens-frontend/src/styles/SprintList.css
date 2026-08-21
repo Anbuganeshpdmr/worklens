@@ -1,0 +1,306 @@
+.sprint-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 8px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.sprint-list__loader,
+.sprint-list__empty {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+  font-size: 14px;
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.sprint-content {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sprint-header {
+  flex-shrink: 0;
+}
+
+.sprint-card {
+  position: relative;
+  width: min(100%, 700px);
+
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  overflow: visible;
+}
+
+.sprint-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.sprint-card__status-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+  pointer-events: none;
+}
+
+.sprint-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-right: 4px;
+}
+
+.sprint-card__title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.sprint-card__project-name {
+  margin-bottom: 2px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.sprint-card__title {
+  margin: 0;
+  color: #1f2937;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.sprint-card__header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sprint-card__created-date {
+  color: #6b7280;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sprint-card__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 3px 9px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sprint-card__menu-wrapper {
+  position: relative;
+}
+
+.sprint-card__menu-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sprint-card__menu-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.sprint-card__menu {
+  position: absolute;
+  top: 34px;
+  right: 0;
+  z-index: 1000;
+  min-width: 170px;
+  padding: 5px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.sprint-card__menu--top {
+  top: auto;
+  bottom: 34px;
+}
+
+.sprint-card__menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  color: #374151;
+  text-align: left;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sprint-card__menu-item:hover {
+  background: #f5f5f5;
+}
+
+.sprint-card__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sprint-card__field {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.sprint-card__field--full-width {
+  width: 100%;
+  display: block;
+}
+
+.sprint-card__label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.sprint-card__value {
+  color: #374151;
+  font-weight: 500;
+}
+
+.sprint-card__description {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sprint-card__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.sprint-card__action-btn {
+  padding: 7px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sprint-list__pagination {
+  width: min(100%, 700px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.sprint-list__pagination-btn {
+  padding: 7px 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sprint-list__pagination-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.sprint-list__pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sprint-list__pagination-info {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+@media (max-width: 700px) {
+  .sprint-card {
+    width: 100%;
+    padding: 14px 16px;
+  }
+
+  .sprint-card__header {
+    align-items: flex-start;
+  }
+
+  .sprint-card__header-actions {
+    flex-wrap: wrap;
+  }
+
+  .sprint-card__created-date {
+    width: 100%;
+    text-align: right;
+  }
+}
+
+@media (max-width: 600px) {
+  .sprint-card__body {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sprint-card__actions {
+    flex-direction: column;
+  }
+
+  .sprint-card__action-btn {
+    width: 100%;
+  }
+
+  .sprint-list__pagination {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}

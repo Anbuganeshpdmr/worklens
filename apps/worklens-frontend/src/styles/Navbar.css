@@ -1,0 +1,131 @@
+.navbar {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: #810B38;
+  border-bottom: 1px solid #810B38;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navbar__menu {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #ffffff;
+}
+
+.navbar__menu:hover {
+  color: #F1E2D1;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.navbar__name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.navbar__home {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.navbar__home:hover {
+  color: #F1E2D1;
+}
+
+.navbar__home-icon {
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar__notification,
+.navbar__profile {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.navbar__notification {
+  font-size: 1.2rem;
+}
+
+.navbar__notification:hover,
+.navbar__profile:hover {
+  color: #F1E2D1;
+}
+
+.navbar__avatar {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1) !important;
+}
+
+.navbar__avatar img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.navbar__notification img,
+.navbar__profile img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
+
+.navbar__notification img {
+  filter: brightness(0) invert(1);
+}

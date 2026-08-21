@@ -1,6 +1,7 @@
 package com.pdmrindia.worklens.module_sprint.mapperDtos;
 
 import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
+import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintMetricsDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,6 @@ public class SprintDisplayDto {
     private String createdBy;
     private String createdOn;
     private RecordStatusDisplayDto currentStatus;
+    private SprintMetricsDto sprintMetricsDto;
+
 }
