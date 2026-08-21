@@ -31,7 +31,7 @@ public class ProjectService {
 
     public Project editProject(int projectId, ProjectDto projectDto){
         Project project = getProjectById(projectId);
-        project.setName(project.getName());
+        project.setName(projectDto.getProjectName());
 
         RecordStatus updatedRecordStatus = recordStatusService.getRecordStatusById(projectDto.getSelectedRecordStatusId());
         recordStatusService.validateRecordStatusOfRecord(Record.PROJECT,updatedRecordStatus);

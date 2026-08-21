@@ -14,4 +14,8 @@ public class ProjectDisplayDto {
     private String createdBy;
     private String createdOn;
     private RecordStatusDisplayDto currentStatus;
+    private long totalSprints;
+    private long activeSprints;
+    private long totalActivities;
+
 }

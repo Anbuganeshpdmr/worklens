@@ -1,0 +1,217 @@
+/* ── Sprint Activities Page Shell ───────────────────────────── */
+.sa-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  text-align: left;
+  background: var(--bg, #fff);
+}
+
+.sa-page__body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.sa-page__main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 24px 32px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── Breadcrumb ────────────────────────────────────────────── */
+.sa-page__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: var(--text, #6b6375);
+  margin: 16px 0 10px;
+  flex-wrap: wrap;
+}
+
+.sa-page__bc-sep {
+  opacity: 0.45;
+  font-size: 0.7rem;
+}
+
+.sa-page__bc-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.74rem;
+  color: var(--text, #6b6375);
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.12s;
+}
+
+.sa-page__bc-link:hover {
+  color: var(--accent, #aa3bff);
+}
+
+.sa-page__bc-current {
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+}
+
+/* ── Page Header ───────────────────────────────────────────── */
+.sa-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border, #e5e4e7);
+}
+
+.sa-page__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sa-page__title-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sa-page__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-h, #08060d);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.sa-page__sprint-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent, #aa3bff);
+  background: var(--accent-bg, rgba(170, 59, 255, 0.12));
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-border, rgba(170, 59, 255, 0.3));
+}
+
+.sa-page__subtitle {
+  font-size: 0.8rem;
+  color: var(--text, #6b6375);
+  margin: 0;
+}
+
+/* ── Toolbar ───────────────────────────────────────────────── */
+.sa-page__header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sa-page__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--accent, #aa3bff);
+  color: #fff;
+  border: 1px solid var(--accent, #aa3bff);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background-color 0.13s ease, transform 0.1s ease;
+}
+
+.sa-page__add-btn:hover {
+  background: #9230e0;
+}
+
+.sa-page__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 6px;
+  background: var(--bg, #fff);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text, #6b6375);
+  transition: border-color 0.13s, color 0.13s, background-color 0.13s;
+}
+
+.sa-page__icon-btn:hover:not(:disabled) {
+  border-color: var(--accent, #aa3bff);
+  color: var(--accent, #aa3bff);
+}
+
+.sa-page__icon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sa-page__icon-btn--spinning i {
+  animation: sa-spin 0.8s linear infinite;
+}
+
+.sa-page__editor-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 6px;
+  background: var(--bg, #fff);
+  color: var(--text-h, #08060d);
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.13s ease;
+}
+
+.sa-page__editor-btn:hover {
+  border-color: var(--accent, #aa3bff);
+  color: var(--accent, #aa3bff);
+}
+
+.sa-page__editor-btn--active {
+  background: var(--accent-bg, rgba(170, 59, 255, 0.1));
+  border-color: var(--accent, #aa3bff);
+  color: var(--accent, #aa3bff);
+  font-weight: 600;
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+.sa-page__footer {
+  margin-top: 14px;
+}
+
+@keyframes sa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .sa-page__main {
+    padding: 0 16px 24px;
+  }
+}
