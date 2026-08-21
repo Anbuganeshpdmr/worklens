@@ -29,14 +29,14 @@ export default function AppRoutes() {
           }
         />
 
-         <Route
-            path="/user-management"
-            element={
-           <ProtectedRoute>
-          <UserManagement />
-          </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/user-management"
+          element={
+            <ProtectedRoute>
+              <UserManagement />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Catch-all: unknown paths redirect to / */}
         <Route path="*" element={<Navigate to="/" replace />} />

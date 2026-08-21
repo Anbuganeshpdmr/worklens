@@ -4,27 +4,24 @@ import "../styles/Sidebar.css";
 // TODO: Replace placeholder labels/paths with real feature routes as they are built.
 const ROLE_MENUS = {
   FH: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // FH-only
-    { label: "Team Overview", path: "/team-overview" },       // TODO: FH feature
-    { label: "Approvals", path: "/approvals" },               // TODO: FH feature
-    { label: "Reports", path: "/reports" },                   // TODO: FH feature
+    { label: "Dashboard",       path: "/home" },
+    { label: "User Management", path: "/user-management" },
+    { label: "Team Overview",   path: "/team-overview" },       // TODO: FH feature
+    { label: "Approvals",       path: "/approvals" },           // TODO: FH feature
+    { label: "Reports",         path: "/reports" },             // TODO: FH feature
   ],
   TL: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // TL-only
-    { label: "My Team", path: "/my-team" },                   // TODO: TL feature
-    { label: "Task Assignments", path: "/task-assignments" }, // TODO: TL feature
-    { label: "Reports", path: "/reports" },                   // TODO: TL feature
+    { label: "Dashboard",       path: "/home" },
+    { label: "User Management", path: "/user-management" },
+    { label: "My Team",         path: "/my-team" },             // TODO: TL feature
+    { label: "Task Assignments",path: "/task-assignments" },    // TODO: TL feature
+    { label: "Reports",         path: "/reports" },             // TODO: TL feature
   ],
   Member: [
-    // Common
-    { label: "Dashboard", path: "/home" },
-    // Member-only
-    { label: "My Tasks", path: "/my-tasks" },                 // TODO: Member feature
-    { label: "My Profile", path: "/profile" },               // TODO: Member feature
+    { label: "Dashboard",       path: "/home" },
+    { label: "User Management", path: "/user-management" },
+    { label: "My Tasks",        path: "/my-tasks" },            // TODO: Member feature
+    { label: "My Profile",      path: "/profile" },             // TODO: Member feature
   ],
 };
 

@@ -1,11 +1,17 @@
-import UserForm from "./UserForm";
+import Addmember from "./Addmember";
+import "../../styles/UserModal.css";
 
-function UserModal({ user, onSave, onClose }) {
+function UserModal({ user, onSave, onClose, saving }) {
   return (
     <div className="modal-overlay">
+
       <div className="user-modal">
+
         <div className="modal-header">
-          <h2>{user ? "Edit User" : "Add Member"}</h2>
+
+          <h2>
+            {user ? "Edit User" : "Add Member"}
+          </h2>
 
           <button
             type="button"
@@ -14,14 +20,18 @@ function UserModal({ user, onSave, onClose }) {
           >
             ×
           </button>
-        </div>
 
-        <UserForm
+        </div>
+        
+        <Addmember
           user={user}
           onSave={onSave}
           onCancel={onClose}
+          saving={saving}
         />
+
       </div>
+
     </div>
   );
 }

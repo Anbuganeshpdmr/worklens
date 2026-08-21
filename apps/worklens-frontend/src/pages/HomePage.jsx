@@ -1,62 +1,88 @@
-import { useEffect, useState } from "react";
+﻿import React from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { getHome } from "../api/home";
 import "../styles/HomePage.css";
 
-function HomePage() {
-  // Read userInfo immediately from localStorage — available as soon as login succeeds
+const Homepage = () => {
+  const navigate = useNavigate();
+
   const stored = localStorage.getItem("userInfo");
   const userInfo = stored ? JSON.parse(stored) : null;
 
-  const displayName =
-    userInfo?.name ||
-    userInfo?.fullName ||
-    userInfo?.username ||
-    userInfo?.userId ||
-    "User";
+  const name        = userInfo?.name        || "User";
+  const role        = userInfo?.role        || "Member";
+  const empId       = userInfo?.empId       || "-";
+  const email       = userInfo?.emailId     || userInfo?.email || "-";
+  const designation = userInfo?.designation || "-";
 
-  const role = userInfo?.role || "Member";
-
-  const [homeData, setHomeData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    getHome()
-      .then((data) => setHomeData(data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
+    navigate("/");
+  };
 
   return (
     <div className="home-page">
       <Sidebar role={role} />
-
       <main className="home-page__main">
+
         <div className="home-page__header">
-          <h2 className="home-page__greeting">Hello, {displayName}</h2>
-          <p className="home-page__role">Role: {role}</p>
+          <div>
+            <h1 className="home-page__greeting">Welcome back, {name}</h1>
+            <p className="home-page__role">{role} - {designation}</p>
+          </div>
+          <button className="home-logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+
+        <div className="home-card-grid">
+          <div className="home-info-card">
+            <div className="home-info-card__icon">&#128100;</div>
+            <div className="home-info-card__body">
+              <p className="home-info-card__label">Full Name</p>
+              <p className="home-info-card__value">{name}</p>
+            </div>
+          </div>
+          <div className="home-info-card">
+            <div className="home-info-card__icon">&#128219;</div>
+            <div className="home-info-card__body">
+              <p className="home-info-card__label">Employee ID</p>
+              <p className="home-info-card__value">{empId}</p>
+            </div>
+          </div>
+          <div className="home-info-card">
+            <div className="home-info-card__icon">&#9993;</div>
+            <div className="home-info-card__body">
+              <p className="home-info-card__label">Email</p>
+              <p className="home-info-card__value">{email}</p>
+            </div>
+          </div>
+          <div className="home-info-card">
+            <div className="home-info-card__icon">&#127991;</div>
+            <div className="home-info-card__body">
+              <p className="home-info-card__label">Role</p>
+              <p className="home-info-card__value">{role}</p>
+            </div>
+          </div>
         </div>
 
         <div className="home-page__content">
-          {loading && (
-            <div className="home-page__loading">Loading dashboard…</div>
-          )}
-
-          {!loading && error && (
-            <div className="home-page__error">{error}</div>
-          )}
-
-          {/* TODO: Render homeData fields here once the /home API shape is finalised */}
-          {!loading && !error && homeData && (
-            <pre style={{ fontSize: "0.8rem", opacity: 0.7 }}>
-              {JSON.stringify(homeData, null, 2)}
-            </pre>
-          )}
+          <h2 className="home-section-title">Quick Actions</h2>
+          <div className="home-actions-grid">
+            <button
+              className="home-action-card"
+              onClick={() => navigate("/user-management")}
+            >
+              <span className="home-action-card__icon">&#128101;</span>
+              <span className="home-action-card__label">User Management</span>
+            </button>
+          </div>
         </div>
+
       </main>
     </div>
   );
-}
+};
 
-export default HomePage;
+export default Homepage;
