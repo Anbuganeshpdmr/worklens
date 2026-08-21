@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import ActivityMetrics from "../components/sprint-activities/ActivityMetrics";
 import ActivityFilterBar from "../components/sprint-activities/ActivityFilterBar";
 import ActivitiesTable from "../components/sprint-activities/ActivitiesTable";
@@ -268,8 +267,6 @@ function SprintActivitiesPage() {
 
   return (
     <div className="sa-page">
-      <Sidebar />
-
       <div className="sa-page__body">
         <main className="sa-page__main">
           {/* Breadcrumb Navigation */}

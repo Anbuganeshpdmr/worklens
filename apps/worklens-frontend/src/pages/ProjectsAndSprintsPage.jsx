@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import { getActiveProjects, getActiveSprints } from "../api/projects";
 import "../styles/ProjectsAndSprintsPage.css";
 
@@ -46,7 +45,6 @@ function ProjectsAndSprintsPage() {
 
   return (
     <div className="projects-page">
-      <Sidebar />
       <main className="projects-page__main">
         <header className="projects-page__header">
           <div>

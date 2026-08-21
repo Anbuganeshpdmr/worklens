@@ -1,4 +1,3 @@
-import Sidebar from "../components/Sidebar";
 import "../styles/activities/ActivitiesPage.css";
 
 /**
@@ -13,8 +12,6 @@ import "../styles/activities/ActivitiesPage.css";
 function ActivitiesPage() {
   return (
     <div className="act-page">
-      <Sidebar />
-
       <main className="act-page__main">
         <div className="act-page__placeholder">
           <div className="act-page__placeholder-icon">
