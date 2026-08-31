@@ -69,12 +69,25 @@ public class CustomExceptionHandler {
             RecordStatusException.DefaultStatusException.class,
             RecordStatusException.NoDefaultStatusException.class,
             RecordStatusException.DefaultStatusNotAllowedException.class,
-            RecordStatusException.RecordStatusMismatchException.class,
+            StatusException.RecordStatusMismatchException.class,
             RecordStatusException.RecordStatusNotAllowedException.class,
             ProjectException.ProjectNotFoundException.class,
             SprintException.SprintNotFoundException.class,
             ActivityException.ActivityNotFoundException.class,
-            SprintActivityException.SprintActivityNotFoundException.class
+            SprintActivityException.SprintActivityNotFoundException.class,
+            EntryException.EntryNotFoundException.class,
+            RecordStatusException.NoSuchRecordStatusException.class,
+            StatusException.StatusUpdateRestrictedException.class,
+            StatusException.DefaultStatusExceedException.class,
+            StatusException.RecordStatusCountMismatchException.class,
+            StatusException.DefaultStatusCountMismatchException.class,
+            StatusException.NoSuchStatusException.class,
+            UserException.ShortUserNameException.class,
+            CategoryException.NoSuchCategoryException.class,
+            CategoryException.CategoryTypeMismatchException.class,
+            EntryException.UnauthorisedEntryAccessException.class,
+            ActivityException.TestCategoryMismatchException.class,
+            SprintActivityException.SprintAndActivityProjectMismatchException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestExceptions(RuntimeException ex) {

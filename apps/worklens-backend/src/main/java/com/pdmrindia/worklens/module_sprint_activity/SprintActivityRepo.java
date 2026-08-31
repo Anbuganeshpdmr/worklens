@@ -2,8 +2,8 @@ package com.pdmrindia.worklens.module_sprint_activity;
 
 import com.pdmrindia.worklens.module_activity.Activity;
 import com.pdmrindia.worklens.module_activity_type.ActivityType;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint.Sprint;
+import com.pdmrindia.worklens.module_status.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +19,8 @@ public interface SprintActivityRepo extends JpaRepository<SprintActivity, Intege
 
     List<SprintActivity> findBySprintAndActivityIn(Sprint sprint, List<Activity> activityList);
 
+    List<SprintActivity> findBySprintAndIsAllowed(Sprint sprint, boolean isAllowed);
+
     /*@Query("""
     SELECT COUNT(sa)
     FROM SprintActivity sa
@@ -29,8 +31,7 @@ public interface SprintActivityRepo extends JpaRepository<SprintActivity, Intege
             @Param("sprint") Sprint sprint,
             @Param("activityType") ActivityType activityType
     );*/
+    //long countBySprintAndActivity_ActivityType(Sprint sprint,ActivityType activityType);
 
-    long countBySprintAndActivity_ActivityType(Sprint sprint,ActivityType activityType);
-
-    long countBySprintAndRecordStatus(Sprint sprint, RecordStatus recordStatus);
+    long countBySprintAndStatus(Sprint sprint, Status status);
 }

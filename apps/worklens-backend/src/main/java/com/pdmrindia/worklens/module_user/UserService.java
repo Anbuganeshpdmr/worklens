@@ -1,9 +1,11 @@
 package com.pdmrindia.worklens.module_user;
 
+import com.pdmrindia.worklens.exception.ResourceException;
 import com.pdmrindia.worklens.exception.UserException;
-import com.pdmrindia.worklens.module_record.Record;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
-import com.pdmrindia.worklens.module_record_status.RecordStatusService;
+import com.pdmrindia.worklens.module_resource.ResourceService;
+import com.pdmrindia.worklens.module_status.Record;
+import com.pdmrindia.worklens.module_status.Status;
+import com.pdmrindia.worklens.module_status.StatusService;
 import com.pdmrindia.worklens.module_user.mapperDtos.*;
 import com.pdmrindia.worklens.module_user_role.Role;
 
@@ -12,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -24,13 +27,16 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
     private final UserInfoMapper userInfoMapper;
-    private final RecordStatusService recordStatusService;
     private final CurrentUserService currentUserService;
+    private final StatusService statusService;
+    private final ProfilePicConfig profilePicConfig;
+    private final ResourceService resourceService;
 
 
     public User createUser(NewUserDto newUserDto){
         User newUser = new User();
 
+        if(newUserDto.getName().trim().length()<2) throw new UserException.ShortUserNameException("Username should be minimum 2 characters");
         newUser.setName(newUserDto.getName());
         newUser.setDesignation(newUserDto.getDesignation());
         newUser.setEmpId(newUserDto.getEmpId());
@@ -40,8 +46,7 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(newUserDto.getEmpId()));
 
         //  New user will be set Active by default
-        //  newUser.setActive(true);
-        newUser.setRecordStatus(recordStatusService.getDefaultRecordStatus(Record.MEMBER));
+        newUser.setStatus(statusService.getRecordStatusByName(Record.MEMBER,"active"));
 
         Role role = userRoleService.getRoleByName(newUserDto.getRole().toUpperCase());
         newUser.setRole(role);
@@ -55,8 +60,10 @@ public class UserService {
 
         //user.setActive(updatedUserInfoDto.isActive());
 
-        RecordStatus updatedRecordStatus = recordStatusService.getRecordStatusById(updatedUserInfoDto.getSelectedRecordStatusId());
-        recordStatusService.validateRecordStatusOfRecord(Record.MEMBER,updatedRecordStatus);
+        Status updatedStatus = statusService.getStatusById(updatedUserInfoDto.getSelectedStatusId());
+        statusService.validateRecordStatusOfRecord(Record.MEMBER,updatedStatus);
+
+        if(updatedUserInfoDto.getName().trim().length()<2) throw new UserException.ShortUserNameException("Username should be minimum 2 characters");
 
         user.setName(updatedUserInfoDto.getName());
         user.setDesignation(updatedUserInfoDto.getDesignation());
@@ -103,5 +110,24 @@ public class UserService {
         System.out.println("New pwd: "+resetPasswordDto.get("newPassword"));
         user.setPassword(passwordEncoder.encode(resetPasswordDto.get("newPassword")));
         userRepo.save(user);
+    }
+
+    @Transactional
+    public User changeProfilePic(MultipartFile profilePic, boolean isDpChanged) {
+        User user = currentUserService.user();
+        if(isDpChanged){
+            if(profilePic.isEmpty()){
+                user.setDpPath(null);
+            }else{
+                if (!profilePicConfig.getAllowedTypes().contains(profilePic.getContentType())) {
+                    throw new ResourceException.FileTypeMismatchException("File type must be JPG or PNG only");
+                }
+                if(profilePic.getSize()>profilePicConfig.getMaxSize().toBytes()){
+                    throw new ResourceException.FileOverSizeException("Uploaded file size must be less than "+profilePicConfig.getMaxSize());
+                }
+                user.setDpPath(resourceService.setProfilePicture(profilePic));
+            }
+        }
+        return userRepo.save(user);
     }
 }

@@ -12,5 +12,5 @@ public class UpdateUserDto {
     private String empId;
     private String role;
     private String designation;
-    private int selectedRecordStatusId;
+    private int selectedStatusId;
 }

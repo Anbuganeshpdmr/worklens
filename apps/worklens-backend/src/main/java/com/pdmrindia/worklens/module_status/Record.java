@@ -1,4 +1,4 @@
-package com.pdmrindia.worklens.module_record;
+package com.pdmrindia.worklens.module_status;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,7 +1,6 @@
 package com.pdmrindia.worklens.module_project.mapperDtos;
 
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
-import com.pdmrindia.worklens.module_status.Status;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ public class ProjectDisplayDto {
     private String projectName;
     private String createdBy;
     private String createdOn;
-    private RecordStatusDisplayDto currentStatus;
+    private StatusDisplayDto currentStatus;
     private long totalSprints;
     private long activeSprints;
     private long totalActivities;

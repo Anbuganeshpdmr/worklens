@@ -1,9 +1,9 @@
 package com.pdmrindia.worklens.module_activity;
 
 import com.pdmrindia.worklens.module_activity_type.ActivityType;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
+import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,8 +28,8 @@ public class Activity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "record_status_id", nullable = false)
-    private RecordStatus recordStatus;
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "project_id")

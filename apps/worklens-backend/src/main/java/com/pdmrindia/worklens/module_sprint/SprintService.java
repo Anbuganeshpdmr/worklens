@@ -1,15 +1,13 @@
 package com.pdmrindia.worklens.module_sprint;
 
-import com.pdmrindia.worklens.exception.ProjectException;
+
 import com.pdmrindia.worklens.exception.SprintException;
-import com.pdmrindia.worklens.module_project.Project;
 import com.pdmrindia.worklens.module_project.ProjectService;
-import com.pdmrindia.worklens.module_project.mapperDtos.ProjectDto;
-import com.pdmrindia.worklens.module_record.Record;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
-import com.pdmrindia.worklens.module_record_status.RecordStatusService;
+import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.EditSprintDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.NewSprintReqDto;
+import com.pdmrindia.worklens.module_status.Status;
+import com.pdmrindia.worklens.module_status.StatusService;
 import com.pdmrindia.worklens.module_user.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +20,8 @@ public class SprintService {
 
     private final SprintRepo sprintRepo;
     private final ProjectService projectService;
-    private final RecordStatusService recordStatusService;
     private final CurrentUserService currentUserService;
+    private final StatusService statusService;
 
     public Sprint createNewSprint(NewSprintReqDto dto){
         Sprint sprint = new Sprint();
@@ -32,20 +30,20 @@ public class SprintService {
         sprint.setProject(projectService.getProjectById(dto.getProjectId()));
         sprint.setCreatedBy(currentUserService.user());
         sprint.setCreatedOn(Instant.now());
-        sprint.setRecordStatus(recordStatusService.getDefaultRecordStatus(Record.SPRINT));
+        sprint.setStatus(statusService.getRecordStatusByName(Record.SPRINT,"active"));
 
         return sprintRepo.save(sprint);
     }
 
-    public Sprint editSprint(int sprintId, EditSprintDto editSprintDto){
+    public Sprint editSprint(EditSprintDto editSprintDto){
 
-        Sprint sprint = getSprintById(sprintId);
+        Sprint sprint = getSprintById(editSprintDto.getSprintId());
         sprint.setName(editSprintDto.getSprintName());
 
-        RecordStatus updatedRecordStatus = recordStatusService.getRecordStatusById(editSprintDto.getSelectedRecordStatusId());
-        recordStatusService.validateRecordStatusOfRecord(Record.SPRINT,updatedRecordStatus);
+        Status updatedStatus = statusService.getStatusById(editSprintDto.getSelectedStatusId());
+        statusService.validateRecordStatusOfRecord(Record.SPRINT,updatedStatus);
+        sprint.setStatus(updatedStatus);
 
-        sprint.setRecordStatus(updatedRecordStatus);
         return sprintRepo.save(sprint);
     }
 

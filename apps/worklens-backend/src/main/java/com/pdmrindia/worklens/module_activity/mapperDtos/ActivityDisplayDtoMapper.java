@@ -1,10 +1,12 @@
 package com.pdmrindia.worklens.module_activity.mapperDtos;
 
 import com.pdmrindia.worklens.module_activity.Activity;
+import com.pdmrindia.worklens.module_activity_type.mapperDtos.TypeDisplayDtoMapper;
+import com.pdmrindia.worklens.module_category.mapperDtos.CategoryDisplayDtoMapper;
 import com.pdmrindia.worklens.module_project.Project;
 import com.pdmrindia.worklens.module_project.mapperDtos.SimpleProjectInfoDtoMapper;
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDtoMapper;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDto;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDtoMapper;
 import com.pdmrindia.worklens.module_user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Component;
 public class ActivityDisplayDtoMapper {
 
     private final SimpleProjectInfoDtoMapper simpleProjectInfoDtoMapper;
-    private final RecordStatusDisplayDtoMapper rsMapper;
+    private final StatusDisplayDtoMapper statusMapper;
+    private final CategoryDisplayDtoMapper categoryMapper;
+    private final TypeDisplayDtoMapper typeMapper;
 
     public ActivityDisplayDto getActivityDisplayDto(Activity activity){
         ActivityDisplayDto dto = new ActivityDisplayDto();
@@ -25,12 +29,13 @@ public class ActivityDisplayDtoMapper {
 
         dto.setVersion(activity.getVersion());
 
-        dto.setActivityType(activity.getActivityType());
+        dto.setActivityType(typeMapper.getSimpleTypeDto(activity.getActivityType()));
+        dto.setCategory(categoryMapper.getSimpleCategoryDispDto(activity.getActivityType().getCategory()));
 
         dto.setCreatedBy(activity.getCreatedBy().getName());
         dto.setCreatedOn(activity.getCreatedOn().toString());
 
-        RecordStatusDisplayDto recordStatusDisplayDto = rsMapper.getRecordStatusDisplayDto(activity.getRecordStatus());
+        StatusDisplayDto recordStatusDisplayDto = statusMapper.getStatusDisplayDto(activity.getStatus());
         dto.setCurrentStatus(recordStatusDisplayDto);
 
         User updatedByUser = activity.getUpdatedBy();

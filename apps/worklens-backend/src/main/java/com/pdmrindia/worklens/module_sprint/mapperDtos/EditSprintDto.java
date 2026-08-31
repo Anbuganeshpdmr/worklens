@@ -9,5 +9,5 @@ public class EditSprintDto {
 
     private int sprintId;
     private String sprintName;
-    private int selectedRecordStatusId;
+    private int selectedStatusId;
 }

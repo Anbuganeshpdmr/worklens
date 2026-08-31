@@ -20,7 +20,8 @@ function ProjectsAndSprintsPage() {
         setSprints(toItems(sprintData));
       })
       .catch((err) => {
-        if (mounted) setError(err.message || "Failed to load projects and sprints.");
+        if (mounted)
+          setError(err.message || "Failed to load projects and sprints.");
       })
       .finally(() => {
         if (mounted) setLoading(false);
@@ -39,7 +40,9 @@ function ProjectsAndSprintsPage() {
         setProjects(toItems(projectData));
         setSprints(toItems(sprintData));
       })
-      .catch((err) => setError(err.message || "Failed to load projects and sprints."))
+      .catch((err) =>
+        setError(err.message || "Failed to load projects and sprints."),
+      )
       .finally(() => setLoading(false));
   }
 
@@ -63,41 +66,69 @@ function ProjectsAndSprintsPage() {
           <div className="projects-page__error" role="alert">
             <i className="bi bi-exclamation-circle" />
             <span>{error}</span>
-            <button type="button" onClick={retry}>Try again</button>
+            <button type="button" onClick={retry}>
+              Try again
+            </button>
           </div>
         )}
 
-        <section className="projects-page__section" aria-labelledby="active-projects-title">
+        <section
+          className="projects-page__section"
+          aria-labelledby="active-projects-title"
+        >
           <div className="projects-page__section-heading">
             <div>
               <p className="projects-page__section-kicker">Portfolio</p>
               <h2 id="active-projects-title">Active projects</h2>
             </div>
-            <span className="projects-page__count">{projects.length} active</span>
+            <span className="projects-page__count">
+              {projects.length} active
+            </span>
           </div>
           <div className="projects-page__project-rail">
-            {loading ? <LoadingCards count={3} /> : projects.length ? projects.map((project, index) => (
-              <ProjectCard key={getId(project, index)} project={project} />
-            )) : <EmptyState label="No active projects" />}
+            {loading ? (
+              <LoadingCards count={3} />
+            ) : projects.length ? (
+              projects.map((project, index) => (
+                <ProjectCard key={getId(project, index)} project={project} />
+              ))
+            ) : (
+              <EmptyState label="No active projects" />
+            )}
           </div>
         </section>
 
-        <section className="projects-page__section projects-page__section--sprints" aria-labelledby="active-sprints-title">
+        <section
+          className="projects-page__section projects-page__section--sprints"
+          aria-labelledby="active-sprints-title"
+        >
           <div className="projects-page__section-heading">
             <div>
               <p className="projects-page__section-kicker">Delivery cycle</p>
               <h2 id="active-sprints-title">Active Sprints</h2>
             </div>
-            <span className="projects-page__count">{sprints.length} active</span>
+            <span className="projects-page__count">
+              {sprints.length} active
+            </span>
           </div>
           <div className="projects-page__sprint-grid">
-            {loading ? <LoadingCards count={6} /> : sprints.length ? sprints.map((sprint, index) => (
-              <SprintCard
-                key={getSprintId(sprint, index)}
-                sprint={sprint}
-                onOpen={() => navigate(`/sprints/${getSprintId(sprint, index)}/activities`)}
-              />
-            )) : <EmptyState label="No active sprints" />}
+            {loading ? (
+              <LoadingCards count={6} />
+            ) : sprints.length ? (
+              sprints.map((sprint, index) => (
+                <SprintCard
+                  key={getSprintId(sprint, index)}
+                  sprint={sprint}
+                  onOpen={() =>
+                    navigate(
+                      `/sprints/${getSprintId(sprint, index)}/activities`,
+                    )
+                  }
+                />
+              ))
+            ) : (
+              <EmptyState label="No active sprints" />
+            )}
           </div>
         </section>
       </main>
@@ -106,15 +137,40 @@ function ProjectsAndSprintsPage() {
 }
 
 function ProjectCard({ project }) {
-  const title = getText(project, ["name", "projectName", "title"], "Untitled project");
+  const title = getText(
+    project,
+    ["name", "projectName", "title"],
+    "Untitled project",
+  );
   const id = getText(project, ["projectId", "id", "code"], "Project");
-  const description = getText(project, ["description", "summary"], "Active project");
-  const owner = getText(project, ["ownerName", "owner", "createdBy"], "Team workspace");
+  const description = getText(
+    project,
+    ["description", "summary"],
+    "Active project",
+  );
+  const owner = getText(
+    project,
+    ["ownerName", "owner", "createdBy"],
+    "Team workspace",
+  );
 
   return (
-    <article className="project-card">
+    <article
+      className="project-card"
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onOpen();
+        }
+      }}
+    >
       <div className="project-card__topline">
-        <span className="project-card__icon"><i className="bi bi-folder2-open" /></span>
+        <span className="project-card__icon">
+          <i className="bi bi-folder2-open" />
+        </span>
         <span className="project-card__status">Active</span>
       </div>
       <h3>{title}</h3>
@@ -129,8 +185,16 @@ function ProjectCard({ project }) {
 }
 
 function SprintCard({ sprint, onOpen }) {
-  const title = getText(sprint, ["name", "sprintName", "title"], "Untitled sprint");
-  const project = getText(sprint, ["projectName", "project?.name"], "Active project");
+  const title = getText(
+    sprint,
+    ["name", "sprintName", "title"],
+    "Untitled sprint",
+  );
+  const project = getText(
+    sprint,
+    ["projectName", "project?.name"],
+    "Active project",
+  );
   const start = getDate(sprint, ["startDate", "startsOn", "startTime"]);
   const end = getDate(sprint, ["endDate", "endsOn", "endTime"]);
 
@@ -148,14 +212,24 @@ function SprintCard({ sprint, onOpen }) {
       }}
     >
       <div className="sprint-card__topline">
-        <span className="sprint-card__icon"><i className="bi bi-lightning-charge-fill" /></span>
+        <span className="sprint-card__icon">
+          <i className="bi bi-lightning-charge-fill" />
+        </span>
         <span className="sprint-card__status">Active</span>
       </div>
       <h3>{title}</h3>
-      <p className="sprint-card__project"><i className="bi bi-folder2" /> {project}</p>
+      <p className="sprint-card__project">
+        <i className="bi bi-folder2" /> {project}
+      </p>
       <div className="sprint-card__dates">
-        <span><small>Starts</small>{start}</span>
-        <span><small>Ends</small>{end}</span>
+        <span>
+          <small>Starts</small>
+          {start}
+        </span>
+        <span>
+          <small>Ends</small>
+          {end}
+        </span>
       </div>
       <button
         type="button"
@@ -178,7 +252,12 @@ function LoadingCards({ count }) {
 }
 
 function EmptyState({ label }) {
-  return <div className="projects-page__empty"><i className="bi bi-inbox" /><span>{label}</span></div>;
+  return (
+    <div className="projects-page__empty">
+      <i className="bi bi-inbox" />
+      <span>{label}</span>
+    </div>
+  );
 }
 
 function toItems(response) {
@@ -190,7 +269,11 @@ function toItems(response) {
 }
 
 function getId(item, index = 0) {
-  return getText(item, ["id", "projectId", "sprintId", "code"], `item-${index}`);
+  return getText(
+    item,
+    ["id", "projectId", "sprintId", "code"],
+    `item-${index}`,
+  );
 }
 
 function getSprintId(item, index = 0) {
@@ -199,8 +282,11 @@ function getSprintId(item, index = 0) {
 
 function getText(item, fields, fallback) {
   for (const field of fields) {
-    const value = field.split(".").reduce((current, key) => current?.[key], item);
-    if (value !== undefined && value !== null && String(value).trim()) return String(value);
+    const value = field
+      .split(".")
+      .reduce((current, key) => current?.[key], item);
+    if (value !== undefined && value !== null && String(value).trim())
+      return String(value);
   }
   return fallback;
 }
@@ -209,7 +295,9 @@ function getDate(item, fields) {
   const value = getText(item, fields, "Not scheduled");
   if (value === "Not scheduled") return value;
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 export default ProjectsAndSprintsPage;

@@ -1,7 +1,6 @@
 package com.pdmrindia.worklens.module_project.mapperDtos;
 
 import com.pdmrindia.worklens.module_project.Project;
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
 import org.springframework.stereotype.Component;
 
 @Component

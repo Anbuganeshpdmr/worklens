@@ -1,9 +1,11 @@
 package com.pdmrindia.worklens.module_sprint;
 
+import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.EditSprintDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.NewSprintReqDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.SprintDisplayDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.SprintDisplayDtoMapper;
+import com.pdmrindia.worklens.module_status.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ public class SprintController {
     private final SprintService sprintService;
     private final SprintDisplayDtoMapper sprintDisplayDtoMapper;
     private final SprintRepo sprintRepo;
+    private final StatusService statusService;
 
 
     @PostMapping("/sprints")
@@ -26,8 +29,8 @@ public class SprintController {
     }
 
     @PutMapping("/sprints/{id}")
-    public SprintDisplayDto editSprint(@PathVariable("id") int sprintId, @RequestBody EditSprintDto sprintDto){
-        Sprint updatedSprint = sprintService.editSprint(sprintId,sprintDto);
+    public SprintDisplayDto editSprint(@RequestBody EditSprintDto sprintDto){
+        Sprint updatedSprint = sprintService.editSprint(sprintDto);
         return sprintDisplayDtoMapper.getSprintDisplayDto(updatedSprint);
     }
 
@@ -43,8 +46,8 @@ public class SprintController {
 
     @GetMapping("/sprints/active")
     public List<SprintDisplayDto> getAllActiveSprints(){
-        return sprintRepo.findAll().stream()
-                .filter(s->s.getRecordStatus().getStatus().getName().equalsIgnoreCase("Active"))
+        return sprintRepo.findByStatus(statusService.getRecordStatusByName(Record.SPRINT,"active"))
+                .stream()
                 .map(sprintDisplayDtoMapper::getSprintDisplayDto)
                 .toList();
     }

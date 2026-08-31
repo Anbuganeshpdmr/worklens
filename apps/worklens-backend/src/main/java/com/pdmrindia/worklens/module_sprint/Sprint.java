@@ -1,8 +1,8 @@
 package com.pdmrindia.worklens.module_sprint;
 
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
+import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,14 +15,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "sprints")
+@Table(name = "sprints",uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_project_sprint_name",
+                columnNames = {"project_id", "sprint_name"}
+        )
+})
 public class Sprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "sprint_name", nullable = false)
     private String name;
 
     @ManyToOne
@@ -33,8 +38,8 @@ public class Sprint {
     private List<SprintActivity> sprintActivities = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "record_status_id", nullable = false)
-    private RecordStatus recordStatus;
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)

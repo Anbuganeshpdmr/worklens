@@ -1,6 +1,6 @@
 package com.pdmrindia.worklens.module_user;
 
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
+import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user_role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -37,17 +37,33 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String emailId;
 
-   /* @Column(nullable = false)
-    private boolean isActive;*/
-
     @ManyToOne
-    @JoinColumn(name = "record_status_id",nullable = false)
-    private RecordStatus recordStatus;
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     private String designation;
 
     @ManyToOne(optional = false)
     private Role role;
+
+    private String dpPath;
+
+    @Transient
+    public boolean isDpAvailable() {
+        return dpPath != null && !dpPath.isBlank();
+    }
+
+    @Transient
+    public String getInitials() {
+        String[] parts = this.name.trim().split("\\s+");
+        StringBuilder initials = new StringBuilder();
+        if (parts.length >= 2) {
+            initials.append(parts[0].charAt(0)).append(parts[1].charAt(0));
+        } else {
+            initials.append(parts[0].charAt(0)).append(parts[0].charAt(1));
+        }
+        return initials.toString().toUpperCase();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.getRecordStatus().getStatus().getName().equalsIgnoreCase("Active");
+        return this.getStatus().getUniqueName().toLowerCase().contains("active");
     }
 
     @Override

@@ -1,5 +1,11 @@
 package com.pdmrindia.worklens;
 
+import com.pdmrindia.worklens.module_activity_type.ActivityTypeService;
+import com.pdmrindia.worklens.module_activity_type.mapperDtos.NewTypeDto;
+import com.pdmrindia.worklens.module_category.CategoryService;
+import com.pdmrindia.worklens.module_category.mapperDtos.NewCategoryDto;
+import com.pdmrindia.worklens.module_status.StatusService;
+import com.pdmrindia.worklens.module_status.mapperDtos.NewStatusDto;
 import com.pdmrindia.worklens.module_user.mapperDtos.NewUserDto;
 import com.pdmrindia.worklens.module_user.User;
 import com.pdmrindia.worklens.module_user.UserRepo;
@@ -23,17 +29,36 @@ public class StartupTask implements CommandLineRunner {
     private final UserService userService;
     private final UserRepo userRepo;
     private final UserRoleRepo userRoleRepo;
+    private final StatusService statusService;
+    private final CategoryService categoryService;
+    private final ActivityTypeService activityTypeService;
 
 
     @Override
     public void run(String... args) throws Exception {
-        //  Check & Create 'Active' status if not exists
-        //  Check all Records have default status. If not, Make 'Active' as their default status
-
-        //  Create mandatory Activity-Types like 'Test,General,etc'
-
+        createMandatoryStatuses();
         createRoles();
+        createCategories();
+        createActivityTypes();
         createAdminUser("1000","admin@pdmrindia.com","ADMIN","Admin");
+    }
+
+    void createCategories() {
+        categoryService.createMandatoryCategory(List.of(
+                new NewCategoryDto("sprint-testing","#0DCAF0"),
+                new NewCategoryDto("team-general","#6F42C1"),
+                new NewCategoryDto("office-general","#8A94A6"),
+                new NewCategoryDto("break","#0D6EFD")
+        ));
+    }
+
+    void createActivityTypes() {
+        activityTypeService.createMandatoryType(List.of(
+                new NewTypeDto("sprint-testing","scenario","#0D6EFD"),
+                new NewTypeDto("sprint-testing","feature","#8A94A6"),
+                new NewTypeDto("sprint-testing","bug","#6F42C1"),
+                new NewTypeDto("sprint-testing","task","#0DCAF0")
+        ));
     }
 
     void createRoles(){
@@ -82,5 +107,30 @@ public class StartupTask implements CommandLineRunner {
                 Please use the following credential for initial employee:
                 identifier:1000
                 password:1000""");
+    }
+
+    void createMandatoryStatuses(){
+        statusService.createMandatoryStatus(List.of(
+                new NewStatusDto("PROJECT","active","#0D6EFD"),
+                new NewStatusDto("PROJECT","in-active","#8A94A6"),
+                new NewStatusDto("SPRINT","active","#6F42C1"),
+                new NewStatusDto("SPRINT","in-active","#A181DC"),
+                new NewStatusDto("ACTIVITY","ready","#0DCAF0"),
+                new NewStatusDto("ACTIVITY","locked","#5C636A"),
+                new NewStatusDto("ACTIVITY","retired","#495057"),
+                new NewStatusDto("ACTIVITY","available","#198754"),
+                new NewStatusDto("SPRINT_ACTIVITY","un-tested","#FFC107"),
+                new NewStatusDto("SPRINT_ACTIVITY","in-testing","#FD7E14"),
+                new NewStatusDto("SPRINT_ACTIVITY","passed","#20C997"),
+                new NewStatusDto("SPRINT_ACTIVITY","failed","#DC3545"),
+                new NewStatusDto("SPRINT_ACTIVITY","closed","#212529"),
+                new NewStatusDto("SPRINT_ACTIVITY","in-applicable","#E9ECEF"),
+                new NewStatusDto("ENTRY","in-process","#0284C7"),
+                new NewStatusDto("ENTRY","complete","#15803D"),
+                new NewStatusDto("ENTRY","hold","#B45309"),
+                new NewStatusDto("MEMBER","active","#10B981"),
+                new NewStatusDto("MEMBER","in-active","#9CA3AF")
+
+        ));
     }
 }
