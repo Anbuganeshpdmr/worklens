@@ -90,7 +90,13 @@ function ProjectsAndSprintsPage() {
               <LoadingCards count={3} />
             ) : projects.length ? (
               projects.map((project, index) => (
-                <ProjectCard key={getId(project, index)} project={project} />
+                <ProjectCard
+                  key={getId(project, index)}
+                  project={project}
+                  onOpen={() =>
+                    navigate(`/projects/${getId(project, index)}/activities`)
+                  }
+                />
               ))
             ) : (
               <EmptyState label="No active projects" />
@@ -136,7 +142,7 @@ function ProjectsAndSprintsPage() {
   );
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onOpen }) {
   const title = getText(
     project,
     ["name", "projectName", "title"],

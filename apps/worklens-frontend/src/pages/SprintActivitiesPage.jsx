@@ -41,6 +41,7 @@ function SprintActivitiesPage() {
     try {
       const data = await getSprintActivities(sprintId);
       const items = Array.isArray(data) ? data : (data?.content ?? []);
+      console.log("Fetched sprint activities-1:", items);
       setAllActivities(items);
     } catch (err) {
       setFetchError(err.message || "Failed to load sprint activities.");
@@ -58,6 +59,7 @@ function SprintActivitiesPage() {
     async function loadData() {
       try {
         const data = await getSprintActivities(sprintId);
+        console.log("Fetched sprint activities-2:", data);
         if (mounted) {
           const items = Array.isArray(data) ? data : (data?.content ?? []);
           setAllActivities(items);
@@ -90,13 +92,16 @@ function SprintActivitiesPage() {
     for (const act of allActivities) {
       const statusName = String(
         act?.currentStatus?.statusName ??
-        act?.simpleActivityInfo?.currentStatus?.statusName ??
-        ""
+          act?.simpleActivityInfo?.currentStatus?.statusName ??
+          "",
       ).toLowerCase();
 
       if (statusName.includes("not executed") || !statusName) {
         notOnce++;
-      } else if (statusName.includes("atleast") || statusName.includes("passed")) {
+      } else if (
+        statusName.includes("atleast") ||
+        statusName.includes("passed")
+      ) {
         atleastOnce++;
       } else if (statusName.includes("need")) {
         needAgain++;
@@ -116,12 +121,12 @@ function SprintActivitiesPage() {
     return allActivities.filter((act) => {
       const info = act.simpleActivityInfo ?? {};
       const title = String(info.title ?? "").toLowerCase();
-      const actId = String(info.activityId ?? act.sprintActivityId ?? "").toLowerCase();
+      const actId = String(
+        info.activityId ?? act.sprintActivityId ?? "",
+      ).toLowerCase();
       const typeName = String(info.activityType?.name ?? "").toLowerCase();
       const statusName = String(
-        act.currentStatus?.statusName ??
-        info.currentStatus?.statusName ??
-        ""
+        act.currentStatus?.statusName ?? info.currentStatus?.statusName ?? "",
       ).toLowerCase();
 
       // Search match
@@ -172,8 +177,12 @@ function SprintActivitiesPage() {
         valA = String(infoA.activityType?.name ?? "").toLowerCase();
         valB = String(infoB.activityType?.name ?? "").toLowerCase();
       } else if (sortField === "status") {
-        valA = String(a.currentStatus?.statusName ?? infoA.currentStatus?.statusName ?? "").toLowerCase();
-        valB = String(b.currentStatus?.statusName ?? infoB.currentStatus?.statusName ?? "").toLowerCase();
+        valA = String(
+          a.currentStatus?.statusName ?? infoA.currentStatus?.statusName ?? "",
+        ).toLowerCase();
+        valB = String(
+          b.currentStatus?.statusName ?? infoB.currentStatus?.statusName ?? "",
+        ).toLowerCase();
       } else if (sortField === "date") {
         valA = String(infoA.updatedOn || infoA.createdOn || "");
         valB = String(infoB.updatedOn || infoB.createdOn || "");
@@ -190,7 +199,7 @@ function SprintActivitiesPage() {
     return allActivities.filter(
       (a) =>
         String(a.simpleActivityInfo?.activityType?.name ?? "").toLowerCase() ===
-        "parent"
+        "parent",
     );
   }, [allActivities]);
 
@@ -243,7 +252,10 @@ function SprintActivitiesPage() {
               ...updated,
               simpleActivityInfo: {
                 ...a.simpleActivityInfo,
-                title: updated.title ?? updated._title ?? a.simpleActivityInfo?.title,
+                title:
+                  updated.title ??
+                  updated._title ??
+                  a.simpleActivityInfo?.title,
                 description:
                   updated.description ??
                   updated._description ??
@@ -251,8 +263,8 @@ function SprintActivitiesPage() {
                 updatedOn: new Date().toISOString(),
               },
             }
-          : a
-      )
+          : a,
+      ),
     );
     setSelectedActivity(updated);
   }
@@ -299,7 +311,8 @@ function SprintActivitiesPage() {
                 <span className="sa-page__sprint-pill">Active Sprint</span>
               </div>
               <p className="sa-page__subtitle">
-                Manage, execute, and monitor test scenarios and parent activities for this sprint.
+                Manage, execute, and monitor test scenarios and parent
+                activities for this sprint.
               </p>
             </div>
 

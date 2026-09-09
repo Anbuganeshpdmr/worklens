@@ -4,7 +4,7 @@
 
 .record-status-shell {
     display: flex;
-    min-height: 100vh;
+    min-height: 100%;
     background: #f8fafc;
 }
 

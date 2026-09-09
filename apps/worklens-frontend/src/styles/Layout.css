@@ -30,4 +30,7 @@
   flex: 1;
   min-width: 0;
   overflow: auto;
+  box-sizing: border-box;
+  /* Leave room for the fixed navbar so page content renders below it. */
+  padding-top: 64px;
 }

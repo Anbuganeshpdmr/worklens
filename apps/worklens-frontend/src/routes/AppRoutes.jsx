@@ -3,11 +3,14 @@ import LoginPage from "../pages/LoginPage";
 import ProjectsAndSprintsPage from "../pages/ProjectsAndSprintsPage";
 import ProjectPage from "../pages/ProjectPage";
 import SprintActivitiesPage from "../pages/SprintActivitiesPage";
+import SprintManagementPage from "../pages/SprintManagementPage";
+import EntryDashboard from "../pages/EntryDashboard";
 import Layout from "../pages/Layout";
 import HomePage from "../pages/HomePage";
 import UserManagement from "../pages/UserManagement";
 import RecordStatusPage from "../pages/RecordStatusPage";
 import ActivitiesPage from "../pages/ActivitiesPage";
+import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
 
 /** Returns true only when both auth keys are present in localStorage */
@@ -35,7 +38,7 @@ export default function AppRoutes() {
             <Route path="/home" element={<ProjectsAndSprintsPage />} />
 
             <Route path="/projects" element={<ProjectPage />} />
-            <Route path="/activities" element={<ActivitiesPage />} />
+            {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />
 
             <Route path="/record-status" element={<RecordStatusPage />} />
@@ -47,9 +50,19 @@ export default function AppRoutes() {
           Pattern mirrors the API: /sprint_activity/sprint/{sprintId}
         */}
             <Route
-              path="/sprints/:sprintId/activities"
+              path="/sprints/:sprintId/activities/old"
               element={<SprintActivitiesPage />}
             />
+            <Route
+              path="/sprints/:sprintId/activities"
+              element={<SprintManagementPage />}
+            />
+            <Route
+              path="/projects/:projectId/activities"
+              element={<ActivitiesPage />}
+            />
+            <Route path="/entry-dashboard" element={<EntryDashboard />} />
+            <Route path="/entries" element={<EntriesPage />} />
           </Route>
         </Route>
 

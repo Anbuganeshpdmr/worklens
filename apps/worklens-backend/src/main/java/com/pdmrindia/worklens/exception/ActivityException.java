@@ -14,7 +14,19 @@ public class ActivityException {
         public ActivityRetiredException(String message){super(message);}
     }
 
+    public static class ActivityNotEditableException extends RuntimeException{
+        public ActivityNotEditableException(String message){super(message);}
+    }
+
     public static class TestCategoryMismatchException extends RuntimeException{
         public TestCategoryMismatchException(String message){super(message);}
+    }
+
+    public static class VersionMismatchException extends RuntimeException{
+        public VersionMismatchException(String message){super(message);}
+    }
+
+    public static class ParentIsInHierarchyException extends RuntimeException{
+        public ParentIsInHierarchyException(String message){super(message);}
     }
 }

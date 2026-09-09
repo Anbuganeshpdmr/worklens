@@ -11,8 +11,11 @@ import apiClient from "./axios";
  */
 export async function getSprintActivities(sprintId, params = {}) {
   try {
-    const response = await apiClient.get(`/sprint_activity/sprint/${sprintId}`, { params });
-    console.log(response)
+    const response = await apiClient.get(
+      `/sprint_activity/sprint/${sprintId}`,
+      { params },
+    );
+    console.log(response);
     return response.data;
   } catch (error) {
     throw buildError(error);
@@ -25,7 +28,9 @@ export async function getSprintActivities(sprintId, params = {}) {
  */
 export async function getSprintActivityChildren(sprintActivityId) {
   try {
-    const response = await apiClient.get(`/sprint_activity/${sprintActivityId}/children`);
+    const response = await apiClient.get(
+      `/sprint_activity/${sprintActivityId}/children`,
+    );
     return response.data;
   } catch (error) {
     throw buildError(error);
@@ -38,7 +43,10 @@ export async function getSprintActivityChildren(sprintActivityId) {
  */
 export async function updateSprintActivity(sprintActivityId, payload) {
   try {
-    const response = await apiClient.put(`/sprint_activity/${sprintActivityId}`, payload);
+    const response = await apiClient.put(
+      `/sprint_activity/${sprintActivityId}`,
+      payload,
+    );
     return response.data;
   } catch (error) {
     throw buildError(error);
@@ -64,18 +72,35 @@ export async function getActivities(params = {}) {
   }
 }
 
+export async function getAllProjectActivities(projectId) {
+  const response = await apiClient.get(`/activity/project/${projectId}`);
+  return response.data;
+}
+
+// Response Data is ignored. Only status code is needed
+export async function createTestActivity(payload) {
+  const response = await apiClient.post(`/activity/test`, payload);
+  return response.status;
+}
+
+export async function updateTestActivity(payload) {
+  const response = await apiClient.put(`/activity/test`, payload);
+  return response.status;
+}
+
 /* ── shared error normaliser ─────────────────────────────────── */
 function buildError(error) {
   if (error.response) {
     const status = error.response.status;
     if (status === 401 || status === 403)
       return new Error("Session expired. Please log in again.");
-    if (status === 404)
-      return new Error("Resource not found.");
+    if (status === 404) return new Error("Resource not found.");
     if (status >= 500)
       return new Error("Server error. Please try again later.");
   }
   if (error.request)
-    return new Error("Unable to reach the server. Please check your network connection.");
+    return new Error(
+      "Unable to reach the server. Please check your network connection.",
+    );
   return error;
 }

@@ -42,10 +42,7 @@ export async function createSprint(projectId, sprintName) {
 
 export async function updateSprint(sprintId, sprintData) {
   try {
-    const response = await apiClient.put(
-      `/sprints/${sprintId}`,
-      sprintData
-    );
+    const response = await apiClient.put(`/sprints/${sprintId}`, sprintData);
 
     return response.data;
   } catch (error) {
@@ -55,11 +52,16 @@ export async function updateSprint(sprintId, sprintData) {
 
 export async function getAllowedSprintStatuses() {
   try {
-    const response = await apiClient.get("/records/SPRINT/allowed");
+    const response = await apiClient.get("/status/records/sprint/applicable");
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     handleApiError(error, "Failed to fetch allowed sprint statuses");
   }
+}
+
+export async function getIndividualSprintDetails(sprintId) {
+  const response = await apiClient.get(`/sprints/${sprintId}`);
+  return response.data;
 }
 
 /**
@@ -73,8 +75,11 @@ function handleApiError(error, defaultMessage) {
   console.error("API Error:", error);
   if (error.response) {
     const status = error.response.status;
-    const message = error.response.data?.message || error.response.data?.error || error.response.data?.detail;
-    
+    const message =
+      error.response.data?.message ||
+      error.response.data?.error ||
+      error.response.data?.detail;
+
     if (status === 401 || status === 403) {
       throw new Error("Session expired. Please log in again.");
     }
@@ -82,12 +87,16 @@ function handleApiError(error, defaultMessage) {
       throw new Error(message || "Invalid input. Please check your data.");
     }
     if (status >= 500) {
-      const errorMsg = message || `Server error (${status}). Please check the backend logs for details.`;
+      const errorMsg =
+        message ||
+        `Server error (${status}). Please check the backend logs for details.`;
       throw new Error(errorMsg);
     }
   }
   if (error.request) {
-    throw new Error("Unable to reach the server. Please check your network connection.");
+    throw new Error(
+      "Unable to reach the server. Please check your network connection.",
+    );
   }
   throw new Error(error.message || defaultMessage);
 }

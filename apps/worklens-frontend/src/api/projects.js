@@ -1,4 +1,5 @@
 import apiClient from "./axios";
+import { commonApiErrorHandler } from "./apiErrorHandler";
 
 /**
  * Fetches all active projects.
@@ -40,10 +41,7 @@ export async function createProject(projectName) {
 
 export async function updateProject(projectId, projectData) {
   try {
-    const response = await apiClient.put(
-      `/projects/${projectId}`,
-      projectData
-    );
+    const response = await apiClient.put(`/projects/${projectId}`, projectData);
 
     return response.data;
   } catch (error) {
@@ -53,11 +51,16 @@ export async function updateProject(projectId, projectData) {
 
 export async function getAllowedProjectStatuses() {
   try {
-    const response = await apiClient.get("/records/PROJECT/allowed");
+    const response = await apiClient.get("/status/records/PROJECT/applicable");
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     handleApiError(error, "Failed to fetch allowed project statuses");
   }
+}
+
+export async function getIndividualProjectDetails(projectId) {
+  const response = await apiClient.get(`/projects/${projectId}`);
+  return response.data;
 }
 
 /**
@@ -71,8 +74,11 @@ function handleApiError(error, defaultMessage) {
   console.error("API Error:", error);
   if (error.response) {
     const status = error.response.status;
-    const message = error.response.data?.message || error.response.data?.error || error.response.data?.detail;
-    
+    const message =
+      error.response.data?.message ||
+      error.response.data?.error ||
+      error.response.data?.detail;
+
     if (status === 401 || status === 403) {
       throw new Error("Session expired. Please log in again.");
     }
@@ -80,12 +86,16 @@ function handleApiError(error, defaultMessage) {
       throw new Error(message || "Invalid input. Please check your data.");
     }
     if (status >= 500) {
-      const errorMsg = message || `Server error (${status}). Please check the backend logs for details.`;
+      const errorMsg =
+        message ||
+        `Server error (${status}). Please check the backend logs for details.`;
       throw new Error(errorMsg);
     }
   }
   if (error.request) {
-    throw new Error("Unable to reach the server. Please check your network connection.");
+    throw new Error(
+      "Unable to reach the server. Please check your network connection.",
+    );
   }
   throw new Error(error.message || defaultMessage);
 }
@@ -121,7 +131,9 @@ function buildError(error) {
     }
   }
   if (error.request) {
-    return new Error("Unable to reach the server. Please check your network connection.");
+    return new Error(
+      "Unable to reach the server. Please check your network connection.",
+    );
   }
   return error;
 }

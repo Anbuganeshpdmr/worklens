@@ -1,13 +1,10 @@
-
-import api, { mockApi } from "./axios";
-
+import api from "./axios";
 
 // ==========================================
 // GET ALL USERS
 // ==========================================
 
 export const getUsers = async () => {
-  
   const response = await api.get("/users");
 
   console.log("Inside...");
@@ -15,7 +12,6 @@ export const getUsers = async () => {
 
   return response.data;
 };
-
 
 // ==========================================
 // CREATE USER
@@ -29,7 +25,6 @@ export const addUser = async (userData) => {
   return response.data;
 };
 
-
 // ==========================================
 // UPDATE USER
 // ==========================================
@@ -42,8 +37,8 @@ export const updateUser = async (id, userData) => {
   return response.data;
 };
 export const getRoles = async () => {
-  const response = await mockApi.get("/");
-  console.log("GET /roles (mock):", response.data);
+  const response = await api.get(`/roles`);
+  console.log("GET /roles:", response.data);
   return response.data;
 };
 // ==========================================

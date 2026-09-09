@@ -1,9 +1,6 @@
 package com.pdmrindia.worklens.module_activity;
 
-import com.pdmrindia.worklens.module_activity.mapperDtos.ActivityDisplayDto;
-import com.pdmrindia.worklens.module_activity.mapperDtos.ActivityDisplayDtoMapper;
-import com.pdmrindia.worklens.module_activity.mapperDtos.NewNonTestActivityDto;
-import com.pdmrindia.worklens.module_activity.mapperDtos.NewTestActivityDto;
+import com.pdmrindia.worklens.module_activity.mapperDtos.*;
 import com.pdmrindia.worklens.module_activity_type.ActivityTypeService;
 import com.pdmrindia.worklens.module_category.CategoryService;
 import com.pdmrindia.worklens.module_project.ProjectService;
@@ -27,6 +24,12 @@ public class ActivityController {
     @PostMapping("/activity/test")
     public ActivityDisplayDto createTestingActivity(@RequestBody NewTestActivityDto newTestActivityDto){
         Activity activity = activityService.createNewTestActivity(newTestActivityDto);
+        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
+    }
+
+    @PutMapping("/activity/test")
+    public ActivityDisplayDto updateTestingActivity(@RequestBody UpdateTestActivityDto updateTestActivityDto){
+        Activity activity = activityService.updateTestActivity(updateTestActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 

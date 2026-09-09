@@ -1,10 +1,7 @@
 package com.pdmrindia.worklens.module_sprint_activity;
 
-import com.pdmrindia.worklens.module_activity_type.ActivityType;
-import com.pdmrindia.worklens.module_activity_type.ActivityTypeService;
 import com.pdmrindia.worklens.module_sprint.Sprint;
 import com.pdmrindia.worklens.module_sprint.SprintService;
-import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.NewSprintNonTestActivityDto;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityDisplayDto;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityDisplayDtoMapper;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityManageListDto;
@@ -41,6 +38,12 @@ public class SprintActivityController {
         Sprint sprint = sprintService.getSprintById(sprintId);
         List<SprintActivity> allowedList = sprintActivityRepo.findBySprintAndIsAllowed(sprint,true);
         return allowedList.stream().map(sprintActivityDisplayDtoMapper::getSprintActivityDisplayDto).toList();
+    }
+
+    @GetMapping("sprint_activity/{sprintActivityId}")
+    public SprintActivityDisplayDto getSprintActivity(@PathVariable("sprintActivityId") int sprintActivityId){
+        SprintActivity sprintActivity = sprintActivityService.getSprintActivityById(sprintActivityId);
+        return sprintActivityDisplayDtoMapper.getSprintActivityDisplayDto(sprintActivity);
     }
 
 }

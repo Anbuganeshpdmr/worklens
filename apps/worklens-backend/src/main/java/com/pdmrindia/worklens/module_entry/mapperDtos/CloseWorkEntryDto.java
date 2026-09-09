@@ -9,6 +9,6 @@ public class CloseWorkEntryDto {
 
     private long entryId;
     private String remarks;
-    private int selectedStatusId;
-    private int selectedParentStatusId;
+    //private int selectedStatusId;
+    private int sprintActivityStatusId;
 }

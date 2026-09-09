@@ -1,7 +1,7 @@
 /* ── Sprint Activities Page Shell ───────────────────────────── */
 .sa-page {
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
   width: 100%;
   text-align: left;
   background: var(--bg, #fff);

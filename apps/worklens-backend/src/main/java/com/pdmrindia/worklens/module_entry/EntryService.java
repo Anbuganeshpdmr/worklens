@@ -37,6 +37,9 @@ public class EntryService {
 
     @Transactional
     public Entry createNewTestEntry(int sprintActivityId){
+        //  Ensure user has all previous entries closed
+        checkUserUnclosedEntry();
+
         Entry entry = new Entry();
 
         SprintActivity sprintActivity = sprintActivityService.getSprintActivityById(sprintActivityId);
@@ -77,12 +80,14 @@ public class EntryService {
         currentEntry.setRemarks(closeWorkEntryDto.getRemarks());
 
         //  Setting Entry Status
-        Status updatedStatus = statusService.getStatusById(closeWorkEntryDto.getSelectedStatusId());
+        /*Status updatedStatus = statusService.getStatusById(closeWorkEntryDto.getSelectedStatusId());
         statusService.validateRecordStatusOfRecord(Record.ENTRY,updatedStatus);
-        currentEntry.setStatus(updatedStatus);
+        currentEntry.setStatus(updatedStatus);*/
+        Status SA_NewSelectedStatus = statusService.getStatusById(closeWorkEntryDto.getSprintActivityStatusId());
+        setEntryStatus(currentEntry, SA_NewSelectedStatus);
 
         //  Setting Sprint-Activity Status
-        sprintActivityService.updateStatus(currentEntry.getSprintActivity(), statusService.getStatusById(closeWorkEntryDto.getSelectedParentStatusId()));
+        sprintActivityService.updateStatus(currentEntry.getSprintActivity(), SA_NewSelectedStatus);
 
         return entryRepo.save(currentEntry);
     }
@@ -116,7 +121,7 @@ public class EntryService {
     public Entry closeNonTestEntry(CloseWorkEntryDto closeWorkEntryDto){
         Entry currentEntry = getEntryById(closeWorkEntryDto.getEntryId());
 
-        validateEntryClosingUser(currentEntry);
+        /*validateEntryClosingUser(currentEntry);
 
         LocalTime endTime = LocalTime.now();
         currentEntry.setEndTime(endTime);
@@ -126,14 +131,24 @@ public class EntryService {
         //  Setting Entry Status
         Status updatedStatus = statusService.getStatusById(closeWorkEntryDto.getSelectedStatusId());
         statusService.validateRecordStatusOfRecord(Record.ENTRY,updatedStatus);
-        currentEntry.setStatus(updatedStatus);
+        currentEntry.setStatus(updatedStatus);*/
 
         return entryRepo.save(currentEntry);
     }
 
+    private void checkUserUnclosedEntry(){
+        Status inProcessStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
+        List<Entry> entries = entryRepo.findByUserAndStatus(currentUserService.user(), inProcessStatus);
+        System.out.println("UNFINISHED ENTRIES = " + entries.size());
+        if(entries.size()>0){
+            System.out.println("Throwing exception");
+            throw new EntryException.UnclosedEntryException("Kindly close previous entries!");
+        }
+    }
+
     public Entry getEntryById(long id){
         return entryRepo.findById(id)
-                .orElseThrow(()-> new EntryException.EntryNotFoundException("No Valid Entry found"));
+                .orElseThrow(()-> new EntryException.EntryNotFoundException("No Valid Entry found with ID: "+id));
     }
 
     public Page<Entry> search(EntryFilterRequest request, Pageable pageable) {
@@ -145,6 +160,21 @@ public class EntryService {
         if(entry.getUser().equals(currentUserService.user())){
             throw new EntryException.UnauthorisedEntryAccessException("Entry must be closed by its owner: "+entry.getUser().getName());
         }
+    }
+
+    private Entry setEntryStatus(Entry entry, Status SA_NewStatus){
+        Status SA_CurrentStatus = entry.getSprintActivity().getStatus();
+
+        if(SA_CurrentStatus==SA_NewStatus){
+            //  SA-status not changed
+            //  Hence Entry set to HOLD
+            entry.setStatus(statusService.getRecordStatusByName(Record.ENTRY,"hold"));
+        }else{
+            //  SA-status changed from previous
+            //  Hence Entry set to COMPLETE
+            entry.setStatus(statusService.getRecordStatusByName(Record.ENTRY,"complete"));
+        }
+        return entry;
     }
 
 }

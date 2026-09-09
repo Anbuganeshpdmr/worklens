@@ -87,7 +87,11 @@ public class CustomExceptionHandler {
             CategoryException.CategoryTypeMismatchException.class,
             EntryException.UnauthorisedEntryAccessException.class,
             ActivityException.TestCategoryMismatchException.class,
-            SprintActivityException.SprintAndActivityProjectMismatchException.class
+            SprintActivityException.SprintAndActivityProjectMismatchException.class,
+            ActivityException.ActivityNotEditableException.class,
+            ActivityException.VersionMismatchException.class,
+            ActivityException.ParentIsInHierarchyException.class,
+            EntryException.UnclosedEntryException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestExceptions(RuntimeException ex) {

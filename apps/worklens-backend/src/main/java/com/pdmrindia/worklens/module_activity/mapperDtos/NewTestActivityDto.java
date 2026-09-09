@@ -11,6 +11,7 @@ public class NewTestActivityDto {
     private Integer projectId;
     private String title;
     private String description;
-    private Integer linkedTicketId;
+    private Integer externalTicketId;
     private Integer parentActivityId;
+    //private Integer statusId;
 }
