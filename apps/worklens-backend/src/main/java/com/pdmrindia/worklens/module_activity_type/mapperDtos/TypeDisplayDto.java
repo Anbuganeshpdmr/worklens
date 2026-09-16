@@ -10,6 +10,5 @@ public class TypeDisplayDto {
     private Integer id;
     private String name;
     private String colourCode;
-    private String categoryName;
     private boolean isMandatory;
 }

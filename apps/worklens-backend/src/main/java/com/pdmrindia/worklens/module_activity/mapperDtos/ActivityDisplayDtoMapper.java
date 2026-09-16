@@ -30,7 +30,7 @@ public class ActivityDisplayDtoMapper {
         dto.setVersion(activity.getVersion());
 
         dto.setActivityType(typeMapper.getSimpleTypeDto(activity.getActivityType()));
-        dto.setCategory(categoryMapper.getSimpleCategoryDispDto(activity.getActivityType().getCategory()));
+        dto.setCategory(categoryMapper.getSimpleCategoryDispDto(activity.getCategory()));
 
         dto.setCreatedBy(activity.getCreatedBy().getName());
         dto.setCreatedOn(activity.getCreatedOn().toString());

@@ -12,7 +12,9 @@ public interface ActivityTypeRepo extends JpaRepository<ActivityType, Integer> {
 
     Optional<ActivityType> findByName(String name);
 
-    Optional<ActivityType> findByNameAndCategory(String name, Category category);
+    //Optional<ActivityType> findByNameAndCategory(String name, Category category);
 
-    List<ActivityType> findByCategory(Category category);
+    //List<ActivityType> findByCategory(Category category);
+
+    Optional<ActivityType> findByNameAndIsMandatory(String name, boolean isMandatory);
 }

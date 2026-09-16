@@ -34,7 +34,7 @@ public class EntryDisplayDtoMapper {
         dto.setActivityId(entry.getActivity().getId());
 
         dto.setActivityType(typeMapper.getSimpleTypeDto(entry.getActivity().getActivityType()));
-        dto.setCategory(categoryMapper.getSimpleCategoryDispDto(entry.getActivity().getActivityType().getCategory()));
+        dto.setCategory(categoryMapper.getSimpleCategoryDispDto(entry.getActivity().getCategory()));
 
         dto.setSprintActivityId(entry.getSprintActivity() != null ? entry.getSprintActivity().getId() : null);
         dto.setSprintName(entry.getSprintActivity() != null ? entry.getSprintActivity().getSprint().getName() : null);

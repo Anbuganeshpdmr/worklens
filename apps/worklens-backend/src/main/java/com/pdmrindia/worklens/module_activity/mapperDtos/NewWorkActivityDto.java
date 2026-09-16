@@ -5,9 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewTestActivityDto {
+public class NewWorkActivityDto {
 
     private Integer typeId;
+    private Integer categoryId;
     private Integer projectId;
     private String title;
     private String description;

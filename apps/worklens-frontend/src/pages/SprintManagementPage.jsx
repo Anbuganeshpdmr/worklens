@@ -4,14 +4,13 @@ import { useParams } from "react-router-dom";
 import SprintActivityList from "../components/activities/SprintActivitiesList";
 import { getIndividualSprintDetails } from "../api/sprints";
 import { mapSprintDetails } from "../components/activities/projectMapper";
-import SprintActivitiesPage from "./SprintActivitiesPage";
 import SprintActivitiesExecutePage from "./SprintActivitiesExecutePage";
 
 export default function SprintManagementPage() {
   const { sprintId } = useParams();
   const [sprint, setSprint] = useState(null);
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState("manage");
+  const [activeTab, setActiveTab] = useState("test");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,7 +90,6 @@ export default function SprintManagementPage() {
 
           {activeTab === "test" && sprint && (
             <SprintActivitiesExecutePage sprint={sprint} />
-            //     <SprintActivitiesPage />
           )}
         </div>
       </main>

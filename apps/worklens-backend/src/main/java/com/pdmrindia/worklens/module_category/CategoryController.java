@@ -24,25 +24,25 @@ public class CategoryController {
         return categoryDisplayDtoMapper.getCategoryDisplayDto(category);
     }
 
-    @PutMapping("category")
+    @PutMapping("/category")
     public CategoryDisplayDto editCategory(@RequestBody UpdateCategoryDto updateCategoryDto){
         Category category = categoryService.updateCategory(updateCategoryDto);
         return categoryDisplayDtoMapper.getCategoryDisplayDto(category);
     }
 
-    @GetMapping("category")
+    @GetMapping("/category")
     public List<CategoryDisplayDto> getAllCategories(){
         return categoryRepo.findAll().stream().map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
     }
 
-    @GetMapping("category/non-test")
+    @GetMapping("/category/non-test")
     public List<CategoryDisplayDto> getNonTestCategories(){
         return categoryRepo.findAll().stream()
                 .filter(c->(!c.getName().toLowerCase().contains("sprint-testing")))
                 .map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
     }
 
-    @GetMapping("category/{id}")
+    @GetMapping("/category/{id}")
     public CategoryDisplayDto getCategory(@PathVariable("id") int id){
         return categoryDisplayDtoMapper.getCategoryDisplayDto(categoryService.getCategoryById(id));
     }

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { startTestActivity } from "../api/entry";
+import { startTestActivity } from "../../api/entry";
 
 export default function SprintActivityExecuteList({ sprintActivities }) {
   const [expandedRows, setExpandedRows] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedSprintActivity, setSelectedSprintActivity] = useState(null);
 
   const rootActivities = sprintActivities.filter(
     (sprintActivity) =>
@@ -28,6 +29,11 @@ export default function SprintActivityExecuteList({ sprintActivities }) {
   const viewSprintActivity = (sprintActivity) => {
     console.log("Viewing Sprint Activity");
     console.log(sprintActivity.activityId);
+  };
+
+  const handleRowClick = (SA) => {
+    setSelectedSprintActivity(SA);
+    console.log("Selected SprintActivityId:", SA.activityId);
   };
 
   return (
@@ -55,6 +61,7 @@ export default function SprintActivityExecuteList({ sprintActivities }) {
             level={0}
             handleStartEntry={startEntry}
             viewSprintActivity={viewSprintActivity}
+            onClick={handleRowClick}
           />
         ))}
       </tbody>
@@ -68,6 +75,7 @@ function ActivityRow({
   level,
   handleStartEntry,
   viewSprintActivity,
+  onClick,
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -80,13 +88,20 @@ function ActivityRow({
 
   return (
     <>
-      <tr>
+      <tr
+        key={sprintActivity.activityId}
+        onClick={() => onClick(sprintActivity)}
+        style={{ cursor: "pointer" }}
+      >
         <td>
           {hasChildren && (
             <button
               type="button"
               className="btn btn-sm btn-outline-secondary me-2"
-              onClick={() => setExpanded((prev) => !prev)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded((prev) => !prev);
+              }}
             >
               {expanded ? "-" : "+"}
             </button>
@@ -130,6 +145,7 @@ function ActivityRow({
             level={level + 1}
             handleStartEntry={handleStartEntry}
             viewSprintActivity={viewSprintActivity}
+            onClick={onClick}
           />
         ))}
     </>

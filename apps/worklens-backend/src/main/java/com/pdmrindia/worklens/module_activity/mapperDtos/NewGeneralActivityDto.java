@@ -5,11 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewNonTestActivityDto {
+public class NewGeneralActivityDto {
 
     private Integer categoryId;
-    private Integer typeId;
-    private Integer projectId;
     private String title;
     private String description;
 }

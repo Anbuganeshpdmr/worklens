@@ -11,7 +11,6 @@ public class TypeDisplayDtoMapper {
         dto.setId(type.getId());
         dto.setName(type.getName());
         dto.setColourCode(type.getColourCode());
-        dto.setCategoryName(type.getCategory().getName());
         dto.setMandatory(type.isMandatory());
         return dto;
     }

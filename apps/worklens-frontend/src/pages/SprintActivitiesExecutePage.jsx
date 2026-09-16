@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getSelectedSprintActivities } from "../api/sprintActivities";
 import { flattenSprintActivity } from "../components/sprint-activities/SprintActivityMapper";
-import SprintActivityExecuteList from "./SprintActivityExecuteList";
+import SprintActivityExecuteList from "../components/sprint-activities/SprintActivityExecuteList";
 
 export default function SprintActivitiesExecutionPage({ sprint }) {
   const [error, setError] = useState("");

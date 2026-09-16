@@ -46,6 +46,7 @@ public class StartupTask implements CommandLineRunner {
     void createCategories() {
         categoryService.createMandatoryCategory(List.of(
                 new NewCategoryDto("sprint-testing","#0DCAF0"),
+                new NewCategoryDto("development","#0DCAF1"),
                 new NewCategoryDto("team-general","#6F42C1"),
                 new NewCategoryDto("office-general","#8A94A6"),
                 new NewCategoryDto("break","#0D6EFD")
@@ -54,10 +55,11 @@ public class StartupTask implements CommandLineRunner {
 
     void createActivityTypes() {
         activityTypeService.createMandatoryType(List.of(
-                new NewTypeDto("sprint-testing","scenario","#0D6EFD"),
-                new NewTypeDto("sprint-testing","feature","#8A94A6"),
-                new NewTypeDto("sprint-testing","bug","#6F42C1"),
-                new NewTypeDto("sprint-testing","task","#0DCAF0")
+                new NewTypeDto("scenario","#0D6EFD"),
+                new NewTypeDto("feature","#8A94A6"),
+                new NewTypeDto("bug","#6F42C1"),
+                new NewTypeDto("task","#0DCAF0"),
+                new NewTypeDto("general","#0DCBF0")
         ));
     }
 

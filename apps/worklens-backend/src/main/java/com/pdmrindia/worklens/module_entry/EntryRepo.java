@@ -1,5 +1,6 @@
 package com.pdmrindia.worklens.module_entry;
 
+import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface EntryRepo extends JpaRepository<Entry, Long>,
         JpaSpecificationExecutor<Entry> {
 
     List<Entry> findByUserAndStatus(User user, Status status);
+
+    List<Entry> findBySprintActivityAndStatus(SprintActivity sprintActivity, Status status);
 }

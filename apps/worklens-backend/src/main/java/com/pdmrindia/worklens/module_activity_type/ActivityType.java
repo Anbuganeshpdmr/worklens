@@ -11,9 +11,9 @@ import lombok.Setter;
 @Table(name = "activity_types", uniqueConstraints = {
         @UniqueConstraint(name = "uk_activity_type_name", columnNames = "name"),
         @UniqueConstraint(name = "uk_activity_type_colour_code", columnNames = "colour_code"),
-        @UniqueConstraint(name = "uk_category_activity",columnNames = {
+        /*@UniqueConstraint(name = "uk_category_activity",columnNames = {
                 "name","category_id"
-        })
+        })*/
 })
 public class ActivityType {
 
@@ -26,10 +26,6 @@ public class ActivityType {
 
     @Column(name = "colour_code", nullable = false,unique = true)
     private String colourCode;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 
     private boolean isMandatory;
 }

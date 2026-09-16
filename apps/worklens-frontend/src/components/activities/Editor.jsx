@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getStatusByRecord } from "../../api/status";
-import { getTestCategoryTypes } from "../../api/types";
+import { getTypes } from "../../api/types";
+import { getCategories } from "../../api/category";
 import { createTestActivity, updateTestActivity } from "../../api/activities";
 
 export default function Editor({
@@ -19,9 +20,12 @@ export default function Editor({
   const [externalTicketId, setExternalTicketId] = useState(null);
   //const [currentStatus, setCurrentStatus] = useState(null);
   const [type, setType] = useState(null);
+  const [category, setCategory] = useState(null);
+
   const [error, setError] = useState(null);
   //const [statuses, setStatuses] = useState([]);
   const [types, setTypes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     if (activity) {
@@ -32,6 +36,7 @@ export default function Editor({
       setExternalTicketId(activity.externalTicketId ?? null);
       //setCurrentStatus(activity.currentStatus?.statusId ?? null);
       setType(activity.activityType?.id ?? null);
+      setCategory(activity.category?.id ?? null);
     } else {
       // NEW or ADD CHILD
       setTitle("");
@@ -40,6 +45,7 @@ export default function Editor({
       setExternalTicketId(null);
       //setCurrentStatus(null);
       setType(null);
+      setCategory(null);
     }
 
     // Newly loaded form has no unsaved changes
@@ -60,6 +66,7 @@ export default function Editor({
       setExternalTicketId(activity.externalTicketId ?? null);
       //setCurrentStatus(activity.currentStatus?.statusId ?? null);
       setType(activity.activityType?.id ?? null);
+      setCategory(activity.category?.id ?? null);
     } else {
       // NEW / ADD CHILD
       setTitle("");
@@ -68,6 +75,7 @@ export default function Editor({
       setExternalTicketId(null);
       //setCurrentStatus(null);
       setType(null);
+      setCategory(null);
     }
 
     onDirtyChange?.(false);
@@ -87,6 +95,7 @@ export default function Editor({
         externalTicketId,
         //currentStatus,
         typeId: type,
+        categoryId: category,
       };
       console.log("Editing activity:", editedActivity);
       try {
@@ -106,6 +115,7 @@ export default function Editor({
         externalTicketId,
         //currentStatus,
         typeId: type,
+        categoryId: category,
       };
       console.log("Creating activity:", newActivityData);
       try {
@@ -132,7 +142,7 @@ export default function Editor({
 
   const getActivityTypes = async () => {
     try {
-      const response = await getTestCategoryTypes();
+      const response = await getTypes();
       console.log("Fetched activity types:", response);
       return response;
     } catch (error) {
@@ -141,16 +151,30 @@ export default function Editor({
     }
   };
 
+  const getAllCategories = async () => {
+    try {
+      const response = await getCategories();
+      console.log("Fetched Categories:", response);
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+      return { data: [] };
+    }
+  };
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const [statusResponse, typeResponse] = await Promise.all([
-          getActivityStatuses(),
-          getActivityTypes(),
-        ]);
+        const [statusResponse, typeResponse, categoryResponse] =
+          await Promise.all([
+            getActivityStatuses(),
+            getActivityTypes(),
+            getAllCategories(),
+          ]);
 
         //setStatuses(statusResponse);
         setTypes(typeResponse);
+        setCategories(categoryResponse);
       } catch (error) {
         setError(error.message);
         console.error("Failed to load editor options", error);
@@ -273,6 +297,29 @@ export default function Editor({
               {types.map((type) => (
                 <option key={type.id} value={type.id}>
                   {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Category */}
+          <div className="mb-3">
+            <label className="form-label">Category</label>
+            <select
+              className="form-control"
+              value={category ?? ""}
+              onChange={(e) => {
+                setCategory(
+                  e.target.value === "" ? null : Number(e.target.value),
+                );
+                markDirty();
+              }}
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>

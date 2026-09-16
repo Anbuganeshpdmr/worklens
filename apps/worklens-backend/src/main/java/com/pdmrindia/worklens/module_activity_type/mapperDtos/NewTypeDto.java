@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NewTypeDto {
 
-    private Object categoryId;
     private String name;
     private String colourCode;
 }

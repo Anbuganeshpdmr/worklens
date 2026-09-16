@@ -27,9 +27,6 @@ public class Category {
     @Column(name = "colour_code", nullable = false, unique = true)
     private String colourCode;
 
-    @OneToMany(mappedBy = "category")
-    private List<ActivityType> activityTypeList = new ArrayList<>();
-
     private boolean isMandatory;
 
 }

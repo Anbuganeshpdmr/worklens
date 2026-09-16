@@ -1,10 +1,10 @@
 package com.pdmrindia.worklens.module_activity;
 
 import com.pdmrindia.worklens.exception.ActivityException;
-import com.pdmrindia.worklens.exception.CategoryException;
-import com.pdmrindia.worklens.module_activity.mapperDtos.NewNonTestActivityDto;
-import com.pdmrindia.worklens.module_activity.mapperDtos.NewTestActivityDto;
-import com.pdmrindia.worklens.module_activity.mapperDtos.UpdateTestActivityDto;
+import com.pdmrindia.worklens.module_activity.mapperDtos.NewGeneralActivityDto;
+import com.pdmrindia.worklens.module_activity.mapperDtos.NewWorkActivityDto;
+import com.pdmrindia.worklens.module_activity.mapperDtos.UpdateGeneralActivityDto;
+import com.pdmrindia.worklens.module_activity.mapperDtos.UpdateWorkActivityDto;
 import com.pdmrindia.worklens.module_activity_type.ActivityType;
 import com.pdmrindia.worklens.module_activity_type.ActivityTypeService;
 import com.pdmrindia.worklens.module_category.Category;
@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,33 +33,34 @@ public class ActivityService {
     private final CategoryService categoryService;
 
     @Transactional
-    public Activity createNewTestActivity(NewTestActivityDto newTestActivityDto){
+    public Activity createNewWorkActivity(NewWorkActivityDto newWorkActivityDto){
         Activity activity = new Activity();
 
-        ActivityType type = activityTypeService.getTypeById(newTestActivityDto.getTypeId());
-        if(!type.getCategory().getName().toLowerCase().contains("sprint-testing")){
-            throw new ActivityException.TestCategoryMismatchException("Select type from testing category");
-        }
+        ActivityType type = activityTypeService.getTypeById(newWorkActivityDto.getTypeId());
+
+        Category category = categoryService.getCategoryById(newWorkActivityDto.getCategoryId());
+        activity.setCategory(category);
+
         activity.setActivityType(type);
         activity.setCreatedBy(currentUserService.user());
         activity.setCreatedOn(Instant.now());
 
         Status thisStatus = statusService.getRecordStatusByName(Record.ACTIVITY,"ready");
-        //Status thisStatus = statusService.getStatusById(newTestActivityDto.getStatusId());
+        //Status thisStatus = statusService.getStatusById(newWorkActivityDto.getStatusId());
         statusService.validateRecordStatusOfRecord(Record.ACTIVITY,thisStatus);
         activity.setStatus(thisStatus);
 
-        activity.setTitle(newTestActivityDto.getTitle());
-        activity.setDescription(newTestActivityDto.getDescription());
+        activity.setTitle(newWorkActivityDto.getTitle());
+        activity.setDescription(newWorkActivityDto.getDescription());
 
-        Project project = projectService.getProjectById(newTestActivityDto.getProjectId());
+        Project project = projectService.getProjectById(newWorkActivityDto.getProjectId());
         activity.setProject(project);
 
-        Integer externalTicketId = newTestActivityDto.getExternalTicketId();
+        Integer externalTicketId = newWorkActivityDto.getExternalTicketId();
         activity.setExternalTicketId(externalTicketId);
 
-        if(newTestActivityDto.getParentActivityId() != null){
-            Activity parentActivity = getActivityById(newTestActivityDto.getParentActivityId());
+        if(newWorkActivityDto.getParentActivityId() != null){
+            Activity parentActivity = getActivityById(newWorkActivityDto.getParentActivityId());
             validateParentActivityProject(parentActivity,project);
             //validateParentActivityHierarchy()
             activity.setParentActivity(parentActivity);
@@ -72,38 +71,42 @@ public class ActivityService {
     }
 
     @Transactional
-    public Activity updateTestActivity(UpdateTestActivityDto updateTestActivityDto){
-        Activity activity = getActivityById(updateTestActivityDto.getActivityId());
+    public Activity updateWorkActivity(UpdateWorkActivityDto updateWorkActivityDto){
+        Activity activity = getActivityById(updateWorkActivityDto.getActivityId());
 
         //  Check status to allowed
         validateEditableStatus(activity);
 
         //  Edit fields
-        ActivityType type = activityTypeService.getTypeById(updateTestActivityDto.getTypeId());
-        if(!type.getCategory().getName().toLowerCase().contains("sprint-testing")){
+        ActivityType type = activityTypeService.getTypeById(updateWorkActivityDto.getTypeId());
+        /*if(!type.getCategory().getName().toLowerCase().contains("sprint-testing")){
             throw new ActivityException.TestCategoryMismatchException("Select type from testing category");
-        }
+        }*/
         activity.setActivityType(type);
+
+        Category category = categoryService.getCategoryById(updateWorkActivityDto.getCategoryId());
+        activity.setCategory(category);
+
         activity.setUpdatedBy(currentUserService.user());
         activity.setUpdatedOn(Instant.now());
-        activity.setTitle(updateTestActivityDto.getTitle());
-        activity.setDescription(updateTestActivityDto.getDescription());
+        activity.setTitle(updateWorkActivityDto.getTitle());
+        activity.setDescription(updateWorkActivityDto.getDescription());
 
-        Integer externalTicketId = updateTestActivityDto.getExternalTicketId();
+        Integer externalTicketId = updateWorkActivityDto.getExternalTicketId();
         activity.setExternalTicketId(externalTicketId);
 
         //  Version check
-        if(!updateTestActivityDto.getVersion().equals(activity.getVersion())){
+        if(!updateWorkActivityDto.getVersion().equals(activity.getVersion())){
             throw new ActivityException.VersionMismatchException("Please Refresh the data to edit further.");
         }
-        System.out.println("Trial version: "+updateTestActivityDto.getVersion());
+        System.out.println("Trial version: "+updateWorkActivityDto.getVersion());
 
         //  validate and set Parent Activity
-        if(updateTestActivityDto.getParentActivityId() != null && updateTestActivityDto.getParentActivityId() > 0){
+        if(updateWorkActivityDto.getParentActivityId() != null && updateWorkActivityDto.getParentActivityId() > 0){
             // validate parent
-            validateNotInHierarchy(activity,updateTestActivityDto.getParentActivityId());
+            validateNotInHierarchy(activity,updateWorkActivityDto.getParentActivityId());
 
-            Activity parentActivity = getActivityById(updateTestActivityDto.getParentActivityId());
+            Activity parentActivity = getActivityById(updateWorkActivityDto.getParentActivityId());
             validateParentActivityProject(parentActivity, activity.getProject());
 
             activity.setParentActivity(parentActivity);
@@ -136,36 +139,44 @@ public class ActivityService {
     }
 
     @Transactional
-    public Activity createNewNonTestActivity(NewNonTestActivityDto newNonTestActivityDto){
+    public Activity createNewGeneralActivity(NewGeneralActivityDto newGeneralActivityDto){
         Activity activity = new Activity();
 
-        Category category = categoryService.getCategoryById(newNonTestActivityDto.getCategoryId());
-        ActivityType type = activityTypeService.getTypeById(newNonTestActivityDto.getTypeId());
-        if(type.getCategory().getName().toLowerCase().contains("sprint-testing")){
-            throw new ActivityException.TestCategoryMismatchException("Select type from Non-testing category");
-        }
-        validateTypeAndCategory(category,type);
-
+        ActivityType type = activityTypeService.getTypeByName("general");
         activity.setActivityType(type);
+
+        Category category = categoryService.getCategoryById(newGeneralActivityDto.getCategoryId());
+        activity.setCategory(category);
+
         activity.setCreatedBy(currentUserService.user());
         activity.setCreatedOn(Instant.now());
 
         Status thisStatus = statusService.getRecordStatusByName(Record.ACTIVITY,"ready");
         activity.setStatus(thisStatus);
 
-        activity.setTitle(newNonTestActivityDto.getTitle());
-        activity.setDescription(newNonTestActivityDto.getDescription());
-
-        Project project = newNonTestActivityDto.getProjectId() != null ? projectService.getProjectById(newNonTestActivityDto.getProjectId()) : null;
-        activity.setProject(project);
+        activity.setTitle(newGeneralActivityDto.getTitle());
+        activity.setDescription(newGeneralActivityDto.getDescription());
 
         return activityRepo.save(activity);
     }
 
-    private void validateTypeAndCategory(Category category, ActivityType type) {
-        if(type.getCategory()!=category){
-            throw new CategoryException.CategoryTypeMismatchException("Please select valid type under category");
+    @Transactional
+    public Activity updateGeneralActivity(UpdateGeneralActivityDto updateGeneralActivityDto){
+        Activity activity = getActivityById(updateGeneralActivityDto.getActivityId());
+
+        if(!updateGeneralActivityDto.getVersion().equals(activity.getVersion())){
+            throw new ActivityException.VersionMismatchException("Please Reload the data to edit further.");
         }
+
+        Category category = categoryService.getCategoryById(updateGeneralActivityDto.getCategoryId());
+        activity.setCategory(category);
+
+        activity.setUpdatedBy(currentUserService.user());
+        activity.setUpdatedOn(Instant.now());
+        activity.setTitle(updateGeneralActivityDto.getTitle());
+        activity.setDescription(updateGeneralActivityDto.getDescription());
+
+        return activityRepo.save(activity);
     }
 
     public void validateParentActivityProject(Activity parentActivity, Project project){
@@ -196,4 +207,10 @@ public class ActivityService {
         }
         return activity;
     }
+
+    /*private void validateTypeAndCategory(Category category, ActivityType type) {
+        if(type.getCategory()!=category){
+            throw new CategoryException.CategoryTypeMismatchException("Please select valid type under category");
+        }
+    }*/
 }

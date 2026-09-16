@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import ProjectsAndSprintsPage from "../pages/ProjectsAndSprintsPage";
 import ProjectPage from "../pages/ProjectPage";
-import SprintActivitiesPage from "../pages/SprintActivitiesPage";
 import SprintManagementPage from "../pages/SprintManagementPage";
 import EntryDashboard from "../pages/EntryDashboard";
 import Layout from "../pages/Layout";
@@ -12,6 +11,7 @@ import RecordStatusPage from "../pages/RecordStatusPage";
 import ActivitiesPage from "../pages/ActivitiesPage";
 import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
+import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -36,23 +36,11 @@ export default function AppRoutes() {
           <Route element={<Layout />}>
             {/* Work Area */}
             <Route path="/home" element={<ProjectsAndSprintsPage />} />
-
             <Route path="/projects" element={<ProjectPage />} />
             {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />
-
             <Route path="/record-status" element={<RecordStatusPage />} />
 
-            {/*
-          Sprint-Activities page
-          Entry point: user selects a sprint from the Active Sprints page
-          (or enters the URL directly while that page is in development).
-          Pattern mirrors the API: /sprint_activity/sprint/{sprintId}
-        */}
-            <Route
-              path="/sprints/:sprintId/activities/old"
-              element={<SprintActivitiesPage />}
-            />
             <Route
               path="/sprints/:sprintId/activities"
               element={<SprintManagementPage />}
@@ -63,6 +51,10 @@ export default function AppRoutes() {
             />
             <Route path="/entry-dashboard" element={<EntryDashboard />} />
             <Route path="/entries" element={<EntriesPage />} />
+            <Route
+              path="/general-activity"
+              element={<GeneralActivitiesPage />}
+            />
           </Route>
         </Route>
 

@@ -81,7 +81,6 @@ function ActivitiesList({ projectId }) {
 
   const handleSaveSuccess = async () => {
     try {
-      //await new Promise((resolve) => setTimeout(resolve, 2000));
       await fetchActivities();
       setIsEditorOpen(false);
       setEditingActivity(null);

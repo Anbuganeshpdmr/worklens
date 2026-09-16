@@ -1,6 +1,7 @@
 package com.pdmrindia.worklens.module_entry;
 
 import com.pdmrindia.worklens.module_entry.filter.EntryFilterRequest;
+import com.pdmrindia.worklens.module_entry.mapperDtos.CloseGeneralEntryDto;
 import com.pdmrindia.worklens.module_entry.mapperDtos.CloseWorkEntryDto;
 import com.pdmrindia.worklens.module_entry.mapperDtos.EntryDisplayDto;
 import com.pdmrindia.worklens.module_entry.mapperDtos.EntryDisplayDtoMapper;
@@ -24,27 +25,27 @@ public class EntryController {
     private final EntryDisplayDtoMapper entryDisplayDtoMapper;
     private final CurrentUserService currentUserService;
 
-    @PostMapping("/entry/test/{sprintActivityId}")
-    public EntryDisplayDto createNewTestEntry(@PathVariable("sprintActivityId") int sprintActivityId){
-        Entry entry = entryService.createNewTestEntry(sprintActivityId);
+    @PostMapping("/entry/work/{sprintActivityId}")
+    public EntryDisplayDto createNewWorkEntry(@PathVariable("sprintActivityId") int sprintActivityId){
+        Entry entry = entryService.createNewWorkEntry(sprintActivityId);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
-    @PutMapping("/entry/test")
-    public EntryDisplayDto closeTestEntry(@RequestBody CloseWorkEntryDto closeWorkEntryDto){
-        Entry entry = entryService.closeTestEntry(closeWorkEntryDto);
+    @PutMapping("/entry/work")
+    public EntryDisplayDto closeWorkEntry(@RequestBody CloseWorkEntryDto closeWorkEntryDto){
+        Entry entry = entryService.closeWorkEntry(closeWorkEntryDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
-    @PostMapping("/entry/non_test/{activityId}")
-    public EntryDisplayDto createNewNonTestEntry(@PathVariable("activityId") int activityId){
-        Entry entry = entryService.createNewNonTestEntry(activityId);
+    @PostMapping("/entry/general/{activityId}")
+    public EntryDisplayDto createNewGeneralEntry(@PathVariable("activityId") int activityId){
+        Entry entry = entryService.createNewGeneralEntry(activityId);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
-    @PutMapping("/entry/non_test")
-    public EntryDisplayDto closeNonTestEntry(@RequestBody CloseWorkEntryDto closeWorkEntryDto){
-        Entry entry = entryService.closeNonTestEntry(closeWorkEntryDto);
+    @PutMapping("/entry/general")
+    public EntryDisplayDto closeGeneralEntry(@RequestBody CloseGeneralEntryDto closeGeneralEntryDto){
+        Entry entry = entryService.closeGeneralEntry(closeGeneralEntryDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 

@@ -1,6 +1,7 @@
 package com.pdmrindia.worklens.module_activity;
 
 import com.pdmrindia.worklens.module_activity_type.ActivityType;
+import com.pdmrindia.worklens.module_category.Category;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_project.Project;
 import com.pdmrindia.worklens.module_status.Status;
@@ -38,6 +39,10 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "activity_type_id", nullable = false)
     private ActivityType activityType;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     private Integer externalTicketId;
 

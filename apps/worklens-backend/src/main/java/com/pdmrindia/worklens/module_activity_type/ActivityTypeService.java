@@ -22,13 +22,14 @@ public class ActivityTypeService {
         for(NewTypeDto newTypeDto: newTypeDtoList){
             ActivityType activityType = new ActivityType();
 
-            Category category = getCategory(newTypeDto.getCategoryId());
-            activityType.setCategory(category);
             activityType.setName(newTypeDto.getName());
             activityType.setColourCode(newTypeDto.getColourCode());
             activityType.setMandatory(true);
 
-            if(activityTypeRepo.findByNameAndCategory(newTypeDto.getName(),category).isPresent()){
+            /*if(activityTypeRepo.findByNameAndCategory(newTypeDto.getName(),category).isPresent()){
+                continue;
+            }*/
+            if(activityTypeRepo.findByNameAndIsMandatory(newTypeDto.getName(),true).isPresent()){
                 continue;
             }
             activityTypeRepo.save(activityType);
@@ -38,8 +39,6 @@ public class ActivityTypeService {
     public ActivityType createOptionalType(NewTypeDto newTypeDto){
         ActivityType activityType = new ActivityType();
 
-        Category category = getCategory(newTypeDto.getCategoryId());
-        activityType.setCategory(category);
         activityType.setName(newTypeDto.getName());
         activityType.setColourCode(newTypeDto.getColourCode());
         activityType.setMandatory(false);
@@ -75,7 +74,7 @@ public class ActivityTypeService {
         return activityTypeRepo.findByName(name).orElseThrow(()->new ActivityTypeException.NoSuchTypeException("No Such Activity Type"));
     }
 
-    public List<ActivityType> getTypesByCategory(int categoryId){
+    /*public List<ActivityType> getTypesByCategory(int categoryId){
         return activityTypeRepo.findByCategory(getCategory(categoryId));
-    }
+    }*/
 }

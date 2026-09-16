@@ -77,15 +77,30 @@ export async function getAllProjectActivities(projectId) {
   return response.data;
 }
 
+export async function getAllGeneralActivities() {
+  const response = await apiClient.get(`/activity/general`);
+  return response.data;
+}
+
 // Response Data is ignored. Only status code is needed
 export async function createTestActivity(payload) {
-  const response = await apiClient.post(`/activity/test`, payload);
+  const response = await apiClient.post(`/activity/work`, payload);
   return response.status;
 }
 
 export async function updateTestActivity(payload) {
-  const response = await apiClient.put(`/activity/test`, payload);
+  const response = await apiClient.put(`/activity/work`, payload);
   return response.status;
+}
+
+export async function createGeneralActivity(payload) {
+  const response = await apiClient.post(`/activity/general`, payload);
+  return response;
+}
+
+export async function updateGeneralActivity(payload) {
+  const response = await apiClient.put(`/activity/general`, payload);
+  return response;
 }
 
 /* ── shared error normaliser ─────────────────────────────────── */

@@ -39,14 +39,19 @@ public class ActivityTypeController {
         return typeDisplayDtoMapper.getTypeDisplayDto(activityTypeService.getTypeById(id));
     }
 
-    @GetMapping("/type/category/{categoryId}")
-    public List<TypeDisplayDto> getCategoryTypes(@PathVariable("categoryId") int id){
-        return activityTypeService.getTypesByCategory(id).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
+    @GetMapping("/type")
+    public List<TypeDisplayDto> getAllTypes(){
+        return activityTypeRepo.findAll().stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
     }
 
-    @GetMapping("/type/test-category")
+    /*@GetMapping("/type/category/{categoryId}")
+    public List<TypeDisplayDto> getCategoryTypes(@PathVariable("categoryId") int id){
+        return activityTypeService.getTypesByCategory(id).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
+    }*/
+
+    /*@GetMapping("/type/test-category")
     public List<TypeDisplayDto> getTestCategoryTypes(){
         Category testCategory = categoryService.getCategoryByName("sprint-testing");
         return activityTypeService.getTypesByCategory(testCategory.getId()).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
-    }
+    }*/
 }

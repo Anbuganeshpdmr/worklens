@@ -1,4 +1,5 @@
 import CloseTestEntryModal from "./CloseTestEntryModal";
+import CloseGeneralEntryModal from "./CloseGeneralEntryModal";
 import { useState, useEffect } from "react";
 import { getSprintActivity } from "../../api/sprintActivities";
 import { getStatusByRecord } from "../../api/status";
@@ -27,7 +28,6 @@ export default function EntryPageList({ entries }) {
 
   const fetchSprintActivity = async (entry) => {
     try {
-      //entry.sprintActivityId
       const response = await getSprintActivity(entry.sprintActivityId);
       console.log("Fetched sprint-activity:", response);
       return flattenSprintActivity(response);
@@ -38,8 +38,12 @@ export default function EntryPageList({ entries }) {
 
   useEffect(() => {
     console.log("In combined call method...", selectedEntry);
-    if (!selectedEntry) {
-      console.log("No selected entry. Returning.");
+    if (
+      !selectedEntry ||
+      selectedEntry.sprintActivityId === null ||
+      selectedEntry.sprintActivityId === undefined
+    ) {
+      console.log("No valid selected entry or sprint activity ID. Returning.");
       return;
     }
     const fetchOptions = async () => {
@@ -58,18 +62,25 @@ export default function EntryPageList({ entries }) {
     };
 
     fetchOptions();
-  }, [selectedEntry]);
+  }, [selectedEntry?.sprintActivityId]);
 
   return (
     <>
-      {showModal && selectedEntry && (
-        <CloseTestEntryModal
-          onClose={() => setShowModal(false)}
-          entry={selectedEntry}
-          sprintActivity={sprintActivity}
-          statuses={statuses}
-        />
-      )}
+      {showModal &&
+        selectedEntry &&
+        (selectedEntry.sprintActivityId !== null ? (
+          <CloseTestEntryModal
+            onClose={() => setShowModal(false)}
+            entry={selectedEntry}
+            sprintActivity={sprintActivity}
+            statuses={statuses}
+          />
+        ) : (
+          <CloseGeneralEntryModal
+            onClose={() => setShowModal(false)}
+            entry={selectedEntry}
+          />
+        ))}
       <table className="table table-bordered">
         <thead>
           <tr>

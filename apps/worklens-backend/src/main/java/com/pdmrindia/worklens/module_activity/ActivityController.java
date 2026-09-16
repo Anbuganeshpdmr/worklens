@@ -21,21 +21,27 @@ public class ActivityController {
     private final ActivityTypeService activityTypeService;
     private final CategoryService categoryService;
 
-    @PostMapping("/activity/test")
-    public ActivityDisplayDto createTestingActivity(@RequestBody NewTestActivityDto newTestActivityDto){
-        Activity activity = activityService.createNewTestActivity(newTestActivityDto);
+    @PostMapping("/activity/work")
+    public ActivityDisplayDto createWorkActivity(@RequestBody NewWorkActivityDto newWorkActivityDto){
+        Activity activity = activityService.createNewWorkActivity(newWorkActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
-    @PutMapping("/activity/test")
-    public ActivityDisplayDto updateTestingActivity(@RequestBody UpdateTestActivityDto updateTestActivityDto){
-        Activity activity = activityService.updateTestActivity(updateTestActivityDto);
+    @PutMapping("/activity/work")
+    public ActivityDisplayDto updateWorkActivity(@RequestBody UpdateWorkActivityDto updateWorkActivityDto){
+        Activity activity = activityService.updateWorkActivity(updateWorkActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
-    @PostMapping("/activity/non-test")
-    public ActivityDisplayDto createNonTestingActivity(@RequestBody NewNonTestActivityDto newNonTestActivityDto){
-        Activity activity = activityService.createNewNonTestActivity(newNonTestActivityDto);
+    @PostMapping("/activity/general")
+    public ActivityDisplayDto createGeneralActivity(@RequestBody NewGeneralActivityDto newGeneralActivityDto){
+        Activity activity = activityService.createNewGeneralActivity(newGeneralActivityDto);
+        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
+    }
+
+    @PutMapping("/activity/general")
+    public ActivityDisplayDto updateGeneralActivity(@RequestBody UpdateGeneralActivityDto updateGeneralActivityDto){
+        Activity activity = activityService.updateGeneralActivity(updateGeneralActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
@@ -53,7 +59,13 @@ public class ActivityController {
 
     @GetMapping("/activity/category/{categoryId}")
     public List<ActivityDisplayDto> getActivitiesByCategory(@PathVariable("categoryId") int categoryId){
-        List<Activity> activityList = activityRepo.findByActivityType_Category(categoryService.getCategoryById(categoryId));
+        List<Activity> activityList = activityRepo.findByCategory(categoryService.getCategoryById(categoryId));
+        return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
+    }
+
+    @GetMapping("/activity/general")
+    public List<ActivityDisplayDto> getNonTestActivities(){
+        List<Activity> activityList = activityRepo.findByActivityType(activityTypeService.getTypeByName("general"));
         return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
     }
 
