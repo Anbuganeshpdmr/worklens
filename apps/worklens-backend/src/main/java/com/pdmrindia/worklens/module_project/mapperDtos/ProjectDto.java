@@ -9,5 +9,5 @@ public class ProjectDto {
 
     private int projectId;
     private String projectName;
-    private int selectedRecordStatusId;
+    private int selectedStatusId;
 }

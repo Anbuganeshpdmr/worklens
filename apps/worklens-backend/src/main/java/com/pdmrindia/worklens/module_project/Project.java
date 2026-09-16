@@ -1,8 +1,8 @@
 package com.pdmrindia.worklens.module_project;
 
 import com.pdmrindia.worklens.module_activity.Activity;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint.Sprint;
+import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +15,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "projects")
+@Table(name = "projects", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_project_name",columnNames = "name")
+})
 public class Project {
 
     @Id
@@ -32,8 +34,8 @@ public class Project {
     private List<Activity> activities = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "record_status_id", nullable = false)
-    private RecordStatus recordStatus;
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)

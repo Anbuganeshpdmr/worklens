@@ -1,8 +1,9 @@
 package com.pdmrindia.worklens.module_activity.mapperDtos;
 
-import com.pdmrindia.worklens.module_activity_type.ActivityType;
+import com.pdmrindia.worklens.module_activity_type.mapperDtos.SimpleTypeDispDto;
+import com.pdmrindia.worklens.module_category.mapperDtos.SimpleCategoryDispDto;
 import com.pdmrindia.worklens.module_project.mapperDtos.SimpleProjectInfoDto;
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,8 @@ public class ActivityDisplayDto {
     private String title;
     private String description;
 
-    private ActivityType activityType;
+    private SimpleTypeDispDto activityType;
+    private SimpleCategoryDispDto category;
 
     private String createdBy;
     private String createdOn;
@@ -22,7 +24,7 @@ public class ActivityDisplayDto {
     private String updatedBy;
     private String updatedOn;
 
-    private RecordStatusDisplayDto currentStatus;
+    private StatusDisplayDto currentStatus;
 
     private SimpleProjectInfoDto projectDetails;
 

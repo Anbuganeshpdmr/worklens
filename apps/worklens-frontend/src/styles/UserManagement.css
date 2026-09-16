@@ -93,7 +93,7 @@
 
 .um-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   box-sizing: border-box;
   background: #f2f4f7;
   padding: 28px 30px;

@@ -3,6 +3,8 @@ package com.pdmrindia.worklens.module_project;
 import com.pdmrindia.worklens.module_project.mapperDtos.ProjectDisplayDto;
 import com.pdmrindia.worklens.module_project.mapperDtos.ProjectDisplayDtoMapper;
 import com.pdmrindia.worklens.module_project.mapperDtos.ProjectDto;
+import com.pdmrindia.worklens.module_status.Record;
+import com.pdmrindia.worklens.module_status.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectDisplayDtoMapper projectDisplayDtoMapper;
     private final ProjectRepo projectRepo;
+    private final StatusService statusService;
 
     @PostMapping("/projects")
     public ProjectDisplayDto createProject(@RequestParam String projectName){
@@ -41,8 +44,8 @@ public class ProjectController {
 
     @GetMapping("/projects/active")
     public List<ProjectDisplayDto> getAllActiveProjects(){
-        return projectRepo.findAll().stream()
-                .filter(p->p.getRecordStatus().getStatus().getName().equalsIgnoreCase("Active"))
+        return projectRepo.findByStatus(statusService.getRecordStatusByName(Record.PROJECT,"active"))
+                .stream()
                 .map(projectDisplayDtoMapper::getProjectDisplayDto)
                 .toList();
     }

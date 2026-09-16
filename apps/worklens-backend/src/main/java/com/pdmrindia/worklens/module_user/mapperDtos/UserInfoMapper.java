@@ -1,7 +1,6 @@
 package com.pdmrindia.worklens.module_user.mapperDtos;
 
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDtoMapper;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDtoMapper;
 import com.pdmrindia.worklens.module_user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,9 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserInfoMapper {
 
-    //  Basic User Info
-    //  shall later add Profile-pic
-    private final RecordStatusDisplayDtoMapper mapper;
+    private final StatusDisplayDtoMapper mapper;
 
     public UserInfoDto createSimpleUserInfo(User user){
         UserInfoDto userInfoDto = new UserInfoDto();
@@ -22,10 +19,10 @@ public class UserInfoMapper {
         userInfoDto.setEmpId(user.getEmpId());
         userInfoDto.setRole(user.getRole().getName());
         userInfoDto.setDesignation(user.getDesignation());
-
-        //userInfoDto.setActive(user.isActive());
-        RecordStatusDisplayDto recordStatusDisplayDto = mapper.getRecordStatusDisplayDto(user.getRecordStatus());
-        userInfoDto.setCurrentStatus(recordStatusDisplayDto);
+        userInfoDto.setCurrentStatus(mapper.getStatusDisplayDto(user.getStatus()));
+        userInfoDto.setInitials(user.getInitials());
+        userInfoDto.setDpPath(user.getDpPath());
+        userInfoDto.setDpAvailable(user.isDpAvailable());
 
         return userInfoDto;
     }

@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -62,6 +63,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
         }catch (BadCredentialsException e){
+            //  User found but with Bad credentials
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            response.getWriter().write(new ObjectMapper().writeValueAsString(new ErrorResponse(e.getMessage())));
+            return;
+        }catch (AuthenticationException e){
+            //  No valid user Found
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

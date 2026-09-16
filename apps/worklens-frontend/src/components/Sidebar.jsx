@@ -59,6 +59,11 @@ const ROLE_MENUS = {
     { label: "Home", path: "/home", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
+      label: "Entry Dashboard",
+      path: "/entry-dashboard",
+      icon: "/icons/entries.png",
+    },
+    {
       label: "Record Status",
       path: "/record-status",
       icon: "/icons/recordStatus.png",
@@ -122,10 +127,13 @@ function normalizeRole(role) {
     typeof role === "object"
       ? role?.name || role?.roleName || role?.role
       : role;
-  const normalized = String(roleValue || "MEMBER").trim().toUpperCase();
+  const normalized = String(roleValue || "MEMBER")
+    .trim()
+    .toUpperCase();
 
   if (normalized === "ADMIN") return "ADMIN";
-  if (normalized === "FH" || normalized.includes("FUNCTIONAL HEAD")) return "FH";
+  if (normalized === "FH" || normalized.includes("FUNCTIONAL HEAD"))
+    return "FH";
   if (normalized === "TL" || normalized.includes("TEAM LEAD")) return "TL";
   return "MEMBER";
 }

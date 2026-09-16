@@ -31,4 +31,10 @@ public class UserException {
             super(message);
         }
     }
+
+    public static class ShortUserNameException extends RuntimeException{
+        public ShortUserNameException(String message){
+            super(message);
+        }
+    }
 }

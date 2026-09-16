@@ -1,12 +1,13 @@
 package com.pdmrindia.worklens.module_activity;
 
-import com.pdmrindia.worklens.module_activity.mapperDtos.ActivityDisplayDto;
-import com.pdmrindia.worklens.module_activity.mapperDtos.ActivityDisplayDtoMapper;
-import com.pdmrindia.worklens.module_activity.mapperDtos.NewActivityDto;
-import com.pdmrindia.worklens.module_activity_type.ActivityType;
+import com.pdmrindia.worklens.module_activity.mapperDtos.*;
 import com.pdmrindia.worklens.module_activity_type.ActivityTypeService;
+import com.pdmrindia.worklens.module_category.CategoryService;
+import com.pdmrindia.worklens.module_project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -14,60 +15,58 @@ import org.springframework.web.bind.annotation.*;
 public class ActivityController {
 
     private final ActivityService activityService;
-    private final ActivityTypeService activityTypeService;
+    private final ActivityRepo activityRepo;
     private final ActivityDisplayDtoMapper activityDisplayDtoMapper;
+    private final ProjectService projectService;
+    private final ActivityTypeService activityTypeService;
+    private final CategoryService categoryService;
 
-
-    @PostMapping("/activity/feature")
-    public ActivityDisplayDto createFeatureActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("feature");
-        Activity activity = activityService.createNewActivity(type,newActivityDto);
+    @PostMapping("/activity/work")
+    public ActivityDisplayDto createWorkActivity(@RequestBody NewWorkActivityDto newWorkActivityDto){
+        Activity activity = activityService.createNewWorkActivity(newWorkActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
-    @PostMapping("/activity/scenario")
-    public ActivityDisplayDto createScenarioActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("scenario");
-        Activity activity = activityService.createNewActivity(type,newActivityDto);
-        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
-    }
-
-    @PostMapping("/activity/bug")
-    public ActivityDisplayDto createBugActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("bug");
-        Activity activity = activityService.createNewActivity(type,newActivityDto);
-        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
-    }
-
-    @PostMapping("/activity/task")
-    public ActivityDisplayDto createTaskActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("task");
-        Activity activity = activityService.createNewActivity(type,newActivityDto);
-        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
-    }
-
-    @PostMapping("/activity/test_common")
-    public ActivityDisplayDto createCommonActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("test_common");
-        Activity activity = activityService.createNewActivity(type,newActivityDto);
+    @PutMapping("/activity/work")
+    public ActivityDisplayDto updateWorkActivity(@RequestBody UpdateWorkActivityDto updateWorkActivityDto){
+        Activity activity = activityService.updateWorkActivity(updateWorkActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
     @PostMapping("/activity/general")
-    public ActivityDisplayDto createTestGeneralActivity(@RequestBody NewActivityDto newActivityDto){
-        ActivityType type = activityTypeService.getTypeByName("general");
-        Activity activity = activityService.createNewGeneralActivity(type,newActivityDto);
+    public ActivityDisplayDto createGeneralActivity(@RequestBody NewGeneralActivityDto newGeneralActivityDto){
+        Activity activity = activityService.createNewGeneralActivity(newGeneralActivityDto);
         return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
-    //  Get - Test_common activities/Project
-    @GetMapping("activity/test_common/{projectId}")
-    public void getProjectCommonActivities(@PathVariable("projectId") int projectId){
-
+    @PutMapping("/activity/general")
+    public ActivityDisplayDto updateGeneralActivity(@RequestBody UpdateGeneralActivityDto updateGeneralActivityDto){
+        Activity activity = activityService.updateGeneralActivity(updateGeneralActivityDto);
+        return activityDisplayDtoMapper.getActivityDisplayDto(activity);
     }
 
+    @GetMapping("/activity/project/{projectId}")
+    public List<ActivityDisplayDto> getActivitiesByProject(@PathVariable("projectId") int projectId){
+        List<Activity> activityList = activityRepo.findByProject(projectService.getProjectById(projectId));
+        return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
+    }
 
-    //  Get - General activities
-    //  Get - Activity(id)
+    @GetMapping("/activity/type/{typeId}")
+    public List<ActivityDisplayDto> getActivitiesByType(@PathVariable("typeId") int typeId){
+        List<Activity> activityList = activityRepo.findByActivityType(activityTypeService.getTypeById(typeId));
+        return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
+    }
+
+    @GetMapping("/activity/category/{categoryId}")
+    public List<ActivityDisplayDto> getActivitiesByCategory(@PathVariable("categoryId") int categoryId){
+        List<Activity> activityList = activityRepo.findByCategory(categoryService.getCategoryById(categoryId));
+        return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
+    }
+
+    @GetMapping("/activity/general")
+    public List<ActivityDisplayDto> getNonTestActivities(){
+        List<Activity> activityList = activityRepo.findByActivityType(activityTypeService.getTypeByName("general"));
+        return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
+    }
 
 }

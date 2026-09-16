@@ -6,6 +6,7 @@ import com.pdmrindia.worklens.module_user.mapperDtos.UpdateUserDto;
 import com.pdmrindia.worklens.module_user.mapperDtos.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -55,5 +56,12 @@ public class UserController {
     @PostMapping("/user/{id}/reset_password")
     public void resetPassword(@PathVariable("id") long id, @RequestBody Map<String,String> resetPasswordDto){
         userService.resetPassword(id,resetPasswordDto);
+    }
+
+    @PostMapping("/user/me/dp")
+    public UserInfoDto updateProfilePic(@RequestParam(value = "profilePic",required = false) MultipartFile profilePic,
+                                        @RequestParam("isDpChanged") boolean isDpChanged){
+        User user = userService.changeProfilePic(profilePic,isDpChanged);
+        return userService.getUserInfo(user);
     }
 }

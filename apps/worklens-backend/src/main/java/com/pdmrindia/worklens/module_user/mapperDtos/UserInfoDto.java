@@ -1,6 +1,6 @@
 package com.pdmrindia.worklens.module_user.mapperDtos;
 
-import com.pdmrindia.worklens.module_record_status.mapperDtos.RecordStatusDisplayDto;
+import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +14,8 @@ public class UserInfoDto {
     private String empId;
     private String role;
     private String designation;
-    //private boolean isActive;
-    private RecordStatusDisplayDto currentStatus;
+    private StatusDisplayDto currentStatus;
+    private String dpPath;
+    private boolean isDpAvailable;
+    private String initials;
 }

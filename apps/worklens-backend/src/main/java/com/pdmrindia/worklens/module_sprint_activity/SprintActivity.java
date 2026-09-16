@@ -2,8 +2,8 @@ package com.pdmrindia.worklens.module_sprint_activity;
 
 import com.pdmrindia.worklens.module_activity.Activity;
 import com.pdmrindia.worklens.module_entry.Entry;
-import com.pdmrindia.worklens.module_record_status.RecordStatus;
 import com.pdmrindia.worklens.module_sprint.Sprint;
+import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(
         name = "sprint_activities",
-        uniqueConstraints = @UniqueConstraint(columnNames = {
+        uniqueConstraints = @UniqueConstraint(name = "uk_sprint_activity", columnNames = {
                 "sprint_id",
                 "activity_id"
         })
@@ -43,6 +43,8 @@ public class SprintActivity {
     @Version
     private Long version;
 
+    private boolean isAllowed;
+
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private User createdBy;
@@ -56,8 +58,8 @@ public class SprintActivity {
     private Instant updatedOn;
 
     @ManyToOne
-    @JoinColumn(name = "record_status_id", nullable = false)
-    private RecordStatus recordStatus;
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     @Override
     public boolean equals(Object o) {
