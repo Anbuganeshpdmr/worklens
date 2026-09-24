@@ -139,7 +139,7 @@ public final class EntrySpecification {
 
         return (root, query, cb) ->
                 root.join("activity", JoinType.INNER)
-                        .join("activityType", JoinType.INNER)
+                        //.join("activityType", JoinType.INNER)
                         .join("category", JoinType.INNER)
                         .get("id")
                         .in(categoryIds);

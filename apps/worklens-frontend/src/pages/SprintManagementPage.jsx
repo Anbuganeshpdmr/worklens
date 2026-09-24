@@ -35,17 +35,45 @@ export default function SprintManagementPage() {
       <main className="act-page__main">
         {/* Page Header */}
         <header className="act-page__header">
-          <h1 className="act-page__title">
-            Sprint: {sprint?.sprintName} ({sprint?.projectName})
-            <button
-              onClick={() => {
-                navigate(`/projects/${sprint?.projectId}/activities`);
-              }}
-              className="btn btn-outline-primary"
-            >
-              Project
-            </button>
-          </h1>
+          <div className="act-page__title-row">
+            <h1 className="act-page__title">
+              Sprint: {sprint?.sprintName} ({sprint?.projectName})
+            </h1>
+            <div className="act-page__header-actions">
+              <button
+                onClick={() => {
+                  navigate(`/projects/${sprint?.projectId}/activities`);
+                }}
+                className="btn btn-outline-primary"
+              >
+                Project
+              </button>
+              <div
+                className="act-page__tabs"
+                role="tablist"
+                aria-label="Sprint sections"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === "manage"}
+                  className={`act-page__tab${activeTab === "manage" ? " act-page__tab--active" : ""}`}
+                  onClick={() => setActiveTab("manage")}
+                >
+                  Manage
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === "test"}
+                  className={`act-page__tab${activeTab === "test" ? " act-page__tab--active" : ""}`}
+                  onClick={() => setActiveTab("test")}
+                >
+                  Test
+                </button>
+              </div>
+            </div>
+          </div>
           <p className="act-page__subtitle">Manage Sprints And Activities.</p>
         </header>
 
@@ -54,33 +82,6 @@ export default function SprintManagementPage() {
             <i className="bi bi-exclamation-circle" /> {error}
           </div>
         )}
-
-        {/* Switchable Tabs */}
-        <div
-          className="act-page__tabs"
-          role="tablist"
-          aria-label="Sprint sections"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "manage"}
-            className={`act-page__tab${activeTab === "manage" ? " act-page__tab--active" : ""}`}
-            onClick={() => setActiveTab("manage")}
-          >
-            Manage
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "test"}
-            className={`act-page__tab${activeTab === "test" ? " act-page__tab--active" : ""}`}
-            onClick={() => setActiveTab("test")}
-          >
-            Test
-          </button>
-        </div>
 
         {/* Tab Content */}
         <div className="act-page__content">
