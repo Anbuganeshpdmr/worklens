@@ -17,11 +17,7 @@ const ROLE_MENUS = {
   FH: [
     { label: "Home", path: "/home", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
-    {
-      label: "Record Status",
-      path: "/record-status",
-      icon: "/icons/recordStatus.png",
-    },
+    
     {
       label: "Sprint Management",
       path: "/projects",
@@ -63,11 +59,7 @@ const ROLE_MENUS = {
       path: "/entry-dashboard",
       icon: "/icons/entries.png",
     },
-    {
-      label: "Record Status",
-      path: "/record-status",
-      icon: "/icons/recordStatus.png",
-    },
+    
     {
       label: "Sprint Management",
       path: "/projects",

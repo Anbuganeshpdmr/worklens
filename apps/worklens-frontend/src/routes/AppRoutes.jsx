@@ -7,7 +7,6 @@ import EntryDashboard from "../pages/EntryDashboard";
 import Layout from "../pages/Layout";
 import HomePage from "../pages/HomePage";
 import UserManagement from "../pages/UserManagement";
-import RecordStatusPage from "../pages/RecordStatusPage";
 import ActivitiesPage from "../pages/ActivitiesPage";
 import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -39,7 +38,7 @@ export default function AppRoutes() {
             <Route path="/projects" element={<ProjectPage />} />
             {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />
-            <Route path="/record-status" element={<RecordStatusPage />} />
+            
 
             <Route
               path="/sprints/:sprintId/activities"
