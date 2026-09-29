@@ -94,6 +94,11 @@ const ROLE_MENUS = {
       path: "/report-dashboard",
       icon: "/icons/reportDashboard.png",
     },
+    {
+      label: "Reports-1",
+      path: "/reports1",
+      icon: "/icons/reportDashboard.png",
+    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],

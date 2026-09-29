@@ -114,12 +114,13 @@ export default function GeneralActivityList({
                         <div className="gen-act-actions-group">
                           <button
                             type="button"
-                            className="gen-act-btn-start"
+                            className="gen-act-btn-edit"
+                            //className="gen-act-btn-start"
                             title="Start Entry (E+)"
                             onClick={() => handleStartClick(activity)}
                           >
                             <i className="bi bi-play-fill" />
-                            <span>E+</span>
+                            {/* <span>E+</span> */}
                           </button>
 
                           <button
@@ -129,7 +130,7 @@ export default function GeneralActivityList({
                             onClick={() => onEditActivity(activity)}
                           >
                             <i className="bi bi-pencil" />
-                            <span>Edit</span>
+                            {/* <span>Edit</span> */}
                           </button>
                         </div>
                       </td>

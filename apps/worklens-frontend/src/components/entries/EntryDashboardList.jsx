@@ -6,6 +6,7 @@ export default function EntryDashboardList({ entries }) {
           <th>Id</th>
           <th>Title</th>
           <th>Status</th>
+          <th>Category</th>
           <th>Created By</th>
           <th>Created On</th>
         </tr>
@@ -16,6 +17,7 @@ export default function EntryDashboardList({ entries }) {
             <td>{entry.id}</td>
             <td>{entry.name}</td>
             <td>{entry.statusDisplayName}</td>
+            <td>{entry.categoryName}</td>
             <td>{entry.user}</td>
             <td>{entry.activityDate}</td>
           </tr>

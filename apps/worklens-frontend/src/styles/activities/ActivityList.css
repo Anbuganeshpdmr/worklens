@@ -757,3 +757,146 @@
     min-height: 40vh;
   }
 }
+
+/* ==========================================================================
+   SprintActivitiesList — additional rules
+   (sa-* prefix to avoid collision with generic act-list-* rules)
+   ========================================================================== */
+
+/* ── sa-table: column widths (11 cols — Select prepended before ID) ── */
+
+/* Select */
+.sa-table th:nth-child(1),
+.sa-table td:nth-child(1) { width: 60px; }
+/* ID */
+.sa-table th:nth-child(2),
+.sa-table td:nth-child(2) { width: 90px; }
+/* Title */
+.sa-table th:nth-child(3),
+.sa-table td:nth-child(3) { width: 200px; }
+/* Description */
+.sa-table th:nth-child(4),
+.sa-table td:nth-child(4) { width: 220px; }
+/* Status */
+.sa-table th:nth-child(5),
+.sa-table td:nth-child(5) { width: 120px; }
+/* Ext. Ticket */
+.sa-table th:nth-child(6),
+.sa-table td:nth-child(6) { width: 90px; }
+/* Parent ID */
+.sa-table th:nth-child(7),
+.sa-table td:nth-child(7) { width: 90px; }
+/* Created By */
+.sa-table th:nth-child(8),
+.sa-table td:nth-child(8) { width: 110px; }
+/* Created On */
+.sa-table th:nth-child(9),
+.sa-table td:nth-child(9) { width: 130px; }
+/* Updated On */
+.sa-table th:nth-child(10),
+.sa-table td:nth-child(10) { width: 130px; }
+
+/* ── Select column header / cell ── */
+
+.sa-table th.th-select {
+  text-align: center;
+}
+
+.act-list-table td.td-select {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ── Checkbox ── */
+
+.sa-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #c9aa8c;
+  border-radius: 4px;
+  background: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color 0.14s ease, border-color 0.14s ease;
+  vertical-align: middle;
+}
+
+.sa-checkbox:checked {
+  background: #810b38;
+  border-color: #810b38;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1.5 5l3 3 6-7' stroke='%23fff' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px 8px;
+}
+
+.sa-checkbox:hover:not(:checked) {
+  border-color: #810b38;
+  background: #fdf0f4;
+}
+
+.sa-checkbox:focus-visible {
+  outline: 2px solid #810b38;
+  outline-offset: 2px;
+}
+
+/* ── Selected row highlight ── */
+
+.act-list-table tbody tr.row--selected {
+  background-color: #fdf5f8;
+}
+
+.act-list-table tbody tr.row--selected:hover {
+  background-color: #faeaf0;
+}
+
+/* ── Save bar (right-side of act-list-header) ── */
+
+.sa-save-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sa-save-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803d;
+  animation: saSaveSuccessFade 3s ease forwards;
+}
+
+@keyframes saSaveSuccessFade {
+  0%   { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Discard button — ghost variant with muted red */
+.sa-btn-discard {
+  background: transparent !important;
+  border: 1px solid #c9aa8c !important;
+  color: #5f5147 !important;
+  box-shadow: none !important;
+}
+
+.sa-btn-discard:hover {
+  background: #f5ece1 !important;
+  border-color: #a68565 !important;
+  color: #2c201a !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Disabled save button */
+.act-list-btn-new:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}

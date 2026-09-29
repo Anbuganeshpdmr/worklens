@@ -22,32 +22,40 @@ public final class EntrySpecification {
         Specification<Entry> specification = (root, query, cb) -> null;
 
         if (request.getFromDate() != null) {
-            specification = specification.and(activityDateGreaterThanOrEqualTo(request.getFromDate()));
+            specification = specification.and(
+                    activityDateGreaterThanOrEqualTo(request.getFromDate())
+            );
         }
 
         if (request.getToDate() != null) {
-            specification = specification.and(activityDateLessThanOrEqualTo(request.getToDate()));
+            specification = specification.and(
+                    activityDateLessThanOrEqualTo(request.getToDate())
+            );
         }
 
         if (hasValues(request.getUserIds())) {
-            specification = specification.and(userIn(request.getUserIds()));
+            specification = specification.and(
+                    userIn(request.getUserIds())
+            );
         }
 
         if (hasValues(request.getActivityIds())) {
-            specification = specification.and(activityIn(request.getActivityIds()));
+            specification = specification.and(
+                    activityIn(request.getActivityIds())
+            );
         }
 
         if (hasValues(request.getProjectIds())) {
-            specification = specification.and(projectIn(request.getProjectIds()));
+            specification = specification.and(
+                    projectIn(request.getProjectIds())
+            );
         }
 
         if (hasValues(request.getSprintIds())) {
-            specification = specification.and(sprintIn(request.getSprintIds()));
+            specification = specification.and(
+                    sprintIn(request.getSprintIds())
+            );
         }
-
-        /*if (hasValues(request.getActivityTypeIds())) {
-            specification = specification.and(activityTypeIn(request.getActivityTypeIds()));
-        }*/
 
         if (hasValues(request.getActivityTypeIds())) {
             specification = specification.and(
@@ -62,13 +70,17 @@ public final class EntrySpecification {
         }
 
         if (hasValues(request.getStatusIds())) {
-            specification = specification.and(statusIn(request.getStatusIds()));
+            specification = specification.and(
+                    statusIn(request.getStatusIds())
+            );
         }
 
         return specification;
     }
 
-    private static Specification<Entry> activityDateGreaterThanOrEqualTo(LocalDate date) {
+
+    private static Specification<Entry> activityDateGreaterThanOrEqualTo(
+            LocalDate date) {
 
         return (root, query, cb) ->
                 cb.greaterThanOrEqualTo(
@@ -77,7 +89,9 @@ public final class EntrySpecification {
                 );
     }
 
-    private static Specification<Entry> activityDateLessThanOrEqualTo(LocalDate date) {
+
+    private static Specification<Entry> activityDateLessThanOrEqualTo(
+            LocalDate date) {
 
         return (root, query, cb) ->
                 cb.lessThanOrEqualTo(
@@ -86,30 +100,39 @@ public final class EntrySpecification {
                 );
     }
 
+
     private static Specification<Entry> userIn(List<Long> userIds) {
 
         return (root, query, cb) ->
-                root.get("user").get("id").in(userIds);
+                root.get("user")
+                        .get("id")
+                        .in(userIds);
     }
+
 
     private static Specification<Entry> activityIn(List<Long> activityIds) {
 
         return (root, query, cb) ->
-                root.get("activity").get("id").in(activityIds);
+                root.get("activity")
+                        .get("id")
+                        .in(activityIds);
     }
+
 
     private static Specification<Entry> projectIn(List<Long> projectIds) {
 
         return (root, query, cb) -> {
 
-            Join<Entry, Activity> activity = root.join("activity", JoinType.INNER);
+            Join<Entry, Activity> activity =
+                    root.join("activity", JoinType.INNER);
 
             return activity
-                    .join("project", JoinType.INNER)
+                    .get("project")
                     .get("id")
                     .in(projectIds);
         };
     }
+
 
     private static Specification<Entry> sprintIn(List<Long> sprintIds) {
 
@@ -119,33 +142,47 @@ public final class EntrySpecification {
                     root.join("sprintActivity", JoinType.INNER);
 
             return sprintActivity
-                    .join("sprint", JoinType.INNER)
+                    .get("sprint")
                     .get("id")
                     .in(sprintIds);
         };
     }
 
-    private static Specification<Entry> activityTypeIn(List<Long> activityTypeIds) {
 
-        return (root, query, cb) ->
-                root.join("activity", JoinType.INNER)
-                        .join("activityType", JoinType.INNER)
-                        .get("id")
-                        .in(activityTypeIds);
+    private static Specification<Entry> activityTypeIn(
+            List<Long> activityTypeIds) {
+
+        return (root, query, cb) -> {
+
+            Join<Entry, Activity> activity =
+                    root.join("activity", JoinType.INNER);
+
+            return activity
+                    .get("activityType")
+                    .get("id")
+                    .in(activityTypeIds);
+        };
     }
+
 
     private static Specification<Entry> categoryIn(
             List<Long> categoryIds) {
 
-        return (root, query, cb) ->
-                root.join("activity", JoinType.INNER)
-                        //.join("activityType", JoinType.INNER)
-                        .join("category", JoinType.INNER)
-                        .get("id")
-                        .in(categoryIds);
+        return (root, query, cb) -> {
+
+            Join<Entry, Activity> activity =
+                    root.join("activity", JoinType.INNER);
+
+            return activity
+                    .get("category")
+                    .get("id")
+                    .in(categoryIds);
+        };
     }
 
-    private static Specification<Entry> statusIn(List<Long> statusIds) {
+
+    private static Specification<Entry> statusIn(
+            List<Long> statusIds) {
 
         return (root, query, cb) ->
                 root.get("status")
@@ -153,7 +190,9 @@ public final class EntrySpecification {
                         .in(statusIds);
     }
 
+
     private static boolean hasValues(List<?> values) {
+
         return values != null && !values.isEmpty();
     }
 }

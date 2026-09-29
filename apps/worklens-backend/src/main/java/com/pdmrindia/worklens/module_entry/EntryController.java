@@ -25,7 +25,7 @@ public class EntryController {
     private final EntryDisplayDtoMapper entryDisplayDtoMapper;
     private final CurrentUserService currentUserService;
 
-    @PostMapping("/entry/work/{sprintActivityId}")
+    /*@PostMapping("/entry/work/{sprintActivityId}")
     public EntryDisplayDto createNewWorkEntry(@PathVariable("sprintActivityId") int sprintActivityId){
         Entry entry = entryService.createNewWorkEntry(sprintActivityId);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
@@ -35,7 +35,7 @@ public class EntryController {
     public EntryDisplayDto closeWorkEntry(@RequestBody CloseWorkEntryDto closeWorkEntryDto){
         Entry entry = entryService.closeWorkEntry(closeWorkEntryDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
-    }
+    }*/
 
     @PostMapping("/entry/general/{activityId}")
     public EntryDisplayDto createNewGeneralEntry(@PathVariable("activityId") int activityId){
@@ -76,6 +76,11 @@ public class EntryController {
 
     @PostMapping("/entry/search")
     public Page<EntryDisplayDto> search(@RequestBody EntryFilterRequest request, Pageable pageable) {
+        System.out.println("========== ENTRY SEARCH ==========");
+        System.out.println("Filter Request: " + request);
+        System.out.println("First Category"+ request.getCategoryIds().get(0));
+        System.out.println("Page: " + pageable.getPageNumber());
+        System.out.println("Size: " + pageable.getPageSize());
         Page<Entry> entryPage = entryService.search(request, pageable);
         return entryPage.map(entryDisplayDtoMapper::getEntryDisplayDto);
     }

@@ -7,7 +7,7 @@ export default function EntriesPage() {
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [filterRequest, setFilterRequest] = useState({});
 

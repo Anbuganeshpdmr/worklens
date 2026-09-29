@@ -4,7 +4,7 @@ export async function getAllEntries(entryFilterRequest, page, size) {
   return apiClient.post(
     `/entry/search`,
     {
-      entryFilterRequest,
+      request: entryFilterRequest,
     },
     {
       params: { page, size },

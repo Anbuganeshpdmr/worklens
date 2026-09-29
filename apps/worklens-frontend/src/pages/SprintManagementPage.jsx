@@ -5,6 +5,7 @@ import SprintActivityList from "../components/activities/SprintActivitiesList";
 import { getIndividualSprintDetails } from "../api/sprints";
 import { mapSprintDetails } from "../components/activities/projectMapper";
 import SprintActivitiesExecutePage from "./SprintActivitiesExecutePage";
+import SprintActivityExecuteList from "../components/sprint-activities/SprintActivityExecuteList";
 
 export default function SprintManagementPage() {
   const { sprintId } = useParams();
@@ -90,7 +91,8 @@ export default function SprintManagementPage() {
           )}
 
           {activeTab === "test" && sprint && (
-            <SprintActivitiesExecutePage sprint={sprint} />
+            <SprintActivityExecuteList sprint={sprint} />
+            // <SprintActivitiesExecutePage sprint={sprint} />
           )}
         </div>
       </main>
