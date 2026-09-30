@@ -13,6 +13,7 @@ import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
 import ReportChartTestPage from "../components/reports/ReportChartTestPage";
+import MyEntriesPage from "../pages/MyEntriesPage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -51,6 +52,7 @@ export default function AppRoutes() {
               element={<ActivitiesPage />}
             />
             <Route path="/entry-dashboard" element={<EntryDashboard />} />
+            <Route path="/my-entries" element={<MyEntriesPage />} />
             <Route path="/entries" element={<EntriesPage />} />
             <Route
               path="/general-activity"

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { flattenEntry } from "../components/entries/entryMapper";
-import EntryDashboardList from "../components/entries/EntryDashboardList";
+import EntryDashboardList, { PAGE } from "../components/entries/EntryDashboardList";
 import EntryHeaderComponent from "../components/entries/EntryHeaderComponent";
 
 export default function EntryDashboard() {
@@ -16,7 +16,7 @@ export default function EntryDashboard() {
 
         <EntryHeaderComponent onResults={setEntries} />
 
-        <EntryDashboardList entries={entries} />
+        <EntryDashboardList entries={entries} page={PAGE.ENTRY_DASHBOARD} />
       </main>
     </div>
   );

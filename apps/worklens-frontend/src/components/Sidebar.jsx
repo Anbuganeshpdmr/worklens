@@ -64,6 +64,11 @@ const ROLE_MENUS = {
       icon: "/icons/entries.png",
     },
     {
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
+    {
       label: "Record Status",
       path: "/record-status",
       icon: "/icons/recordStatus.png",
@@ -106,6 +111,16 @@ const ROLE_MENUS = {
   MEMBER: [
     { label: "Home", path: "/home", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
+    {
+      label: "Entry Dashboard",
+      path: "/entry-dashboard",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
     {
       label: "Sprint Management",
       path: "/projects",

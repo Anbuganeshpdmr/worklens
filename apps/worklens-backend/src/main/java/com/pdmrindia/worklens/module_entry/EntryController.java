@@ -76,11 +76,9 @@ public class EntryController {
 
     @PostMapping("/entry/search")
     public Page<EntryDisplayDto> search(@RequestBody EntryFilterRequest request, Pageable pageable) {
-        System.out.println("========== ENTRY SEARCH ==========");
-        System.out.println("Filter Request: " + request);
-        System.out.println("First Category"+ request.getCategoryIds().get(0));
-        System.out.println("Page: " + pageable.getPageNumber());
-        System.out.println("Size: " + pageable.getPageSize());
+        if(currentUserService.user().getRole().getName().equalsIgnoreCase("member")){
+            request.setUserIds(List.of(currentUserService.user().getId()));
+        }
         Page<Entry> entryPage = entryService.search(request, pageable);
         return entryPage.map(entryDisplayDtoMapper::getEntryDisplayDto);
     }

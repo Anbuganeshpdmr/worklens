@@ -208,6 +208,10 @@ export default function EntryHeaderComponent({
   const [users, setUsers] = useState([]);
   const [optionsLoading, setOptionsLoading] = useState(true);
 
+  const stored = localStorage.getItem("userInfo");
+  const userInfo = stored ? JSON.parse(stored) : null;
+  const isMember = userInfo?.role?.toLowerCase() === "member";
+
   useEffect(() => {
     let cancelled = false;
 
@@ -281,8 +285,8 @@ export default function EntryHeaderComponent({
       console.log("Before sending Request:",filterRequest);
       const response = await getAllEntries(filterRequest, page, size);
       console.log("API response:", response);
-console.log("API content:", response?.data?.content);
-console.log("API content count:", response?.data?.content?.length);
+      console.log("API content:", response?.data?.content);
+      console.log("API content count:", response?.data?.content?.length);
       const flat = response?.data?.content?.map(flattenEntry) ?? [];
       console.log("Response Flat:",flat);
       setRecords(flat);       // → ReportChart re-renders
@@ -482,6 +486,7 @@ console.log("API content count:", response?.data?.content?.length);
               </div>
 
               {/* Row 4: User */}
+              {!isMember && 
               <div className="sa-exec-fields-row">
                 <div className="sa-exec-field sa-exec-field--ms">
                   <MultiSelect
@@ -493,7 +498,7 @@ console.log("API content count:", response?.data?.content?.length);
                     loading={optionsLoading}
                   />
                 </div>
-              </div>
+              </div>}
 
               {/* Row 5: Activity IDs */}
               <div className="sa-exec-fields-row">
