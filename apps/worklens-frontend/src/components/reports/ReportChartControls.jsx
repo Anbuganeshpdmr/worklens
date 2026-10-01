@@ -1,33 +1,29 @@
 function ReportChartControls({
     criteria,
     setCriteria,
+    aggregator,
+    setAggregator,
+    aggregatorOptions,
     chartType,
     setChartType,
-    showLegend,
-    setShowLegend,
     criteriaOptions,
 }) {
     return (
-        <div
-            style={{
-                display: "flex",
-                gap: "20px",
-                alignItems: "center",
-                marginBottom: "20px",
-            }}
-        >
-            <div>
-                <label>
-                    Criteria:&nbsp;
+        <div className="report-chart-controls">
+            <div className="report-chart-control-group">
+                <label className="report-chart-control-label" htmlFor="rc-criteria">
+                    Criteria:
                 </label>
 
                 <select
+                    id="rc-criteria"
+                    className="report-chart-select"
                     value={criteria}
                     onChange={(e) =>
                         setCriteria(e.target.value)
                     }
                 >
-                    {criteriaOptions.map((option) => (
+                    {criteriaOptions?.map((option) => (
                         <option
                             key={option.key}
                             value={option.key}
@@ -38,13 +34,38 @@ function ReportChartControls({
                 </select>
             </div>
 
-
-            <div>
-                <label>
-                    Chart:&nbsp;
+            <div className="report-chart-control-group">
+                <label className="report-chart-control-label" htmlFor="rc-aggregator">
+                    Aggregator:
                 </label>
 
                 <select
+                    id="rc-aggregator"
+                    className="report-chart-select"
+                    value={aggregator}
+                    onChange={(e) =>
+                        setAggregator(e.target.value)
+                    }
+                >
+                    {aggregatorOptions?.map((option) => (
+                        <option
+                            key={option.key}
+                            value={option.key}
+                        >
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="report-chart-control-group">
+                <label className="report-chart-control-label" htmlFor="rc-chart-type">
+                    Chart:
+                </label>
+
+                <select
+                    id="rc-chart-type"
+                    className="report-chart-select"
                     value={chartType}
                     onChange={(e) =>
                         setChartType(e.target.value)
@@ -54,19 +75,6 @@ function ReportChartControls({
                     <option value="bar">Bar</option>
                 </select>
             </div>
-
-
-            <label>
-                <input
-                    type="checkbox"
-                    checked={showLegend}
-                    onChange={(e) =>
-                        setShowLegend(e.target.checked)
-                    }
-                />
-
-                &nbsp;Legend
-            </label>
         </div>
     );
 }

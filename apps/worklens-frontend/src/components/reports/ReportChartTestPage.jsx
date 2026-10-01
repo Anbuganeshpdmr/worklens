@@ -1,5 +1,5 @@
 import ReportChart from "./ReportChart";
-
+import { AggregatorOptions_EntryList } from "./CritreriaOptions";
 
 const SAMPLE_DATA = [
     {
@@ -22,6 +22,8 @@ const SAMPLE_DATA = [
 
         projectId: 3,
         projectName: "CPS",
+
+        duration: "PT2H30M",
     },
 
     {
@@ -44,6 +46,8 @@ const SAMPLE_DATA = [
 
         projectId: 3,
         projectName: "CPS",
+
+        duration: "PT1H45M",
     },
 
     {
@@ -66,6 +70,8 @@ const SAMPLE_DATA = [
 
         projectId: 4,
         projectName: "LMS",
+
+        duration: "PT3H",
     },
 
     {
@@ -88,6 +94,8 @@ const SAMPLE_DATA = [
 
         projectId: 4,
         projectName: "LMS",
+
+        duration: "PT45M",
     },
 
     {
@@ -110,9 +118,10 @@ const SAMPLE_DATA = [
 
         projectId: 5,
         projectName: "JMS",
+
+        duration: "PT1H15M",
     },
 ];
-
 
 const CRITERIA_OPTIONS = [
     {
@@ -169,19 +178,18 @@ const CRITERIA_OPTIONS = [
     },
 ];
 
-
 function ReportChartTestPage() {
     return (
         <div style={{ padding: "30px" }}>
-
             <h2>Report Chart Test</h2>
 
             <ReportChart
                 records={SAMPLE_DATA}
                 criteriaOptions={CRITERIA_OPTIONS}
                 defaultCriteria="status"
+                aggregatorOptions={AggregatorOptions_EntryList}
+                defaultAggregator="duration"
             />
-
         </div>
     );
 }

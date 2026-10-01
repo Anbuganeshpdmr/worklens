@@ -1,0 +1,315 @@
+/* ==========================================================================
+   ReportChart Styles
+   Theme aligned with Worklens Palette:
+     Primary / Accent: #810b38
+     Borders: #c9aa8c, #dcc3aa, #ede2d4
+     Surfaces: #ffffff, #faf5ef, #fbf8f5
+     Text: #2c201a (headings/body), #5f5147 (labels/muted), #9e8d7f (subtle)
+   ========================================================================== */
+
+/* ── Root Container ── */
+.report-chart-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: inherit;
+  color: #2c201a;
+}
+
+/* ── Controls Toolbar ── */
+.report-chart-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  background: #faf5ef;
+  border: 1px solid #ede2d4;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(95, 81, 71, 0.04);
+}
+
+.report-chart-control-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.report-chart-control-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5f5147;
+  white-space: nowrap;
+}
+
+/* ── Styled Select Dropdowns ── */
+.report-chart-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 6px 28px 6px 11px;
+  border: 1px solid #c9aa8c;
+  border-radius: 7px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235f5147' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  color: #2c201a;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(95, 81, 71, 0.05);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.report-chart-select:hover {
+  border-color: #810b38;
+  background-color: #fdfaf7;
+}
+
+.report-chart-select:focus {
+  border-color: #810b38;
+  box-shadow: 0 0 0 3px rgba(129, 11, 56, 0.12);
+  background-color: #ffffff;
+}
+
+.report-chart-select option {
+  color: #2c201a;
+  background-color: #ffffff;
+  padding: 6px 10px;
+}
+
+/* ── Empty State ── */
+.report-chart-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: #5f5147;
+  font-size: 13px;
+  background: #faf5ef;
+  border: 1px dashed #dcc3aa;
+  border-radius: 8px;
+  margin-top: 6px;
+}
+
+/* ── Pie Chart Container (Left: Pie, Right: Metrics) ── */
+.report-chart-pie-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 330px;
+  gap: 12px;
+}
+
+.report-chart-pie-left {
+  flex: 0 0 52%;
+  max-width: 54%;
+  min-width: 220px;
+  height: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-chart-pie-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 330px;
+  padding: 4px 8px 4px 0;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling for metrics panel */
+.report-chart-pie-right::-webkit-scrollbar {
+  width: 4px;
+}
+.report-chart-pie-right::-webkit-scrollbar-thumb {
+  background: #dcc3aa;
+  border-radius: 4px;
+}
+
+/* ── Metrics Summary Bar ── */
+.report-chart-metrics-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ede2d4;
+  font-size: 11.5px;
+  color: #5f5147;
+}
+
+.report-chart-metrics-summary-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.report-chart-metrics-summary-value {
+  font-weight: 700;
+  color: #810b38;
+  font-size: 12.5px;
+}
+
+.report-chart-metrics-summary-splits {
+  font-size: 11px;
+  color: #9e8d7f;
+}
+
+/* ── Metrics Grid (1-col or 2-col based on number of splits) ── */
+.report-chart-metrics-grid--1col {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.report-chart-metrics-grid--2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 8px;
+}
+
+/* ── Metric Card ── */
+.report-chart-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 9px;
+  background: #ffffff;
+  border: 1px solid #eaddcf;
+  border-left: 3.5px solid #810b38;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(95, 81, 71, 0.04);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.report-chart-metric-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(95, 81, 71, 0.09);
+  background: #fdfbf9;
+}
+
+.report-chart-metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.report-chart-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.report-chart-metric-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.report-chart-metric-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #2c201a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-chart-metric-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: #810b38;
+  background: #f9ede7;
+  padding: 1px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.report-chart-metric-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: #5f5147;
+  padding-left: 12px;
+}
+
+/* ── Bar Chart Container ── */
+.report-chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ── Bar Chart Legend / Metrics Row Below Chart ── */
+.report-chart-bar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  padding-top: 10px;
+  margin-top: 6px;
+  border-top: 1px solid #ede2d4;
+}
+
+.report-chart-bar-legend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  background: #faf5ef;
+  border: 1px solid #eaddcf;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #2c201a;
+  box-shadow: 0 1px 2px rgba(95, 81, 71, 0.04);
+  transition: background-color 0.12s ease;
+}
+
+.report-chart-bar-legend-pill:hover {
+  background-color: #f5ece1;
+}
+
+.report-chart-bar-legend-name {
+  font-weight: 600;
+  color: #2c201a;
+}
+
+.report-chart-bar-legend-val {
+  font-weight: 700;
+  color: #810b38;
+}
+
+.report-chart-bar-legend-pct {
+  font-size: 10.5px;
+  color: #5f5147;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 768px) {
+  .report-chart-pie-container {
+    flex-direction: column;
+  }
+  .report-chart-pie-left {
+    flex: 0 0 100%;
+    max-width: 100%;
+    height: 260px;
+  }
+  .report-chart-pie-right {
+    max-height: none;
+    width: 100%;
+  }
+}

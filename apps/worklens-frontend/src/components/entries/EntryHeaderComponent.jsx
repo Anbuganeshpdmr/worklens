@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import ReportChart from "../reports/ReportChart";
-import { CriteriaOptions_EntryList } from "../reports/CritreriaOptions";
+import {
+  CriteriaOptions_EntryList,
+  AggregatorOptions_EntryList,
+} from "../reports/CritreriaOptions";
 import { getActiveProjects } from "../../api/projects";
 import { getSprints } from "../../api/sprints";
 import { getTypes } from "../../api/types";
@@ -179,7 +182,9 @@ const DEFAULT_FIELDS = {
  *   defaultFields   — partial field overrides applied at mount (e.g. { fromDate, toDate })
  *   page            — page index passed to getAllEntries (default 0)
  *   size            — page size passed to getAllEntries (default 100)
- *   criteriaOptions — optional override for ReportChart criteria (defaults to CriteriaOptions_EntryList)
+ *   criteriaOptions   — optional override for ReportChart criteria (defaults to CriteriaOptions_EntryList)
+ *   aggregatorOptions — optional override for ReportChart aggregator (defaults to AggregatorOptions_EntryList)
+ *   defaultAggregator — optional default aggregator key (defaults to "duration")
  */
 export default function EntryHeaderComponent({
   onResults,
@@ -188,6 +193,8 @@ export default function EntryHeaderComponent({
   page = 0,
   size = 100,
   criteriaOptions = CriteriaOptions_EntryList,
+  aggregatorOptions = AggregatorOptions_EntryList,
+  defaultAggregator = "duration",
 }) {
   const [expanded, setExpanded] = useState(true);
 
@@ -384,6 +391,8 @@ export default function EntryHeaderComponent({
                 records={records}
                 criteriaOptions={criteriaOptions}
                 defaultCriteria="status"
+                aggregatorOptions={aggregatorOptions}
+                defaultAggregator={defaultAggregator}
               />
             </div>
           </div>

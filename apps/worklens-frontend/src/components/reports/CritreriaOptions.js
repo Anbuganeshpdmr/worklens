@@ -59,4 +59,21 @@ export const CriteriaOptions_EntryList = [
             color: null,
         }),
     },
+    {
+        key: "user",
+        label: "User",
+        getValue: (entry) => ({
+            id: entry.user,
+            name: entry.user,
+            color: null,
+        }),
+    },
 ];
+
+export {
+    AggregatorOption_Duration,
+    AggregatorOption_Count,
+    AggregatorOptions_EntryList,
+    AggregatorOptions_SprintActivityExecuteList,
+    DEFAULT_AGGREGATOR,
+} from "./AggregatorOptions.js";

@@ -1,6 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import ReportChart from "../reports/ReportChart";
-import { CriteriaOptions_SprintActivityExecuteList } from "../reports/CritreriaOptions";
+import {
+  CriteriaOptions_SprintActivityExecuteList,
+  AggregatorOptions_SprintActivityExecuteList,
+} from "../reports/CritreriaOptions";
 
 /* ══════════════════════════════════════════════════════════════════════════
    MultiSelect — custom pill-tag dropdown for type / status / currentUser
@@ -126,9 +129,13 @@ function MultiSelect({ id, label, options, selected, onChange }) {
  *   onFiltersChange   — callback(updatedFilters)
  *   onSearch          — callback()
  *   onReset           — callback()
- *   totalCount        — total rows
- *   filteredCount     — rows after filters
- *   onDownload        — callback() (placeholder, wired up later)
+ *   totalCount          — total rows
+ *   filteredCount       — rows after filters
+ *   onDownload          — callback() (placeholder, wired up later)
+ *   criteriaOptions     — optional override for ReportChart criteria (defaults to CriteriaOptions_SprintActivityExecuteList)
+ *   aggregatorOptions   — optional override for ReportChart aggregator (defaults to AggregatorOptions_SprintActivityExecuteList)
+ *   defaultCriteria     — optional default criteria key (defaults to "status")
+ *   defaultAggregator   — optional default aggregator key (defaults to "count")
  */
 export default function ExecuteListHeader({
   sprintActivities,       // filtered list  → drives the chart
@@ -140,6 +147,10 @@ export default function ExecuteListHeader({
   totalCount,
   filteredCount,
   onDownload,
+  criteriaOptions = CriteriaOptions_SprintActivityExecuteList,
+  aggregatorOptions = AggregatorOptions_SprintActivityExecuteList,
+  defaultCriteria = "status",
+  defaultAggregator = "count",
 }) {
   const [expanded, setExpanded] = useState(true);
 
@@ -222,8 +233,10 @@ export default function ExecuteListHeader({
             <div className="sa-exec-accordion__chart-body">
               <ReportChart
                 records={sprintActivities}
-                criteriaOptions={CriteriaOptions_SprintActivityExecuteList}
-                defaultCriteria="status"
+                criteriaOptions={criteriaOptions}
+                defaultCriteria={defaultCriteria}
+                aggregatorOptions={aggregatorOptions}
+                defaultAggregator={defaultAggregator}
               />
             </div>
           </div>
