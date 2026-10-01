@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
 import StatusPage from "../pages/StatusPage";
 import CategoryTypePage from "../pages/CategoryTypePage";
+import ProfilePage from "../pages/ProfilePage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -40,7 +41,6 @@ export default function AppRoutes() {
             <Route path="/projects" element={<ProjectPage />} />
             {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />
-            
 
             <Route
               path="/sprints/:sprintId/activities"
@@ -58,6 +58,7 @@ export default function AppRoutes() {
               path="/general-activity"
               element={<GeneralActivitiesPage />}
             />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>
 

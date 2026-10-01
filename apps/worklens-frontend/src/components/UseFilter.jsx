@@ -38,7 +38,7 @@ function UserFilter({
               <option value="All">All Roles</option>
               <option value="Member">Member</option>
               <option value="TL">TL</option>
-              <option value="Manager">Manager</option>
+              <option value="Manager">FH</option>
             </select>
           </div>
 

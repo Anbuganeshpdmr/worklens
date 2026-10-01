@@ -1,6 +1,16 @@
 import api from "./axios";
 
 // ==========================================
+// GET PROFILE (logged-in user)
+// ==========================================
+
+export const getProfile = async () => {
+  const response = await api.get("/profile");
+  console.log("GET /profile:", response.data);
+  return response.data;
+};
+
+// ==========================================
 // GET ALL USERS
 // ==========================================
 
@@ -42,6 +52,17 @@ export const getRoles = async () => {
   return response.data;
 };
 // ==========================================
+// GET MEMBER STATUSES
+// ==========================================
+
+export const getMemberStatuses = async () => {
+  const response = await api.get("/records/MEMBER/allowed");
+
+  console.log("GET /records/MEMBER/allowed:", response.data);
+
+  return response.data;
+};
+// ==========================================
 // DELETE USER
 // ==========================================
 
@@ -50,5 +71,13 @@ export const deleteUser = async (id) => {
 
   console.log(`DELETE /user/${id}:`, response.data);
 
+  return response.data;
+};
+
+// ==========================================
+// CHANGE PASSWORD
+// ==========================================
+export const changePassword = async (passwordData) => {
+  const response = await api.post("/me/password", passwordData);
   return response.data;
 };

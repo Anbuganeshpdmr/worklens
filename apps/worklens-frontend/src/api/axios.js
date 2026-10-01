@@ -1,5 +1,4 @@
 import axios from "axios";
-import { commonApiErrorHandler } from "./apiErrorHandler";
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
@@ -28,7 +27,7 @@ api.interceptors.response.use(
       window.location.href = "/";
     }
 
-    commonApiErrorHandler(error);
+    return Promise.reject(error);
   },
 );
 

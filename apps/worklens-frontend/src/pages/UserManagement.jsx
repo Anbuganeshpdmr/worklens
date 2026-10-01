@@ -87,8 +87,14 @@ const UserManagement = () => {
       typeof u?.role === "object" ? u?.role?.name || "" : u?.role || "";
     const matchRole =
       roleFilter === "All" || uRole.toLowerCase() === roleFilter.toLowerCase();
-    const isActive =
-      u?.active === true || u?.active === 1 || u?.isActive === true;
+    // Determine active from currentStatus.displayName / uniqueName / statusName
+    const statusName = (
+      u?.currentStatus?.displayName ||
+      u?.currentStatus?.uniqueName  ||
+      u?.currentStatus?.statusName  ||
+      ""
+    ).toLowerCase();
+    const isActive = statusName.includes("active") && !statusName.includes("inactive");
     const matchStatus =
       statusFilter === "All" ||
       (statusFilter === "Active" && isActive) ||
@@ -107,20 +113,67 @@ const UserManagement = () => {
       setError("");
       if (modal.user) {
         const id =
-          modal.user.id ??
           modal.user.userId ??
           modal.user._id ??
-          modal.user.empId;
-        await updateUser(id, userData);
+          modal.user.id ??
+          null;
+
+        const numericId = id !== null && !String(id).includes(":")
+          ? id
+          : null;
+
+        if (!numericId) {
+          const noIdErr = new Error("Cannot update user: valid user ID not found.");
+          setError(noIdErr.message);
+          throw noIdErr;
+        }
+
+        console.log("UPDATE USER ID:", numericId, "PAYLOAD:", userData);
+
+        // Strip frontend-only field before sending to backend
+        const { _selectedStatusObj, ...backendPayload } = userData;
+        const updatedUser = await updateUser(numericId, backendPayload);
+
+        // Backend may return stale currentStatus due to JPA cache.
+        // Build the correct currentStatus from what we know we sent.
+        const freshStatus = _selectedStatusObj
+          ? {
+              statusId:    _selectedStatusObj.statusId ?? _selectedStatusObj.id,
+              displayName: _selectedStatusObj.displayName || _selectedStatusObj.statusName || "",
+              colourCode:  _selectedStatusObj.colourCode || "",
+              applicable:  _selectedStatusObj.applicable ?? true,
+              mandatory:   _selectedStatusObj.mandatory ?? false,
+              uniqueName:  _selectedStatusObj.uniqueName || "",
+            }
+          : null;
+
+        const mergedUser = {
+          ...(updatedUser || modal.user),
+          ...(freshStatus ? { currentStatus: freshStatus } : {}),
+        };
+
+        setUsers((prev) =>
+          prev.map((u) =>
+            (u.id ?? u.userId) === (mergedUser.id ?? mergedUser.userId)
+              ? mergedUser
+              : u
+          )
+        );
+
+        // Reload in background for full consistency
+        loadUsers();
+
       } else {
         await addUser(userData);
+        await loadUsers();
       }
+
       setModal(null);
-      await loadUsers();
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Failed to save user",
-      );
+      const msg =
+        err.response?.data?.message || err.message || "Failed to save user";
+      setError(msg);
+      throw err; // re-throw so the form also shows it inline
     } finally {
       setSaving(false);
     }
@@ -175,23 +228,7 @@ const UserManagement = () => {
             </div>
           </div>
 
-          {/* TABS */}
-          <div className="um-tabs">
-            <button
-              type="button"
-              className={`um-tab${activeTab === "users" ? " um-tab--active" : ""}`}
-              onClick={() => setActiveTab("users")}
-            >
-              User
-            </button>
-            <button
-              type="button"
-              className={`um-tab${activeTab === "roles" ? " um-tab--active" : ""}`}
-              onClick={() => setActiveTab("roles")}
-            >
-              Roles
-            </button>
-          </div>
+
 
           {/* ── USERS TAB ── */}
           {activeTab === "users" && (

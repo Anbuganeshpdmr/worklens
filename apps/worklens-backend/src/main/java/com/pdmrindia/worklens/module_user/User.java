@@ -77,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.getStatus().getUniqueName().toLowerCase().contains("active");
+        return this.getStatus().getDisplayName().trim().equalsIgnoreCase("active");
     }
 
     @Override

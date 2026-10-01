@@ -12,4 +12,5 @@ public class NewUserDto {
     private String name;
     private String designation;
     private String role;
+    private Integer selectedStatusId;
 }
