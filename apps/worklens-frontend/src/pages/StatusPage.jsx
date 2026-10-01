@@ -1,478 +1,177 @@
 import { useEffect, useState } from "react";
 
 import {
-    getAllStatuses,
-    updateStatus,
-    createStatus
-} from "../api/recordStatus";
+    getStatuses,
+    getRecordTypes,
+    createStatus,
+    updateStatus
+} from "../api/status";
 
-import StatusTable
-    from "../components/status/StatusTable";
-
-import StatusForm
-    from "../components/status/StatusForm";
-
+import StatusTable from "../components/status/StatusTable";
+import StatusForm from "../components/status/StatusForm";
 import "../styles/Status.css";
 
-
-export default function StatusPage() {
-
+const StatusPage = () => {
+    const [recordTypes, setRecordTypes] = useState([]);
     const [statuses, setStatuses] = useState([]);
-
+    const [expandedRecordTypes, setExpandedRecordTypes] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const [error, setError] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState("new");
+    const [selectedStatus, setSelectedStatus] = useState(null);
 
-    const [editingStatus, setEditingStatus] =
-        useState(null);
+    const [toast, setToast] = useState("");
 
-    const [addingStatus, setAddingStatus] =
-        useState(false);
+    const loadData = async () => {
+        setLoading(true);
 
-    const [saving, setSaving] = useState(false);
+        const [types, statusData] = await Promise.all([
+            getRecordTypes(),
+            getStatuses()
+        ]);
 
-    const [addingStatusForm, setAddingStatusForm] =
-        useState({
-            name: "",
-            colourCode: ""
-        });
+        setRecordTypes(types);
+        setStatuses(statusData);
 
-
-    /*
-     * GET /status/all
-     */
-    const loadStatuses = async () => {
-
-        try {
-
-            setLoading(true);
-            setError("");
-
-            const data = await getAllStatuses();
-
-            console.log(
-                "GET /status/all",
-                data
-            );
-
-            setStatuses(
-                Array.isArray(data)
-                    ? data
-                    : []
-            );
-
-        } catch (err) {
-
-            console.error(
-                "Failed to load statuses:",
-                err
-            );
-
-            setStatuses([]);
-
-            setError(
-                err.message ||
-                "Failed to load statuses."
-            );
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
+        setLoading(false);
     };
 
-
-    /*
-     * Load statuses when page opens
-     */
     useEffect(() => {
-
-        loadStatuses();
-
+        loadData();
     }, []);
 
+    const toggleRecordType = (recordType) => {
+        setExpandedRecordTypes((previous) => ({
+            ...previous,
+            [recordType]: !previous[recordType]
+        }));
+    };
 
-    /*
-     * Open edit modal
-     */
+    const getStatusesForRecordType = (recordType) => {
+        return statuses.filter((status) => {
+            const statusRecordType = status.uniqueName.split("_");
+
+            return statusRecordType.slice(0, -1).join("_") === recordType;
+        });
+    };
+
+    const handleNewStatus = () => {
+        setSelectedStatus(null);
+        setModalMode("new");
+        setIsModalOpen(true);
+    };
+
     const handleEdit = (status) => {
-
-        setError("");
-
-        setEditingStatus({
-            ...status
-        });
-
+        setSelectedStatus(status);
+        setModalMode("edit");
+        setIsModalOpen(true);
     };
 
-
-    /*
-     * Open add modal
-     */
-    const handleAdd = () => {
-
-        setError("");
-
-        setAddingStatusForm({
-            name: "",
-            colourCode: ""
-        });
-
-        setAddingStatus(true);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedStatus(null);
     };
 
-    /*
-     * Close modal
-     */
-    const handleCancel = () => {
+    const showToast = (message) => {
+        setToast(message);
 
-        setEditingStatus(null);
-        setAddingStatus(false);
-
+        setTimeout(() => {
+            setToast("");
+        }, 3000);
     };
-
-
-    /*
-     * Change edit form
-     */
-    const handleEditChange = (
-        field,
-        value
-    ) => {
-
-        setEditingStatus(
-            previous => ({
-                ...previous,
-                [field]: value
-            })
-        );
-
-    };
-
-
-    /*
-     * Change add form
-     */
-    const handleAddChange = (
-        field,
-        value
-    ) => {
-
-        setAddingStatusForm(
-            previous => ({
-                ...previous,
-                [field]: value
-            })
-        );
-
-    };
-
-
-    /*
-     * Save edited status
-     *
-     * PUT /status/{id}
-     */
-    const handleSave = async () => {
-
-        if (!editingStatus) {
-            return;
-        }
-
-        try {
-
-            setSaving(true);
-            setError("");
-
-            const payload = {
-
-                name:
-                    editingStatus.name,
-
-                colourCode:
-                    editingStatus.colourCode
-
-            };
-
-            console.log(
-                `PUT /status/${editingStatus.id}`,
-                payload
-            );
-
-            const updatedStatus =
-                await updateStatus(
-                    editingStatus.id,
-                    payload
-                );
-
-            console.log(
-                "Updated status:",
-                updatedStatus
-            );
-
-            setStatuses(
-                previous =>
-                    previous.map(status =>
-                        status.id === editingStatus.id
-                            ? updatedStatus
-                            : status
-                    )
-            );
-
-            setEditingStatus(null);
-
-        } catch (err) {
-
-            console.error(
-                "Failed to update status:",
-                err
-            );
-
-            setError(
-                err.message ||
-                "Failed to update status."
-            );
-
-        } finally {
-
-            setSaving(false);
-
-        }
-
-    };
-
-
-    /*
-     * Create new status
-     *
-     * POST /status
-     */
-    const handleCreate = async () => {
-
-        if (!addingStatusForm.name.trim()) {
-
-            setError(
-                "Status name is required."
-            );
-
-            return;
-        }
-
-        try {
-
-            setSaving(true);
-            setError("");
-
-            const payload = {
-
-                name:
-                    addingStatusForm.name.trim(),
-
-                colourCode:
-                    addingStatusForm.colourCode
-
-            };
-
-            console.log(
-                "POST /status",
-                payload
-            );
-
-            const newStatus =
-                await createStatus(
-                    payload
-                );
-
-            console.log(
-                "Created status:",
-                newStatus
-            );
-
-            setStatuses(
-                previous => [
-                    ...previous,
-                    newStatus
-                ]
-            );
-
-            setAddingStatus(false);
-
-            setAddingStatusForm({
-                name: "",
-                colourCode: ""
-            });
-
-        } catch (err) {
-
-            console.error(
-                "Failed to create status:",
-                err
-            );
-
-            setError(
-                err.message ||
-                "Failed to create status."
-            );
-
-        } finally {
-
-            setSaving(false);
-
-        }
-
-    };
-
 
     return (
-
         <div className="status-page">
 
-            {/* =========================
-                HEADER
-            ========================= */}
+            {toast && (
+                <div className="status-toast">
+                    {toast}
+                </div>
+            )}
 
             <div className="status-page-header">
-
-                <div>
-
-                    <h2>
-                        Status
-                    </h2>
-
-                    <p>
-                        Manage statuses used across
-                        the system.
-                    </p>
-
-                </div>
-
+                <h1>Status Management</h1>
 
                 <div className="status-page-actions">
-
                     <button
-                        className="add-status-button"
-                        onClick={handleAdd}
                         type="button"
+                        onClick={handleNewStatus}
                     >
-                        + Add Status
+                        + New
                     </button>
 
-
                     <button
-                        className="refresh-button"
-                        onClick={loadStatuses}
-                        disabled={loading}
                         type="button"
+                        onClick={loadData}
                     >
-
-                        <span
-                            className="refresh-icon"
-                            aria-hidden="true"
-                        ></span>
-
-                        <span>
-                            Refresh
-                        </span>
-
+                        Refresh
                     </button>
-
                 </div>
-
             </div>
 
-
-            {/* =========================
-                ERROR
-            ========================= */}
-
-            {error && (
-
-                <div className="error-message">
-                    {error}
-                </div>
-
-            )}
-
-
-            {/* =========================
-                CONTENT
-            ========================= */}
-
             {loading ? (
-
-                <p>
-                    Loading statuses...
-                </p>
-
-            ) : statuses.length === 0 ? (
-
-                <p>
-                    No statuses available.
-                </p>
-
+                <p>Loading...</p>
             ) : (
+                recordTypes.map((recordType) => (
+                    <div
+                        className="status-record-section"
+                        key={recordType}
+                    >
+                        <button
+                            type="button"
+                            className="status-record-header"
+                            onClick={() =>
+                                toggleRecordType(recordType)
+                            }
+                        >
+                            <span>
+                                {expandedRecordTypes[recordType]
+                                    ? "⌄"
+                                    : "›"}
+                            </span>
 
-                <StatusTable
-                    statuses={statuses}
-                    onEdit={handleEdit}
-                />
+                            <span>
+                                {recordType}
+                            </span>
+                        </button>
 
+                        {expandedRecordTypes[recordType] && (
+                            <StatusTable
+                                statuses={getStatusesForRecordType(
+                                    recordType
+                                )}
+                                onEdit={handleEdit}
+                            />
+                        )}
+                    </div>
+                ))
             )}
 
+            <StatusForm
+                isOpen={isModalOpen}
+                mode={modalMode}
+                status={selectedStatus}
+                recordTypes={recordTypes}
+                onClose={handleCloseModal}
+                onSave={async (data) => {
+                    console.log("Status form data:", data);
 
-            {/* =========================
-                EDIT MODAL
-            ========================= */}
+                    if (modalMode === "edit") {
+                        await updateStatus(data);
+                        showToast("Status updated successfully");
+                    } else {
+                        await createStatus(data);
+                        showToast("Status created successfully");
+                    }
 
-            {editingStatus && (
-
-                <StatusForm
-
-                    status={editingStatus}
-
-                    title="Edit Status"
-
-                    onChange={handleEditChange}
-
-                    onSave={handleSave}
-
-                    onCancel={handleCancel}
-
-                    saving={saving}
-
-                />
-
-            )}
-
-
-            {/* =========================
-                ADD MODAL
-            ========================= */}
-
-            {addingStatus && (
-
-                <StatusForm
-
-                    status={addingStatusForm}
-
-                    title="Add Status"
-
-                    onChange={handleAddChange}
-
-                    onSave={handleCreate}
-
-                    onCancel={handleCancel}
-
-                    saving={saving}
-
-                />
-
-            )}
+                    await loadData();
+                    handleCloseModal();
+                }}
+            />
 
         </div>
-
     );
+};
 
-}
+export default StatusPage;

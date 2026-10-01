@@ -1,35 +1,24 @@
-
-const StatusTable = ({ statuses, onEdit, onApplicableChange }) => {
+const CategoryTable = ({ categories, onEdit }) => {
     return (
-        <table className="status-table">
+        <table className="category-type-table">
             <thead>
                 <tr>
-                    <th>Applicable</th>
-                    <th>Display Name</th>
+                    <th>Name</th>
                     <th>Colour</th>
                     <th>Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                {statuses.map((status) => (
-                    <tr key={status.statusId}>
-                        <td>
-                            <input
-                                type="checkbox"
-                                checked={status.applicable}
-                                readOnly
-                                disabled
-                            />
-                        </td>
-
-                        <td>{status.displayName}</td>
+                {categories.map((category) => (
+                    <tr key={category.id}>
+                        <td>{category.name}</td>
 
                         <td>
                             <span
-                                className="status-colour"
+                                className="category-colour"
                                 style={{
-                                    backgroundColor: status.colourCode,
+                                    backgroundColor: category.colourCode,
                                 }}
                             />
                         </td>
@@ -37,8 +26,9 @@ const StatusTable = ({ statuses, onEdit, onApplicableChange }) => {
                         <td>
                             <button
                                 type="button"
-                                onClick={() => onEdit(status)}
-                                aria-label={`Edit ${status.displayName}`}
+                                className="category-edit-button"
+                                onClick={() => onEdit(category)}
+                                title="Edit"
                             >
                                 <svg
                                     width="16"
@@ -62,5 +52,4 @@ const StatusTable = ({ statuses, onEdit, onApplicableChange }) => {
     );
 };
 
-export default StatusTable;
-
+export default CategoryTable;

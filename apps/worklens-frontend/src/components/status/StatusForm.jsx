@@ -1,133 +1,186 @@
-export default function StatusForm({
+import { useEffect, useState } from "react";
+
+const StatusForm = ({
+    isOpen,
+    mode,
     status,
-    title,
-    onChange,
-    onSave,
-    onCancel,
-    saving
-}) {
+    recordTypes,
+    onClose,
+    onSave
+}) => {
+    const isEdit = mode === "edit";
+
+    const [recordName, setRecordName] = useState("");
+    const [displayName, setDisplayName] = useState("");
+    const [colourCode, setColourCode] = useState("#000000");
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        if (isEdit && status) {
+            setRecordName(
+                status.uniqueName?.split("_")[0] || ""
+            );
+            setDisplayName(status.displayName || "");
+            setColourCode(status.colourCode || "#000000");
+        } else {
+            setRecordName(recordTypes?.[0] || "");
+            setDisplayName("");
+            setColourCode("#000000");
+        }
+    }, [isOpen, isEdit, status, recordTypes]);
+
+    if (!isOpen) {
+        return null;
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (isEdit) {
+            onSave({
+                statusId: status.statusId,
+                displayName,
+                colourCode
+            });
+
+            return;
+        }
+
+        onSave({
+            recordName,
+            displayName,
+            colourCode
+        });
+    };
 
     return (
-
         <div className="status-modal-overlay">
-
             <div className="status-modal">
 
-                {/* MODAL HEADER */}
-
                 <div className="status-modal-header">
-
-                    <h3>
-                        {title}
-                    </h3>
+                    <h2>
+                        {isEdit ? "Edit Status" : "New Status"}
+                    </h2>
 
                     <button
                         type="button"
                         className="status-modal-close"
-                        onClick={onCancel}
-                        disabled={saving}
+                        onClick={onClose}
+                        aria-label="Close"
                     >
                         ×
                     </button>
-
                 </div>
 
+                <form onSubmit={handleSubmit}>
 
-                {/* NAME */}
+                    <div className="status-modal-body">
 
-                <div className="status-form-field">
+                        {!isEdit && (
+                            <div className="status-form-group">
+                                <label>
+                                    Record Type
+                                </label>
 
-                    <label>
-                        Name
-                    </label>
+                                <select
+                                    value={recordName}
+                                    onChange={(event) =>
+                                        setRecordName(
+                                            event.target.value
+                                        )
+                                    }
+                                    required
+                                >
+                                    <option value="">
+                                        Select Record Type
+                                    </option>
 
-                    <input
-                        type="text"
-                        value={status.name || ""}
-                        onChange={(e) =>
-                            onChange(
-                                "name",
-                                e.target.value
-                            )
-                        }
-                        disabled={saving}
-                        placeholder="Enter status name"
-                    />
-
-                </div>
-
-
-                {/* COLOUR */}
-
-                {/* COLOUR */}
-
-                <div className="status-form-field">
-
-                    <label>
-                        Colour
-                    </label>
-
-                    <div className="colour-picker-row">
-
-                        <input
-                            type="color"
-                            value={status.colourCode}
-                            onChange={(e) =>
-                                onChange(
-                                    "colourCode",
-                                    e.target.value
-                                )
-                            }
-                            disabled={saving}
-                        />
-
-                        {status.colourCode && (
-                            <span
-                                className="selected-colour"
-                                style={{
-                                    backgroundColor:
-                                        status.colourCode
-                                }}
-                            />
+                                    {recordTypes.map((type) => (
+                                        <option
+                                            key={type}
+                                            value={type}
+                                        >
+                                            {type}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         )}
+
+                        <div className="status-form-group">
+                            <label>
+                                Status Name
+                            </label>
+
+                            <input
+                                type="text"
+                                value={displayName}
+                                onChange={(event) =>
+                                    setDisplayName(
+                                        event.target.value
+                                    )
+                                }
+                                disabled={
+                                    isEdit && status?.mandatory
+                                }
+                                required
+                            />
+                        </div>
+
+                        <div className="status-form-group">
+                            <label>
+                                Colour
+                            </label>
+
+                            <div className="status-colour-input">
+                                <input
+                                    type="color"
+                                    value={colourCode}
+                                    onChange={(event) =>
+                                        setColourCode(
+                                            event.target.value
+                                        )
+                                    }
+                                />
+
+                                <span
+                                    className="status-colour-preview"
+                                    style={{
+                                        backgroundColor:
+                                            colourCode
+                                    }}
+                                />
+                            </div>
+                        </div>
 
                     </div>
 
-                </div>
+                    <div className="status-modal-footer">
 
+                        <button
+                            type="button"
+                            className="status-cancel-button"
+                            onClick={onClose}
+                        >
+                            Cancel
+                        </button>
 
-                {/* BOTTOM BUTTONS */}
+                        <button
+                            type="submit"
+                            className="status-save-button"
+                        >
+                            {isEdit ? "Update" : "Create"}
+                        </button>
 
-                <div className="status-form-actions">
+                    </div>
 
-                    <button
-                        type="button"
-                        className="status-cancel-button"
-                        onClick={onCancel}
-                        disabled={saving}
-                    >
-                        Cancel
-                    </button>
-
-                    <button
-                        type="button"
-                        className="status-save-button"
-                        onClick={onSave}
-                        disabled={saving}
-                    >
-                        {saving
-                            ? "Saving..."
-                            : title === "Add Status"
-                                ? "Add Status"
-                                : "Save"}
-                    </button>
-
-                </div>
-
+                </form>
             </div>
-
         </div>
-
     );
+};
 
-}
+export default StatusForm;

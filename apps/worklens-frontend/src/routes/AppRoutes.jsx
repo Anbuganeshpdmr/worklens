@@ -7,11 +7,12 @@ import EntryDashboard from "../pages/EntryDashboard";
 import Layout from "../pages/Layout";
 import HomePage from "../pages/HomePage";
 import UserManagement from "../pages/UserManagement";
-import RecordStatusPage from "../pages/RecordStatusPage";
 import ActivitiesPage from "../pages/ActivitiesPage";
 import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
+import StatusPage from "../pages/StatusPage";
+import CategoryTypePage from "../pages/CategoryTypePage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -39,7 +40,7 @@ export default function AppRoutes() {
             <Route path="/projects" element={<ProjectPage />} />
             {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />
-            <Route path="/record-status" element={<RecordStatusPage />} />
+            
 
             <Route
               path="/sprints/:sprintId/activities"
@@ -49,6 +50,8 @@ export default function AppRoutes() {
               path="/projects/:projectId/activities"
               element={<ActivitiesPage />}
             />
+            <Route path="/status" element={<StatusPage />} />
+            <Route path="/category-type" element={<CategoryTypePage />} />
             <Route path="/entry-dashboard" element={<EntryDashboard />} />
             <Route path="/entries" element={<EntriesPage />} />
             <Route

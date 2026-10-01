@@ -2,7 +2,8 @@ import CloseTestEntryModal from "./CloseTestEntryModal";
 import CloseGeneralEntryModal from "./CloseGeneralEntryModal";
 import { useState, useEffect } from "react";
 import { getSprintActivity } from "../../api/sprintActivities";
-import { getStatusByRecord } from "../../api/status";
+//import { getStatusByRecord } from "../../api/status";
+import { getStatuses } from "../../api/status";
 import { flattenSprintActivity } from "../../components/sprint-activities/sprintActivityMapper";
 
 export default function EntryPageList({ entries }) {
@@ -17,7 +18,8 @@ export default function EntryPageList({ entries }) {
 
   const getSprintActivityStatuses = async () => {
     try {
-      const response = await getStatusByRecord("sprint_activity");
+      //const response = await getStatusByRecord("sprint_activity");
+      const response = await getStatuses("SPRINT_ACTIVITY");
       console.log("Fetched sprint-activity statuses:", response);
       return response;
     } catch (error) {
