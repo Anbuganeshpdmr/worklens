@@ -17,7 +17,7 @@ const ROLE_MENUS = {
   FH: [
     { label: "Home", path: "/home", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
-    
+
     {
       label: "Sprint Management",
       path: "/projects",
@@ -28,6 +28,12 @@ const ROLE_MENUS = {
       path: "/activity-type",
       icon: "/icons/activityType.png",
     },
+
+    {
+      label: "Status",
+      path: "/status",
+      icon: "/icons/status.png",
+    },
     //{ label: "Activities", path: "/activities", icon: "/icons/activities.png" },
     {
       label: "General Activity",
@@ -36,6 +42,12 @@ const ROLE_MENUS = {
     },
     //{ label: "Sprint", path: "/sprint", icon: "/icons/sprint.png" },
     //{ label: "Activity Movements", path: "/activity-movements", icon: "/icons/activityMovements.png" },
+
+    {
+      label: "Category & Types",
+      path: "/category-type",
+      icon: "/icons/category.png",
+    },
     {
       label: "User Management",
       path: "/user-management",
@@ -59,7 +71,7 @@ const ROLE_MENUS = {
       path: "/entry-dashboard",
       icon: "/icons/entries.png",
     },
-    
+
     {
       label: "Sprint Management",
       path: "/projects",
@@ -70,10 +82,22 @@ const ROLE_MENUS = {
       path: "/activity-type",
       icon: "/icons/activityType.png",
     },
+
+    {
+      label: "Status",
+      path: "/status",
+      icon: "/icons/status.png",
+    },
     {
       label: "General Activity",
       path: "/general-activity",
       icon: "/icons/general.png",
+    },
+
+    {
+      label: "Category & Types",
+      path: "/category-type",
+      icon: "/icons/category.png",
     },
     {
       label: "User Management",
@@ -161,11 +185,10 @@ function Sidebar({ role, collapsed }) {
             ) : (
               <a
                 href={item.path}
-                className={`sidebar__nav-item${
-                  location.pathname === item.path
-                    ? " sidebar__nav-item--active"
-                    : ""
-                }`}
+                className={`sidebar__nav-item${location.pathname === item.path.split("?")[0]
+                  ? " sidebar__nav-item--active"
+                  : ""
+                  }`}
               >
                 <img
                   src={item.icon}

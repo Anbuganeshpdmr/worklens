@@ -11,6 +11,8 @@ import ActivitiesPage from "../pages/ActivitiesPage";
 import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
+import StatusPage from "../pages/StatusPage";
+import CategoryTypePage from "../pages/CategoryTypePage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -48,6 +50,8 @@ export default function AppRoutes() {
               path="/projects/:projectId/activities"
               element={<ActivitiesPage />}
             />
+            <Route path="/status" element={<StatusPage />} />
+            <Route path="/category-type" element={<CategoryTypePage />} />
             <Route path="/entry-dashboard" element={<EntryDashboard />} />
             <Route path="/entries" element={<EntriesPage />} />
             <Route
