@@ -120,6 +120,46 @@
   height: 20px;
 }
 
+/* Collapsed Sidebar - Hover Label */
+
+.sidebar--collapsed .sidebar__nav-item {
+  position: relative;
+}
+
+.sidebar--collapsed .sidebar__nav-item span {
+  display: none;
+}
+
+.sidebar--collapsed .sidebar__nav-item:hover span {
+  display: block;
+  position: absolute;
+  left: 62px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(44, 41, 43, 0.88);
+  color: #FFFFFF;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Small arrow */
+
+.sidebar--collapsed .sidebar__nav-item:hover span::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(44, 41, 43, 0.88);;
+  transform: translateY(-50%) rotate(45deg);
+}
+
 /* Sidebar PNG icons filter */
 .sidebar__icon {
   width: 20px;

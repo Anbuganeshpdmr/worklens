@@ -31,25 +31,28 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  background: #ffffff;
 }
 
 .sprint-header {
   flex-shrink: 0;
 }
 
-.sprint-card {
+.sprint-list > .sprint-card {
   position: relative;
   width: min(100%, 700px);
+  min-height: 164px;
 
   box-sizing: border-box;
-  background: #ffffff;
+  background: #EDE8D0;
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 10px;
   padding: 1rem 1.25rem;
   overflow: visible;
 }
 
-.sprint-card:hover {
+.sprint-list > .sprint-card:hover {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
@@ -137,8 +140,8 @@
 }
 
 .sprint-card__menu-btn:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: #f5e8ee;
+  color: #8b0038;
 }
 
 .sprint-card__menu {
@@ -175,7 +178,8 @@
 }
 
 .sprint-card__menu-item:hover {
-  background: #f5f5f5;
+  background: #f8eef2;
+  color: #8b0038;
 }
 
 .sprint-card__body {
@@ -184,7 +188,10 @@
   gap: 10px 24px;
   margin-top: 13px;
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+}
+
+.sprint-card__body:empty {
+  display: none;
 }
 
 .sprint-card__field {
@@ -266,7 +273,7 @@
 }
 
 @media (max-width: 700px) {
-  .sprint-card {
+  .sprint-list > .sprint-card {
     width: 100%;
     padding: 14px 16px;
   }
@@ -303,4 +310,88 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+}
+
+/* Sprint status/type counts row */
+.sprint-card__counts-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 2px;
+}
+
+.sprint-card__counts-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: #f0f0f0;
+}
+
+/* Dynamic count values */
+.sprint-card__counts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  min-width: 0;
+}
+
+.sprint-card__count-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.sprint-card__count-name {
+  color: #475569;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.sprint-card__count-value {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* Status / Type tabs */
+.sprint-card__count-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.sprint-card__count-tab {
+  border: 1px solid #d9dee8;
+  background: #ffffff;
+  color: #64748b;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sprint-card__count-tab:hover {
+  background: #f8eef2;
+  color: #8b0038;
+}
+
+.sprint-card__count-tab.active {
+  background: #8b0038;
+  border-color: #8b0038;
+  color: #ffffff;
+}
+
+.sprint-card__no-counts {
+  color: #777;
+  font-size: 14px;
+  font-style: italic;
 }

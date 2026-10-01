@@ -35,7 +35,7 @@ export default function AppRoutes() {
           {/* Common Layout */}
           <Route element={<Layout />}>
             {/* Work Area */}
-            <Route path="/home" element={<ProjectsAndSprintsPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/projects" element={<ProjectPage />} />
             {/* <Route path="/activities" element={<ActivitiesPage />} /> */}
             <Route path="/user-management" element={<UserManagement />} />

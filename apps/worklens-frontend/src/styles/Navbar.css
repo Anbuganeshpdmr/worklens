@@ -12,6 +12,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 .navbar__left {
@@ -40,9 +41,10 @@
 }
 
 .navbar__logo {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .navbar__name {
@@ -78,54 +80,147 @@
   gap: 1rem;
 }
 
-.navbar__notification,
-.navbar__profile {
-  width: 34px;
-  height: 34px;
+.navbar__greeting {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding-left: 1rem;
+}
+
+.navbar__quote {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  width: 480px;
+  max-width: 480px;
+  white-space: normal;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+
+  padding-left: 1rem;
+
+  text-wrap: pretty;
+}
+
+/* Small separators */
+.navbar__greeting,
+.navbar__quote {
+  position: relative;
+}
+
+.navbar__greeting::before,
+.navbar__quote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Entry Timer */
+.navbar__timer {
+  position: relative;
   display: flex;
   align-items: center;
+  margin-left: 18px;
+  padding-left: 1rem;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.navbar__timer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Active Timer */
+.timer-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #ffffff; /* bright white */
+
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Timer Animation */
+.timer-icon {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+  flex-shrink: 0;
+
+  color: #ffffff;
+  opacity: 1;
+  animation: timerPulse 1.2s ease-in-out infinite;
+  transform-origin: center;
 }
 
-.navbar__notification {
-  font-size: 1.2rem;
+.timer-icon svg {
+  flex-shrink: 0;
+  stroke: currentColor;
 }
 
-.navbar__notification:hover,
-.navbar__profile:hover {
-  color: #F1E2D1;
+@keyframes timerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  25% {
+    transform: scale(1.08) rotate(-5deg);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+  75% {
+    transform: scale(1.08) rotate(5deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
 }
 
-.navbar__avatar {
-  width: 22px !important;
-  height: 22px !important;
-  object-fit: contain;
-  display: block;
-  filter: brightness(0) invert(1) !important;
+/* Inactive Timer */
+.timer-inactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgb(255, 254, 254);
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.navbar__avatar img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
-  filter: brightness(0) invert(1);
-}
-
-.navbar__notification img,
-.navbar__profile img {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  display: block;
-}
-
-.navbar__notification img {
-  filter: brightness(0) invert(1);
+.timer-inactive svg {
+  opacity: 0.7;
 }

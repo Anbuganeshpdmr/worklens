@@ -1,32 +1,258 @@
-/* LoginPage layout */
+/* Login Page */
 .login-page {
+  position: relative;
   display: flex;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
   overflow: hidden;
+  background: #f4efe9;
 }
 
-/* Left panel — background image, left 60% of viewport */
-.login-page__bg {
+/* LEFT SIDE */
+.login-page__left {
+  position: relative;
   flex: 0 0 60%;
-  /* contain keeps the full image visible; padding gives ~12% breathing room on each side */
-  background-image: url("/eye-1.png");
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-  /* ~12% horizontal padding so image never touches the panel edges */
-  padding: 0 12%;
-  background-origin: content-box;
-  background-color: var(--bg, #fff);
+  width: 60%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f4efe9;
+  box-sizing: border-box;
+  padding: 30px 45px 18px;
 }
 
-/* Right panel — card area, right 40% of viewport */
+/* Top-left decorative corner */
+.login-page__corner-shape {
+  position: absolute;
+  top: -145px;
+  left: -145px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #9b1748;
+  z-index: 0;
+}
+
+.login-page__corner-shape::before {
+  content: "";
+  position: absolute;
+  inset: 18px 18px 18px 18px;
+  border-radius: 50%;
+  border: 2px solid #f7e4dc;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  transform: rotate(40deg);
+  box-shadow: 0 0 0 2px #f7e4dc inset;
+}
+
+/* Dots */
+.login-page__dots {
+  position: absolute;
+  top: 35px;
+  right: 70px;
+  width: 110px;
+  height: 90px;
+  background-image: radial-gradient(
+    circle,
+    #dca99c 4px,
+    transparent 4px
+  );
+  background-size: 22px 22px;
+  opacity: 0.9;
+  z-index: 0;
+}
+
+/* Logo */
+.login-page__logo {
+  position: relative;
+  z-index: 1;
+  width: 240px;
+  height: auto;
+  object-fit: contain;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+/* WORKLENS */
+.login-page__brand {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 62px;
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #9b1748;
+}
+
+/* TEST & TIME MANAGEMENT */
+
+.login-page__tagline {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #666666;
+}
+
+/* Description */
+.login-page__description {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.4;
+  font-style: italic;
+  font-weight: 500;
+  color: #666666;
+}
+
+/* Bottom illustration */
+.login-page__illustration {
+  position: relative;
+  z-index: 1;
+  width: 82%;
+  max-width: 680px;
+  height: auto;
+  margin-top: 26px;
+  object-fit: contain;
+}
+
+
+/* RIGHT SIDE */
 .login-page__panel {
+  position: relative;
   flex: 0 0 40%;
+  width: 40%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  background-color: var(--bg, #fff);
-  border-left: 1px solid var(--border, #e5e4e7);
+  padding: 35px 4.2%;
+  box-sizing: border-box;
+  background: #f4efe9;
+  border-left: 1px solid #e5e4e7;
+}
+
+/* Bottom-right decorative corner */
+.login-page__right-corner {
+  position: absolute;
+  right: -145px;
+  bottom: -145px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #9b1748;
+  z-index: 0;
+}
+
+.login-page__right-corner::before {
+  content: "";
+  position: absolute;
+  inset: 18px 18px 18px 18px;
+  border-radius: 50%;
+  border: 2px solid #f7e4dc;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(-40deg);
+  box-shadow: 0 0 0 2px #f7e4dc inset;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+
+  .login-page__left {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .login-page__logo {
+    width: 160px;
+  }
+
+  .login-page__brand {
+    font-size: 44px;
+  }
+
+  .login-page__tagline {
+    font-size: 17px;
+  }
+
+  .login-page__description {
+    font-size: 14px;
+  }
+
+  .login-page__dots {
+    right: 30px;
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .login-page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .login-page__left {
+    flex: none;
+    width: 100%;
+    height: 55vh;
+    min-height: 450px;
+    padding: 30px 20px 10px;
+  }
+
+  .login-page__panel {
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-height: 45vh;
+    padding: 35px 24px;
+    border-left: none;
+    border-top: 1px solid #e5e4e7;
+  }
+
+  .login-page__logo {
+    width: 130px;
+  }
+
+  .login-page__brand {
+    font-size: 36px;
+  }
+
+  .login-page__tagline {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+
+  .login-page__description {
+    font-size: 12px;
+  }
+
+  .login-page__illustration {
+    width: 95%;
+  }
+
+  .login-page__dots {
+    top: 25px;
+    right: 20px;
+    transform: scale(0.7);
+    transform-origin: top right;
+  }
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
 }

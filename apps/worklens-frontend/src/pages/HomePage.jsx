@@ -1,65 +1,123 @@
-﻿import { useEffect, useState } from "react";
-//import Sidebar from "../components/Sidebar";
-//import Navbar from "../components/Navbar";
-import { getHome } from "../api/home";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getActiveProjects,
+  getActiveSprints,
+} from "../api/projects";
 import "../styles/HomePage.css";
- 
+
 function HomePage() {
-  // Read userInfo immediately from localStorage — available as soon as login succeeds
-  const stored = localStorage.getItem("userInfo");
-  const userInfo = stored ? JSON.parse(stored) : null;
- 
-  const displayName =
-    userInfo?.name ||
-    userInfo?.fullName ||
-    userInfo?.username ||
-    userInfo?.userId ||
-    "User";
- 
-  const role = userInfo?.role || "Member";  const [homeData, setHomeData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
- 
+  const navigate = useNavigate();
+
+  const [projects, setProjects] = useState([]);
+  const [sprints, setSprints] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    getHome()
-      .then((data) => setHomeData(data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    loadActiveProjects();
+    loadActiveSprints();
   }, []);
- 
+
+  const loadActiveProjects = async () => {
+    try {
+      const data = await getActiveProjects();
+      setProjects(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to load active projects:", error);
+      setProjects([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadActiveSprints = async () => {
+    try {
+      const data = await getActiveSprints();
+      console.log("Active Sprints:", data);
+      setSprints(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to load active sprints:", error);
+      setSprints([]);
+    }
+  };
+
+  const handleProjectClick = (projectId) => {
+    navigate(`/projects/${projectId}/activities`);
+  };
+
+  const handleSprintClick = (sprintId) => {
+    navigate(`/sprints/${sprintId}/activities`);
+  };
+
   return (
-    <>
-    {/* <Navbar /> */}
- 
-    <div className="home-page">
-      {/* <Sidebar role={role} /> */}
- 
-      <main className="home-page__main">
-        <div className="home-page__header">
-          <h2 className="home-page__greeting">Hello, {displayName}</h2>
-          <p className="home-page__role">Role: {role}</p>
+    <div className="projects-sprints-page">
+      <h1>Projects and Sprints</h1>
+
+      {isLoading ? (
+        <p>Loading projects...</p>
+      ) : projects.length > 0 ? (
+        <div className="projects-sprints-board">
+          {projects.map((project) => {
+            const projectSprints = sprints.filter(
+              (sprint) => sprint.projectId === project.projectId
+            );
+
+            return (
+              <div
+                className="home-project-column"
+                key={project.projectId}
+              >
+                <div
+                  className="home-project-card"
+                  onClick={() =>
+                    handleProjectClick(project.projectId)
+                  }
+                >
+                  <div
+                    className="home-project-card-name"
+                    title={project.projectName}
+                  >
+                    {project.projectName}
+                  </div>
+
+                  <div className="home-project-card-count">
+                    {project.activeSprints} sprints
+                  </div>
+                </div>
+
+                <div className="home-sprints-list">
+                  {projectSprints.length > 0 ? (
+                    projectSprints.map((sprint) => (
+                      <div
+                        className="home-sprint-card"
+                        key={sprint.sprintId}
+                        onClick={() =>
+                          handleSprintClick(sprint.sprintId)
+                        }
+                      >
+                        <span
+                          className="home-sprint-card-name"
+                          title={sprint.sprintName}
+                        >
+                          {sprint.sprintName}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="home-no-sprints">
+                      No active sprints
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
- 
-        <div className="home-page__content">
-          {loading && (
-            <div className="home-page__loading">Loading dashboard…</div>
-          )}
- 
-          {!loading && error && (
-            <div className="home-page__error">{error}</div>
-          )}
- 
-          {/* TODO: Render homeData fields here once the /home API shape is finalised */}
-          {!loading && !error && homeData && (
-            <pre style={{ fontSize: "0.8rem", opacity: 0.7 }}>
-              {JSON.stringify(homeData, null, 2)}
-            </pre>
-          )}
-        </div>
-      </main>
+      ) : (
+        <p>No active projects</p>
+      )}
     </div>
-    </>
   );
 }
- 
+
 export default HomePage;

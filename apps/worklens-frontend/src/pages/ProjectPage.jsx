@@ -136,9 +136,9 @@ function ProjectPage() {
       console.log("EDIT PROJECT DATA:", data);
 
       await updateProject(data.projectId, {
-        //projectId: data.projectId,
+        projectId: data.projectId,
         projectName: data.projectName,
-        selectedRecordStatusId: data.selectedRecordStatusId,
+        selectedStatusId: data.selectedStatusId,
       });
 
       setEditProjectModalOpen(false);
@@ -167,8 +167,9 @@ function ProjectPage() {
       console.log("EDIT SPRINT DATA:", data);
 
       await updateSprint(data.sprintId, {
+        sprintId: data.sprintId,
         sprintName: data.sprintName,
-        selectedRecordStatusId: data.selectedRecordStatusId,
+        selectedStatusId: data.selectedStatusId,
       });
 
       setEditSprintModalOpen(false);

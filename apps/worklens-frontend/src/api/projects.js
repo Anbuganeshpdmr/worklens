@@ -41,8 +41,8 @@ export async function createProject(projectName) {
 
 export async function updateProject(projectId, projectData) {
   try {
+    console.log("Updating project with ID:", projectId, "Data:", projectData);
     const response = await apiClient.put(`/projects/${projectId}`, projectData);
-
     return response.data;
   } catch (error) {
     handleApiError(error, "Failed to update project");

@@ -1,56 +1,204 @@
-﻿/* HomePage shell — sidebar + main content */
-.home-page {
-  display: flex;
-  height: 100%;
+.projects-sprints-page {
   width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-sprints-page h1 {
+  margin: 0 0 24px;
+}
+
+.projects-sprints-board {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 36px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: stretch;
+  padding-bottom: 12px;
+  box-sizing: border-box;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #810b38 #f1e2d1;
+}
+
+.projects-sprints-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.projects-sprints-board::-webkit-scrollbar-track {
+  background: #f1e2d1;
+  border-radius: 999px;
+}
+
+.projects-sprints-board::-webkit-scrollbar-thumb {
+  background: #810b38;
+  border-radius: 999px;
+}
+
+.projects-sprints-board::-webkit-scrollbar-thumb:hover {
+  background: #65082c;
+}
+
+/* PROJECT COLUMN */
+
+.home-project-column {
+  flex: 0 0 min(256px, 100%);
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
- 
-.home-page__main {
-  flex: 1;
-  padding: 2rem 2.5rem;
-  overflow-y: auto;
-}
- 
-.home-page__header {
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border, #e5e4e7);
-}
- 
-.home-page__greeting {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-h, #08060d);
-  margin: 0 0 0.25rem;
-}
- 
-.home-page__role {
-  font-size: 0.85rem;
-  color: var(--text, #6b6375);
+
+.home-project-column h2 {
   margin: 0;
+  padding-bottom: 10px;
+  font-size: 16px;
+  text-align: center;
 }
- 
-.home-page__content {
-  color: var(--text, #6b6375);
-}
- 
-/* Loading state */
-.home-page__loading {
+
+/* PROJECT CARD */
+
+.home-project-card {
+  width: 100%;
+  min-height: 58px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 200px;
-  font-size: 0.95rem;
-  color: var(--text, #6b6375);
+  justify-content: space-between;
+  padding: 16px 18px;
+  margin-top: 12px;
+  box-sizing: border-box;
+  background: #810b38;
+  color: #ffffff;
+  border: 1px solid #810b38;
+  border-radius: 8px;
+  box-shadow: none;
+  cursor: pointer;
 }
- 
-/* Error state */
-.home-page__error {
-  padding: 1rem 1.25rem;
-  background-color: rgba(220, 53, 69, 0.08);
-  border-left: 3px solid #dc3545;
-  border-radius: 6px;
-  color: #dc3545;
-  font-size: 0.9rem;
+
+.home-project-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-project-card-count {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* SPRINT LIST */
+
+.home-sprints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  margin-top: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+
+.home-sprints-list::-webkit-scrollbar {
+  width: 0;
+}
+
+.home-sprints-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.home-sprints-list::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Show scrollbar only when mouse is over sprint list */
+
+.home-sprints-list:hover {
+  scrollbar-width: thin;
+  scrollbar-color: #810b38 #f1e2d1;
+}
+
+.home-sprints-list:hover::-webkit-scrollbar {
+  width: 6px;
+}
+
+.home-sprints-list:hover::-webkit-scrollbar-track {
+  background: #f1e2d1;
+  border-radius: 999px;
+}
+
+.home-sprints-list:hover::-webkit-scrollbar-thumb {
+  background: #810b38;
+  border-radius: 999px;
+}
+
+.home-sprints-list:hover::-webkit-scrollbar-thumb:hover {
+  background: #65082c;
+}
+
+/* SPRINT CARD */
+
+.home-sprint-card {
+  width: 100%;
+  min-height: 58px;
+  flex: 0 0 auto;
+  padding: 18px 20px;
+  box-sizing: border-box;
+  background: #EDE8D0;
+  border: 1px solid #810b38;
+  border-radius: 8px;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.home-sprint-card-name {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* CARD HOVER EFFECT */
+
+.home-project-card,
+.home-sprint-card {
+  transition:
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.home-project-card:hover {
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18);
+  background: #970d43;
+}
+
+.home-sprint-card:hover {
+  background: #f3efd9;
+  border-color: #810b38;
+  box-shadow: 0 5px 12px rgba(129, 11, 56, 0.25);
 }

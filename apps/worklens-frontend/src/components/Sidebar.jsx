@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 import "../styles/Sidebar.css";
 
 // Menu items per role.
@@ -15,7 +16,7 @@ const ROLE_MENUS = {
   ],
 
   FH: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
       label: "Record Status",
@@ -23,7 +24,7 @@ const ROLE_MENUS = {
       icon: "/icons/recordStatus.png",
     },
     {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -56,7 +57,7 @@ const ROLE_MENUS = {
   ],
 
   TL: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
       label: "Entry Dashboard",
@@ -69,7 +70,7 @@ const ROLE_MENUS = {
       icon: "/icons/recordStatus.png",
     },
     {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -99,10 +100,10 @@ const ROLE_MENUS = {
   ],
 
   MEMBER: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -140,6 +141,7 @@ function normalizeRole(role) {
 
 function Sidebar({ role, collapsed }) {
   const location = useLocation();
+  const { user, logoutUser } = useUser();
   const normalizedRole = normalizeRole(role);
 
   const menuItems = ROLE_MENUS[normalizedRole] ?? ROLE_MENUS["MEMBER"];
@@ -154,17 +156,23 @@ function Sidebar({ role, collapsed }) {
               <button
                 className="sidebar__nav-item sidebar__logout-btn"
                 onClick={() => {
+                  console.log("User before logout:", user);
+                  const loggedOutUser = user;
+                  logoutUser();
+                  console.log("Logged out user:", loggedOutUser);
                   localStorage.removeItem("token");
                   localStorage.removeItem("userInfo");
+                  localStorage.removeItem("navbarQuote");
+                  localStorage.removeItem("navbarQuoteTime");
                   window.location.replace("/");
-                }}
+              }}
               >
                 <img
                   src={item.icon}
                   alt={item.label}
                   className="sidebar__icon"
                 />
-                <span>{item.label}</span>
+                <span data-label={item.label}>{item.label}</span>
               </button>
             ) : (
               <a
@@ -180,7 +188,7 @@ function Sidebar({ role, collapsed }) {
                   alt={item.label}
                   className="sidebar__icon"
                 />
-                <span>{item.label}</span>
+                <span data-label={item.label}>{item.label}</span>
               </a>
             )}
           </li>
