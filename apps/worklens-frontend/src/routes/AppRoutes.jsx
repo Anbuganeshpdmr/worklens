@@ -12,6 +12,7 @@ import ActivitiesPage from "../pages/ActivitiesPage";
 import EntriesPage from "../pages/EntriesPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GeneralActivitiesPage from "../pages/GeneralActivitiesPage";
+import ProfilePage from "../pages/ProfilePage";
 
 /** Returns true only when both auth keys are present in localStorage */
 function isAuthenticated() {
@@ -55,12 +56,17 @@ export default function AppRoutes() {
               path="/general-activity"
               element={<GeneralActivitiesPage />}
             />
-          </Route>
-        </Route>
-
+            <Route
+                path="/profile"
+                element={<ProfilePage />}
+              />
+            </Route>
+            </Route>
+            
+          
         {/* Unknown route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </ BrowserRouter>
   );
 }

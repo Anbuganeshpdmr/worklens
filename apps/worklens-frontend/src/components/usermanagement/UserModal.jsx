@@ -1,4 +1,4 @@
-import Addmember from "./Addmember";
+import Addmember from "./addmember";
 import "../../styles/UserModal.css";
 
 function UserModal({ user, onSave, onClose, saving }) {
@@ -24,6 +24,7 @@ function UserModal({ user, onSave, onClose, saving }) {
         </div>
         
         <Addmember
+          key={user?.id ?? user?.userId ?? "new"}
           user={user}
           onSave={onSave}
           onCancel={onClose}

@@ -1,3 +1,5 @@
+import { getUserStatusName, isUserActive } from "../../utils/userStatus";
+
 function UserTable({ users, onEdit }) {
 
   return (
@@ -33,8 +35,9 @@ function UserTable({ users, onEdit }) {
 
         ) : (
 
-          users.map((user) => (
-
+          users.map((user) => {
+            const active = isUserActive(user);
+            return (
             <tr key={user.id}>
 
               <td>
@@ -61,15 +64,13 @@ function UserTable({ users, onEdit }) {
 
                 <span
                   className={
-                    user.active
+                    active
                       ? "status-active"
                       : "status-inactive"
                   }
                 >
 
-                  {user.active
-                    ? "Active"
-                    : "Inactive"}
+                  {getUserStatusName(user)}
 
                 </span>
 
@@ -87,8 +88,8 @@ function UserTable({ users, onEdit }) {
               </td>
 
             </tr>
-
-          ))
+            );
+          })
 
         )}
 
