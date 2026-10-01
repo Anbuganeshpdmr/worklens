@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -133,9 +134,16 @@ public class EntryService {
         }
         validateEntryClosingUser(currentEntry);
 
+        LocalDate endDate = LocalDate.now();
         LocalTime endTime = LocalTime.now();
+
+        currentEntry.setActivityEndDate(endDate);
         currentEntry.setEndTime(endTime);
-        currentEntry.setDuration(Duration.between(currentEntry.getStartTime(), endTime));
+
+        LocalDateTime exactStartTime = LocalDateTime.of(currentEntry.getActivityDate(),currentEntry.getStartTime());
+        LocalDateTime exactEndTime = LocalDateTime.of(endDate,endTime);
+
+        currentEntry.setDuration(Duration.between(exactStartTime, exactEndTime));
         currentEntry.setRemarks(remarks);
 
         Status entryStatus = statusService.getRecordStatusByName(Record.ENTRY,"complete");
@@ -194,8 +202,8 @@ public class EntryService {
     }
 
     private void checkUserUnclosedEntry(){
-        Status inProcessStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
-        List<Entry> entries = entryRepo.findByUserAndStatus(currentUserService.user(), inProcessStatus);
+        //Status inProcessStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
+        List<Entry> entries = entryRepo.findByUserAndEndTimeIsNull(currentUserService.user());
         System.out.println("UNFINISHED ENTRIES = " + entries.size());
         if(entries.size()>0){
             //throw new EntryException.UnclosedEntryException("Kindly close previous entries!");
@@ -210,6 +218,11 @@ public class EntryService {
     public Page<Entry> search(EntryFilterRequest request, Pageable pageable) {
         Specification<Entry> specification = EntrySpecification.withFilters(request);
         return entryRepo.findAll(specification, pageable);
+    }
+
+    public List<Entry> fetch(EntryFilterRequest request) {
+        Specification<Entry> specification = EntrySpecification.withFilters(request);
+        return entryRepo.findAll(specification);
     }
 
     private void validateEntryClosingUser(Entry entry){
@@ -246,4 +259,15 @@ public class EntryService {
 
     }
 
+    public Entry getUserCurrentEntry() {
+        List<Entry> currentOpenEntries = entryRepo.findByUserAndEndTimeIsNull(currentUserService.user());
+        System.out.println("Open Entries:"+currentOpenEntries.size());
+        if(currentOpenEntries.isEmpty()) {
+            return null;
+        }else if(currentOpenEntries.size() == 1){
+            return currentOpenEntries.get(0);
+        }else{
+            throw new EntryException.UnclosedEntryException("Max Allowed limit is 1! Detected open Entries: "+currentOpenEntries.size());
+        }
+    }
 }
