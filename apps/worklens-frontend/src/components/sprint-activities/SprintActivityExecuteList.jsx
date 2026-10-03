@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { startSprintActivity, getSelectedSprintActivities } from "../../api/sprintActivities";
+import {
+  startSprintActivity,
+  getSelectedSprintActivities,
+} from "../../api/sprintActivities";
 import { flattenSprintActivity } from "./SprintActivityMapper";
 import ExecuteListHeader from "./ExecuteListHeader";
 import CloseTestEntryModal from "../entries/CloseTestEntryModal";
@@ -22,8 +25,13 @@ const EMPTY_FILTERS = {
 /* ── Filter helper ──────────────────────────────────────────────────────── */
 function applyFilters(activities, filters) {
   return activities.filter((a) => {
-    if (filters.id.trim() && String(a.activityId) !== filters.id.trim()) return false;
-    if (filters.saId.trim() && String(a.sprintActivityId) !== filters.saId.trim()) return false;
+    if (filters.id.trim() && String(a.activityId) !== filters.id.trim())
+      return false;
+    if (
+      filters.saId.trim() &&
+      String(a.sprintActivityId) !== filters.saId.trim()
+    )
+      return false;
     if (
       filters.title.trim() &&
       !a.title?.toLowerCase().includes(filters.title.trim().toLowerCase())
@@ -45,10 +53,20 @@ function applyFilters(activities, filters) {
     )
       return false;
     /* Multi-select: include row if its value is in the selected set (OR logic) */
-    if (filters.types.length > 0 && !filters.types.includes(a.activityType_name)) return false;
-    if (filters.statuses.length > 0 && !filters.statuses.includes(a.currentStatus_displayName))
+    if (
+      filters.types.length > 0 &&
+      !filters.types.includes(a.activityType_name)
+    )
       return false;
-    if (filters.currentUsers.length > 0 && !filters.currentUsers.includes(a.currentUser))
+    if (
+      filters.statuses.length > 0 &&
+      !filters.statuses.includes(a.currentStatus_displayName)
+    )
+      return false;
+    if (
+      filters.currentUsers.length > 0 &&
+      !filters.currentUsers.includes(a.currentUser)
+    )
       return false;
     return true;
   });
@@ -133,7 +151,9 @@ export default function SprintActivityExecuteList({ sprint }) {
       const response = await startSprintActivity(sa.sprintActivityId);
       const updated = flattenSprintActivity(response.data || response);
       setSprintActivities((prev) =>
-        prev.map((a) => (a.sprintActivityId === updated.sprintActivityId ? updated : a)),
+        prev.map((a) =>
+          a.sprintActivityId === updated.sprintActivityId ? updated : a,
+        ),
       );
     } catch (err) {
       setError(err?.message || "Failed to start entry.");
@@ -147,7 +167,9 @@ export default function SprintActivityExecuteList({ sprint }) {
 
   const handleUpdateSprintActivity = (updated) => {
     setSprintActivities((prev) =>
-      prev.map((a) => (a.sprintActivityId === updated.sprintActivityId ? updated : a)),
+      prev.map((a) =>
+        a.sprintActivityId === updated.sprintActivityId ? updated : a,
+      ),
     );
   };
 
@@ -155,7 +177,9 @@ export default function SprintActivityExecuteList({ sprint }) {
   const rootActivities = filteredActivities.filter(
     (sa) =>
       !sa.parentActivityId ||
-      !filteredActivities.some((item) => item.activityId === sa.parentActivityId),
+      !filteredActivities.some(
+        (item) => item.activityId === sa.parentActivityId,
+      ),
   );
 
   return (
@@ -186,7 +210,7 @@ export default function SprintActivityExecuteList({ sprint }) {
           }}
           sprintActivityId={selectedSprintActivity.sprintActivityId}
           sprintActivity={selectedSprintActivity}
-          onUpdate={handleUpdateSprintActivity}
+          onUpdateSprintActivity={handleUpdateSprintActivity}
         />
       )}
 
@@ -209,7 +233,14 @@ export default function SprintActivityExecuteList({ sprint }) {
           <span className="sa-exec-table-header__title">
             Sprint Activities
             {loading && (
-              <span style={{ marginLeft: 8, fontSize: 12, fontWeight: 400, color: "#9e8d7f" }}>
+              <span
+                style={{
+                  marginLeft: 8,
+                  fontSize: 12,
+                  fontWeight: 400,
+                  color: "#9e8d7f",
+                }}
+              >
                 Loading…
               </span>
             )}
@@ -219,11 +250,14 @@ export default function SprintActivityExecuteList({ sprint }) {
         <div className="sa-exec-table-card">
           {rootActivities.length === 0 && !loading ? (
             <div className="sa-exec-empty">
-              <i className="bi bi-inbox sa-exec-empty__icon" aria-hidden="true" />
+              <i
+                className="bi bi-inbox sa-exec-empty__icon"
+                aria-hidden="true"
+              />
               <p className="sa-exec-empty__title">No activities found</p>
               <p className="sa-exec-empty__desc">
-                Try adjusting your filters, or check back when activities have been added to this
-                sprint.
+                Try adjusting your filters, or check back when activities have
+                been added to this sprint.
               </p>
             </div>
           ) : (
@@ -286,7 +320,8 @@ function ActivityRow({
   );
   const hasChildren = children.length > 0;
   const isSelected = selectedId === sa.sprintActivityId;
-  const hasOpenEntry = sa.currentEntry !== null && sa.currentEntry !== undefined;
+  const hasOpenEntry =
+    sa.currentEntry !== null && sa.currentEntry !== undefined;
 
   return (
     <>
@@ -301,11 +336,17 @@ function ActivityRow({
               <button
                 type="button"
                 className="sa-exec-expand-btn"
-                onClick={(e) => { e.stopPropagation(); setExpanded((p) => !p); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded((p) => !p);
+                }}
                 aria-label={expanded ? "Collapse" : "Expand"}
                 aria-expanded={expanded}
               >
-                <i className={`bi ${expanded ? "bi-chevron-down" : "bi-chevron-right"}`} aria-hidden="true" />
+                <i
+                  className={`bi ${expanded ? "bi-chevron-down" : "bi-chevron-right"}`}
+                  aria-hidden="true"
+                />
               </button>
             ) : (
               <span className="sa-exec-expand-spacer" aria-hidden="true" />
@@ -319,12 +360,18 @@ function ActivityRow({
 
         {/* Type — color pill from activityType_colourCode */}
         <td className="td-type">
-          <ColorPill label={sa.activityType_name} hex={sa.activityType_colourCode} />
+          <ColorPill
+            label={sa.activityType_name}
+            hex={sa.activityType_colourCode}
+          />
         </td>
 
         {/* Title */}
         <td className="td-title">
-          <div className="sa-exec-title-cell" style={{ paddingLeft: `${level * 18}px` }}>
+          <div
+            className="sa-exec-title-cell"
+            style={{ paddingLeft: `${level * 18}px` }}
+          >
             <span className="sa-exec-title-text" title={sa.title}>
               {sa.title}
             </span>
@@ -365,7 +412,10 @@ function ActivityRow({
             <button
               type="button"
               className="sa-exec-action-btn sa-exec-action-btn--start"
-              onClick={(e) => { e.stopPropagation(); onStartEntry(sa); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStartEntry(sa);
+              }}
               title="Start entry"
             >
               <i className="bi bi-play-fill" aria-hidden="true" />
@@ -375,7 +425,10 @@ function ActivityRow({
             <button
               type="button"
               className="sa-exec-action-btn sa-exec-action-btn--stop"
-              onClick={(e) => { e.stopPropagation(); onStopEntry(sa); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStopEntry(sa);
+              }}
               title="Stop entry"
             >
               <i className="bi bi-stop-fill" aria-hidden="true" />

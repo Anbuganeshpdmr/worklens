@@ -32,7 +32,8 @@ function ColorPill({ label, hex }) {
 
 /* ── Null-safe plain cell value ─────────────────────────────────────────── */
 function Val({ v }) {
-  if (v === null || v === undefined || v === "") return <span className="edl-null">—</span>;
+  if (v === null || v === undefined || v === "")
+    return <span className="edl-null">—</span>;
   return v;
 }
 
@@ -53,7 +54,7 @@ function truncate(value, limit) {
    ══════════════════════════════════════════════════════════════════════════ */
 export const PAGE = {
   ENTRY_DASHBOARD: "entry-dashboard",
-  MY_ENTRIES:      "my-entries",
+  MY_ENTRIES: "my-entries",
 };
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -80,9 +81,13 @@ export const PAGE = {
      base       : 2288px  (sum of 14 col widths)
      my-entries : 2288 + 120 = 2408px  (Type becomes scrollable + Action 120px)
    ══════════════════════════════════════════════════════════════════════════ */
-export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DASHBOARD }) {
-  const hasEntries   = entries.length > 0;
-  const isMyEntries  = page === PAGE.MY_ENTRIES;
+export default function EntryDashboardList({
+  entries = [],
+  page = PAGE.ENTRY_DASHBOARD,
+  setEntries,
+}) {
+  const hasEntries = entries.length > 0;
+  const isMyEntries = page === PAGE.MY_ENTRIES;
   const [showModal, setShowModal] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
 
@@ -97,6 +102,10 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
     setShowModal(true);
   };
 
+  const handleUpdateEntry = (updated) => {
+    setEntries((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));
+  };
+
   return (
     <div className="edl-root">
       {showModal &&
@@ -106,6 +115,9 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
             onClose={() => setShowModal(false)}
             sprintActivityId={selectedEntry.sprintActivityId}
             sprintActivity={null}
+            onUpdateEntry={handleUpdateEntry}
+            caller="ENTRY_PAGE"
+            selectedEntry={selectedEntry}
           />
         ) : (
           <CloseGeneralEntryModal
@@ -118,11 +130,15 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
           {!hasEntries ? (
             /* ── Empty state ── */
             <div className="edl-empty">
-              <i className="bi bi-journal-x edl-empty__icon" aria-hidden="true" />
+              <i
+                className="bi bi-journal-x edl-empty__icon"
+                aria-hidden="true"
+              />
               <p className="edl-empty__title">No entries found</p>
               <p className="edl-empty__desc">
-                There are no entries matching your current filters.
-                Try adjusting the search criteria or check back once entries have been logged.
+                There are no entries matching your current filters. Try
+                adjusting the search criteria or check back once entries have
+                been logged.
               </p>
             </div>
           ) : (
@@ -138,7 +154,9 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
                     <th className="edl-col-frozen edl-col-1">Id</th>
                     <th className="edl-col-frozen edl-col-2">User</th>
                     <th className="edl-col-frozen edl-col-3">Category</th>
-                    <th className="edl-col-frozen edl-col-4 edl-col-frozen--last">Date</th>
+                    <th className="edl-col-frozen edl-col-4 edl-col-frozen--last">
+                      Date
+                    </th>
 
                     {/* ── Scrollable ── */}
                     <th>Start Time</th>
@@ -152,21 +170,25 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
                     <th>SA-Id</th>
 
                     {/* Type — frozen-right on base, scrollable on my-entries */}
-                    <th className={isMyEntries ? "" : "edl-col-frozen-right"}>Status</th>
+                    <th className={isMyEntries ? "" : "edl-col-frozen-right"}>
+                      Status
+                    </th>
 
                     {/* Action — only on my-entries, frozen-right */}
                     {isMyEntries && (
-                      <th className="edl-col-frozen-right edl-th-actions">Action</th>
+                      <th className="edl-col-frozen-right edl-th-actions">
+                        Action
+                      </th>
                     )}
                   </tr>
                 </thead>
                 <tbody>
                   {entries.map((entry) => {
-                    const titleDisplay  = truncate(entry.name,         60);
-                    const remarkDisplay = truncate(entry.remarks,      60);
-                    const userDisplay   = truncate(entry.user,         30);
-                    const projDisplay   = truncate(entry.projectName,  30);
-                    const sprintDisplay = truncate(entry.sprintName,   30);
+                    const titleDisplay = truncate(entry.name, 60);
+                    const remarkDisplay = truncate(entry.remarks, 60);
+                    const userDisplay = truncate(entry.user, 30);
+                    const projDisplay = truncate(entry.projectName, 30);
+                    const sprintDisplay = truncate(entry.sprintName, 30);
 
                     return (
                       <tr key={entry.id}>
@@ -178,72 +200,133 @@ export default function EntryDashboardList({ entries = [], page = PAGE.ENTRY_DAS
                           className="edl-col-frozen edl-col-2 edl-td-user"
                           title={entry.user ?? undefined}
                         >
-                          {userDisplay ? userDisplay : <span className="edl-null">—</span>}
+                          {userDisplay ? (
+                            userDisplay
+                          ) : (
+                            <span className="edl-null">—</span>
+                          )}
                         </td>
                         <td
                           className="edl-col-frozen edl-col-3 edl-td-category"
                           title={entry.categoryName ?? undefined}
                         >
-                          <ColorPill label={entry.categoryName} hex={entry.categoryColour} />
+                          <ColorPill
+                            label={entry.categoryName}
+                            hex={entry.categoryColour}
+                          />
                         </td>
                         <td className="edl-col-frozen edl-col-4 edl-col-frozen--last edl-td-date">
                           <Val v={entry.activityDate} />
                         </td>
 
                         {/* ── Scrollable ── */}
-                        <td className="edl-td-time"><Val v={entry.startTime} /></td>
-                        <td className="edl-td-time"><Val v={entry.endTime} /></td>
+                        <td className="edl-td-time">
+                          <Val v={entry.startTime} />
+                        </td>
+                        <td className="edl-td-time">
+                          <Val v={entry.endTime} />
+                        </td>
                         <td className="edl-td-meta">
-                          <ColorPill label={entry.activityTypeName} hex={entry.activityTypeColour} />
+                          <ColorPill
+                            label={entry.activityTypeName}
+                            hex={entry.activityTypeColour}
+                          />
                         </td>
-                        <td className="edl-td-meta" title={entry.projectName ?? undefined}>
-                          {projDisplay ? projDisplay : <span className="edl-null">—</span>}
+                        <td
+                          className="edl-td-meta"
+                          title={entry.projectName ?? undefined}
+                        >
+                          {projDisplay ? (
+                            projDisplay
+                          ) : (
+                            <span className="edl-null">—</span>
+                          )}
                         </td>
-                        <td className="edl-td-meta" title={entry.sprintName ?? undefined}>
-                          {sprintDisplay ? sprintDisplay : <span className="edl-null">—</span>}
+                        <td
+                          className="edl-td-meta"
+                          title={entry.sprintName ?? undefined}
+                        >
+                          {sprintDisplay ? (
+                            sprintDisplay
+                          ) : (
+                            <span className="edl-null">—</span>
+                          )}
                         </td>
                         <td
                           className="edl-td-title"
-                          title={entry.name != null && entry.name !== "" ? entry.name : undefined}
+                          title={
+                            entry.name != null && entry.name !== ""
+                              ? entry.name
+                              : undefined
+                          }
                         >
-                          {titleDisplay ? titleDisplay : <span className="edl-null">—</span>}
+                          {titleDisplay ? (
+                            titleDisplay
+                          ) : (
+                            <span className="edl-null">—</span>
+                          )}
                         </td>
                         <td
                           className="edl-td-remarks"
-                          title={entry.remarks != null && entry.remarks !== "" ? entry.remarks : undefined}
+                          title={
+                            entry.remarks != null && entry.remarks !== ""
+                              ? entry.remarks
+                              : undefined
+                          }
                         >
-                          {remarkDisplay ? remarkDisplay : <span className="edl-null">—</span>}
+                          {remarkDisplay ? (
+                            remarkDisplay
+                          ) : (
+                            <span className="edl-null">—</span>
+                          )}
                         </td>
-                        <td className="edl-td-num"><Val v={entry.activityId} /></td>
-                        <td className="edl-td-num"><Val v={entry.sprintActivityId} /></td>
+                        <td className="edl-td-num">
+                          <Val v={entry.activityId} />
+                        </td>
+                        <td className="edl-td-num">
+                          <Val v={entry.sprintActivityId} />
+                        </td>
 
                         {/* Type — frozen-right on base, scrollable on my-entries */}
-                        <td className={isMyEntries ? "" : "edl-col-frozen-right"}>
-                          <ColorPill label={entry.statusDisplayName} hex={entry.statusColour} />
+                        <td
+                          className={isMyEntries ? "" : "edl-col-frozen-right"}
+                        >
+                          <ColorPill
+                            label={entry.statusDisplayName}
+                            hex={entry.statusColour}
+                          />
                         </td>
 
                         {/* Action — only on my-entries */}
                         {isMyEntries && (
                           <td className="edl-col-frozen-right edl-td-actions">
                             {/* Placeholder buttons — wire up handlers as needed */}
-                            {!isMember && 
-                            <button
-                              type="button"
-                              className="edl-action-btn edl-action-btn--edit"
-                              title="Edit entry"
-                              onClick={() => {}}
-                            >
-                              <i className="bi bi-pencil" aria-hidden="true" />
-                            </button>}
+                            {!isMember && (
+                              <button
+                                type="button"
+                                className="edl-action-btn edl-action-btn--edit"
+                                title="Edit entry"
+                                onClick={() => {}}
+                              >
+                                <i
+                                  className="bi bi-pencil"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            )}
                             {entry.statusDisplayName.includes("in-process") && (
-                            <button
-                              type="button"
-                              className="edl-action-btn edl-action-btn--delete"
-                              title="Close entry"
-                              onClick={() => handleEntryClose(entry)}
-                            >
-                              <i className="bi-rocket-takeoff" aria-hidden="true" />
-                            </button>)}
+                              <button
+                                type="button"
+                                className="edl-action-btn edl-action-btn--delete"
+                                title="Close entry"
+                                onClick={() => handleEntryClose(entry)}
+                              >
+                                <i
+                                  className="bi-rocket-takeoff"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            )}
                           </td>
                         )}
                       </tr>

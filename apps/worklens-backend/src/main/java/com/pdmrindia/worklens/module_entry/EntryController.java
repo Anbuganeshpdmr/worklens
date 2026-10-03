@@ -103,4 +103,10 @@ public class EntryController {
                 .toList();
     }
 
+    @GetMapping("/entry/{id}")
+    public EntryDisplayDto getEntry(@PathVariable("id") long id){
+        Entry entry = entryService.getEntryById(id);
+        return entryDisplayDtoMapper.getEntryDisplayDto(entry);
+    }
+
 }

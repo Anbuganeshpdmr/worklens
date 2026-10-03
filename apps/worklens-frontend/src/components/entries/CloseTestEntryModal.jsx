@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
-import { stopSprintActivity, getSprintActivity } from "../../api/sprintActivities";
+import {
+  stopSprintActivity,
+  getSprintActivity,
+} from "../../api/sprintActivities";
 import { getStatusByRecord } from "../../api/status";
 import { flattenSprintActivity } from "../sprint-activities/SprintActivityMapper";
+import { flattenEntry } from "../entries/entryMapper";
+import { getEntry } from "../../api/entry";
 
 export default function CloseTestEntryModal({
   onClose,
   sprintActivityId,
   sprintActivity: sprintActivityProp,
+  onUpdateSprintActivity,
+  onUpdateEntry,
+  caller = "SA_PAGE",
+  selectedEntry,
 }) {
-  const [sprintActivity, setSprintActivity] = useState(sprintActivityProp ?? null);
+  const [sprintActivity, setSprintActivity] = useState(
+    sprintActivityProp ?? null,
+  );
   const [sprintActivityStatus, setSprintActivityStatus] = useState(
     sprintActivityProp?.currentStatus_statusId ?? null,
   );
@@ -46,18 +57,30 @@ export default function CloseTestEntryModal({
   console.log("Sprint Activity", sprintActivity);
   console.log("Statuses", statuses);
 
-
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const response = {
+      const request = {
         sprintActivityId,
         remarks,
         sprintActivityStatusId: sprintActivityStatus,
       };
-      console.log("close Record: ", response);
-      await stopSprintActivity(response);
+      console.log("close Record: ", request);
+      const response = await stopSprintActivity(request);
 
+      if (caller === "ENTRY_PAGE") {
+        // API succeeded
+        // Get Entry details and update the entry in the list
+        const entryResponse = await getEntry(selectedEntry.id);
+        const updatedEntry = flattenEntry(entryResponse.data || entryResponse);
+        onUpdateEntry(updatedEntry);
+        console.log("updated Entry: ", response);
+      } else {
+        // API succeeded
+        console.log("updated SA: ", response);
+        const updated_SA = flattenSprintActivity(response.data || response);
+        onUpdateSprintActivity(updated_SA);
+      }
       // API succeeded
       onClose();
     } catch (error) {

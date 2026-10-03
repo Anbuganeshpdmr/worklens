@@ -1,17 +1,10 @@
 import apiClient from "./axios";
 
 export async function getAllEntries(entryFilterRequest, page, size) {
-  console.log(
-    "REQUEST BODY:",
-    JSON.stringify(entryFilterRequest, page, size)
-);
-  return apiClient.post(
-    `/entry/search`,
-    entryFilterRequest,
-    {
-      params: { page, size },
-    },
-  );
+  console.log("REQUEST BODY:", JSON.stringify(entryFilterRequest, page, size));
+  return apiClient.post(`/entry/search`, entryFilterRequest, {
+    params: { page, size },
+  });
 }
 
 export async function startTestActivity(sprintActivityId) {
@@ -28,4 +21,9 @@ export async function startGeneralActivity(activityId) {
 
 export async function closeGeneralActivity(response) {
   return apiClient.put(`/entry/general`, response);
+}
+
+export async function getEntry(id) {
+  console.log("Fetching Entry details for ID:", id);
+  return apiClient.get(`/entry/${id}`);
 }
