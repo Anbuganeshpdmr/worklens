@@ -1,7 +1,8 @@
 /* ── Activities Page Shell ───────────────────────────────────── */
 .act-page {
   display: flex;
-  min-height: 100%;
+  /* Fill the work-area completely — work-area is already height-constrained */
+  height: 100%;
   width: 100%;
   text-align: left;
   background: var(--bg, #fff);
@@ -10,15 +11,26 @@
 .act-page__main {
   flex: 1;
   min-width: 0;
-  padding: 0 24px 32px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: 0;
+  padding: 0 24px 0;
+  /* This element must NOT scroll — its child (act-page__content) scrolls */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Page Header ───────────────────────────────────────────── */
 .act-page__header {
+  flex-shrink: 0;
   padding: 28px 0 16px;
   border-bottom: 1px solid var(--border, #e5e4e7);
+}
+
+.act-page__title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .act-page__title {
@@ -28,6 +40,15 @@
   letter-spacing: -0.03em;
   line-height: 1.15;
   color: var(--text-h, #08060d);
+  flex: 1;
+  min-width: 0;
+}
+
+.act-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .act-page__subtitle {
@@ -38,6 +59,7 @@
 
 /* ── Error Message ─────────────────────────────────────────── */
 .act-page__error {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -56,9 +78,16 @@
 
 /* ── Switchable Tabs ───────────────────────────────────────── */
 .act-page__tabs {
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  /* When tabs are inside act-page__header-actions, remove the standalone margin/border */
+  border-bottom: none;
+}
+
+/* Standalone tabs (outside of header-actions) keep their original spacing */
+.act-page__main > .act-page__tabs {
   margin: 20px 0 0;
   border-bottom: 1px solid var(--border, #e5e4e7);
 }
@@ -91,17 +120,27 @@
   font-weight: 600;
 }
 
-/* ── Tab Content ───────────────────────────────────────────── */
+.act-page__header-actions .act-page__tab {
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+}
+
+/* ── Tab Content — fills every remaining pixel ─────────────── */
 .act-page__content {
+  flex: 1;
+  min-height: 0;          /* critical: lets flex child shrink below content height */
   display: flex;
   flex-direction: column;
-  gap: 16px;
   padding-top: 18px;
+  padding-bottom: 18px;
+  overflow: hidden;       /* children handle their own scroll */
 }
 
 @media (max-width: 900px) {
   .act-page__main {
-    padding: 0 16px 24px;
+    padding: 0 16px 0;
   }
 
   .act-page__tab {

@@ -7,6 +7,9 @@ import com.pdmrindia.worklens.module_status.mapperDtos.StatusDisplayDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class EntryDisplayDtoMapper {
@@ -16,6 +19,8 @@ public class EntryDisplayDtoMapper {
     private final TypeDisplayDtoMapper typeMapper;
 
     public EntryDisplayDto getEntryDisplayDto(Entry entry){
+        if(entry==null) return null;
+
         EntryDisplayDto dto = new EntryDisplayDto();
 
         dto.setId(entry.getId());
@@ -39,6 +44,14 @@ public class EntryDisplayDtoMapper {
         dto.setSprintActivityId(entry.getSprintActivity() != null ? entry.getSprintActivity().getId() : null);
         dto.setSprintName(entry.getSprintActivity() != null ? entry.getSprintActivity().getSprint().getName() : null);
         dto.setProjectName(entry.getActivity().getProject() != null ? entry.getActivity().getProject().getName() : null);
+
+        LocalDateTime exactStartTime = LocalDateTime.of(entry.getActivityDate(),entry.getStartTime());
+        if(entry.getActivityEndDate()!=null && entry.getEndTime()!=null){
+
+            LocalDateTime exactEndTime = LocalDateTime.of(entry.getActivityEndDate(),entry.getEndTime());
+            dto.setDuration2(Duration.between(exactStartTime, exactEndTime).toString());
+        }
+
 
         return dto;
     }

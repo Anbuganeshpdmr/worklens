@@ -51,6 +51,9 @@ export function flattenSprintActivity(response) {
     sprintId: response.simpleSprintInfo?.sprintId,
     sprintName: response.simpleSprintInfo?.sprintName,
 
+    currentEntry: response.entryId,
+    currentUser: response.currentUser,
+
     sprintActivityId: response.sprintActivityId,
     rootVersion: response.version,
   };

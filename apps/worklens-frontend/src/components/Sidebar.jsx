@@ -75,6 +75,17 @@ const ROLE_MENUS = {
 
     {
       label: "Projects & Sprints",
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "Record Status",
+      path: "/record-status",
+      icon: "/icons/recordStatus.png",
+    },
+    {
+      label: "Sprint Management",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -111,6 +122,11 @@ const ROLE_MENUS = {
       path: "/report-dashboard",
       icon: "/icons/reportDashboard.png",
     },
+    {
+      label: "Reports-1",
+      path: "/reports1",
+      icon: "/icons/reportDashboard.png",
+    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
@@ -120,6 +136,17 @@ const ROLE_MENUS = {
     { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
       label: "Projects & Sprints",
+      label: "Entry Dashboard",
+      path: "/entry-dashboard",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "Sprint Management",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -181,7 +208,7 @@ function Sidebar({ role, collapsed }) {
                   localStorage.removeItem("navbarQuote");
                   localStorage.removeItem("navbarQuoteTime");
                   window.location.replace("/");
-              }}
+                }}
               >
                 <img
                   src={item.icon}
@@ -193,10 +220,11 @@ function Sidebar({ role, collapsed }) {
             ) : (
               <a
                 href={item.path}
-                className={`sidebar__nav-item${location.pathname === item.path.split("?")[0]
-                  ? " sidebar__nav-item--active"
-                  : ""
-                  }`}
+                className={`sidebar__nav-item${
+                  location.pathname === item.path.split("?")[0]
+                    ? " sidebar__nav-item--active"
+                    : ""
+                }`}
               >
                 <img
                   src={item.icon}

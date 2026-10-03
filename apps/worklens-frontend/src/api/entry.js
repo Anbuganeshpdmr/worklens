@@ -1,11 +1,13 @@
 import apiClient from "./axios";
 
 export async function getAllEntries(entryFilterRequest, page, size) {
+  console.log(
+    "REQUEST BODY:",
+    JSON.stringify(entryFilterRequest, page, size)
+);
   return apiClient.post(
     `/entry/search`,
-    {
-      entryFilterRequest,
-    },
+    entryFilterRequest,
     {
       params: { page, size },
     },

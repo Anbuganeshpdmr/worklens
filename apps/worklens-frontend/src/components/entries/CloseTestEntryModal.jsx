@@ -1,29 +1,62 @@
-import { useState } from "react";
-import { closeWorkActivity } from "../../api/entry";
+import { useEffect, useState } from "react";
+import { stopSprintActivity, getSprintActivity } from "../../api/sprintActivities";
+import { getStatusByRecord } from "../../api/status";
+import { flattenSprintActivity } from "../sprint-activities/SprintActivityMapper";
 
 export default function CloseTestEntryModal({
   onClose,
-  entry,
-  sprintActivity,
-  statuses,
+  sprintActivityId,
+  sprintActivity: sprintActivityProp,
 }) {
+  const [sprintActivity, setSprintActivity] = useState(sprintActivityProp ?? null);
   const [sprintActivityStatus, setSprintActivityStatus] = useState(
-    sprintActivity?.currentStatus_statusId ?? null,
+    sprintActivityProp?.currentStatus_statusId ?? null,
   );
   const [remarks, setRemarks] = useState("");
+  const [statuses, setStatuses] = useState(null);
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      try {
+        const response = await getStatusByRecord("sprint_activity");
+        console.log("Fetched sprint-activity statuses:", response);
+        setStatuses(response);
+      } catch (error) {
+        console.error("Failed to fetch statuses", error);
+      }
+    };
+    fetchStatuses();
+  }, []);
+
+  useEffect(() => {
+    if (sprintActivityProp !== null && sprintActivityProp !== undefined) return;
+    const fetchSprintActivity = async () => {
+      try {
+        const response = await getSprintActivity(sprintActivityId);
+        const flattened = flattenSprintActivity(response.data || response);
+        setSprintActivity(flattened);
+        setSprintActivityStatus(flattened?.currentStatus_statusId ?? null);
+      } catch (error) {
+        console.error("Failed to fetch sprint activity", error);
+      }
+    };
+    fetchSprintActivity();
+  }, []);
 
   console.log("Sprint Activity", sprintActivity);
   console.log("Statuses", statuses);
+
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
       const response = {
-        entryId: entry.id,
+        sprintActivityId,
         remarks,
         sprintActivityStatusId: sprintActivityStatus,
       };
-      console.log("close entry: ", response);
-      await closeWorkActivity(response);
+      console.log("close Record: ", response);
+      await stopSprintActivity(response);
 
       // API succeeded
       onClose();
@@ -51,7 +84,7 @@ export default function CloseTestEntryModal({
               </div>
 
               <div className="modal-body">
-                <p>Hello from the modal -- {entry.id}.</p>
+                <p>Hello from the modal</p>
                 {/* Remarks */}
                 <div className="mb-3">
                   <label className="form-label">Remarks</label>
@@ -80,7 +113,7 @@ export default function CloseTestEntryModal({
                     required
                   >
                     <option value="">Select Status</option>
-                    {statuses.map((status) => (
+                    {(statuses ?? []).map((status) => (
                       <option key={status.statusId} value={status.statusId}>
                         {status.displayName}
                       </option>

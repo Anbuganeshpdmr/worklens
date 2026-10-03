@@ -1,7 +1,9 @@
 package com.pdmrindia.worklens.module_sprint_activity;
 
+import com.pdmrindia.worklens.module_entry.mapperDtos.CloseWorkEntryDto;
 import com.pdmrindia.worklens.module_sprint.Sprint;
 import com.pdmrindia.worklens.module_sprint.SprintService;
+import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.CloseSprintActivityEntryDto;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityDisplayDto;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityDisplayDtoMapper;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityManageListDto;
@@ -26,23 +28,35 @@ public class SprintActivityController {
         sprintActivityService.syncSprintActivities(sprintActivityManageListDto);
     }
 
-    @GetMapping("sprint_activity/sprint/{sprintId}/list")
+    @GetMapping("/sprint_activity/sprint/{sprintId}/list")
     public List<Integer> getSprintActivitiesIdsList(@PathVariable("sprintId") int sprintId){
         Sprint sprint = sprintService.getSprintById(sprintId);
         List<SprintActivity> allowedList = sprintActivityRepo.findBySprintAndIsAllowed(sprint,true);
         return allowedList.stream().map(sa->sa.getActivity().getId()).toList();
     }
 
-    @GetMapping("sprint_activity/sprint/{sprintId}")
+    @GetMapping("/sprint_activity/sprint/{sprintId}")
     public List<SprintActivityDisplayDto> getSprintActivitiesList(@PathVariable("sprintId") int sprintId){
         Sprint sprint = sprintService.getSprintById(sprintId);
         List<SprintActivity> allowedList = sprintActivityRepo.findBySprintAndIsAllowed(sprint,true);
         return allowedList.stream().map(sprintActivityDisplayDtoMapper::getSprintActivityDisplayDto).toList();
     }
 
-    @GetMapping("sprint_activity/{sprintActivityId}")
+    @GetMapping("/sprint_activity/{sprintActivityId}")
     public SprintActivityDisplayDto getSprintActivity(@PathVariable("sprintActivityId") int sprintActivityId){
         SprintActivity sprintActivity = sprintActivityService.getSprintActivityById(sprintActivityId);
+        return sprintActivityDisplayDtoMapper.getSprintActivityDisplayDto(sprintActivity);
+    }
+
+    @PostMapping("/sprint_activity/{sprintActivityId}/start")
+    public SprintActivityDisplayDto startSprintActivity(@PathVariable("sprintActivityId") int sprintActivityId){
+        SprintActivity sprintActivity = sprintActivityService.startSprintActivity(sprintActivityId);
+        return sprintActivityDisplayDtoMapper.getSprintActivityDisplayDto(sprintActivity);
+    }
+
+    @PostMapping("/sprint_activity/stop")
+    public SprintActivityDisplayDto stopSprintActivity(@RequestBody CloseSprintActivityEntryDto dto){
+        SprintActivity sprintActivity = sprintActivityService.closeSprintActivityWithEntry(dto);
         return sprintActivityDisplayDtoMapper.getSprintActivityDisplayDto(sprintActivity);
     }
 

@@ -4,7 +4,10 @@ import com.pdmrindia.worklens.exception.SprintActivityException;
 import com.pdmrindia.worklens.exception.SprintException;
 import com.pdmrindia.worklens.module_activity.Activity;
 import com.pdmrindia.worklens.module_activity.ActivityService;
+import com.pdmrindia.worklens.module_entry.Entry;
+import com.pdmrindia.worklens.module_entry.EntryService;
 import com.pdmrindia.worklens.module_project.Project;
+import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.CloseSprintActivityEntryDto;
 import com.pdmrindia.worklens.module_sprint_activity.mapperDtos.SprintActivityManageListDto;
 import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_sprint.Sprint;
@@ -33,6 +36,7 @@ public class SprintActivityService {
     private final SprintService sprintService;
     private final StatusService statusService;
     private final CurrentUserService currentUserService;
+    private final EntryService entryService;
 
     /*
     selected - May be new
@@ -131,6 +135,47 @@ public class SprintActivityService {
         return sprintActivityRepo.save(sprintActivity);
     }
 
+    @Transactional
+    public SprintActivity startSprintActivity(int sprintActivityId){
 
+        SprintActivity sprintActivity = getSprintActivityById(sprintActivityId);
+
+        if(sprintActivity.getCurrentEntry() != null){
+            throw new RuntimeException("SprintActivity has Active Entry");
+        }
+        Entry newEntry = entryService.createNewWorkEntry2(sprintActivity);
+        sprintActivity.setCurrentEntry(newEntry);
+
+        Status sprintActivity_InTestingStatus = statusService.getRecordStatusByName(Record.SPRINT_ACTIVITY,"in-testing");
+        statusService.validateRecordStatusOfRecord(Record.SPRINT_ACTIVITY,sprintActivity_InTestingStatus);
+        sprintActivity.setStatus(sprintActivity_InTestingStatus);
+
+        return sprintActivityRepo.save(sprintActivity);
+    }
+
+    @Transactional
+    public SprintActivity closeSprintActivityWithEntry(CloseSprintActivityEntryDto dto){
+
+        SprintActivity sprintActivity = getSprintActivityById(dto.getSprintActivityId());
+
+        Entry activeEntry = sprintActivity.getCurrentEntry();
+        if (activeEntry != null) {
+            // 2. Update the entry properties
+            entryService.closeWorkEntry2(activeEntry, dto.getRemarks());
+
+            // 3. Clear the active reference link on the activity
+            sprintActivity.setCurrentEntry(null);
+        }
+        else{
+            throw new RuntimeException("There's no Active Entry available to close");
+        }
+
+        Status SA_NewSelectedStatus = statusService.getStatusById(dto.getSprintActivityStatusId());
+        statusService.validateRecordStatusOfRecord(Record.SPRINT_ACTIVITY,SA_NewSelectedStatus);
+        sprintActivity.setStatus(SA_NewSelectedStatus);
+
+        //return sprintActivityRepo.save(sprintActivity);
+        return sprintActivity;
+    }
 
 }

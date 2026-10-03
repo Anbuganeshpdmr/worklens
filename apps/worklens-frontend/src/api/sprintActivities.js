@@ -26,3 +26,11 @@ export async function getSprintActivity(sprintActivityId) {
   const response = await apiClient.get(`/sprint_activity/${sprintActivityId}`);
   return response.data;
 }
+
+export async function startSprintActivity(sprintActivityId) {
+  return apiClient.post(`/sprint_activity/${sprintActivityId}/start`);
+}
+
+export async function stopSprintActivity(response) {
+  return apiClient.post(`/sprint_activity/stop`, response);
+}

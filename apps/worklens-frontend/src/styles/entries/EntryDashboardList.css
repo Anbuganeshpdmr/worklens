@@ -1,0 +1,443 @@
+/* ==========================================================================
+   EntryDashboardList — Themed styles
+   Palette: #810b38, #DCC3AA, #C9AA8C, #5F5147, #fbf8f5
+   Mirrors SprintActivityExecuteList design language.
+
+   Column widths (px)  →  cumulative left offset for sticky cols
+   ─────────────────────────────────────────────────────────────
+   Col 1  Id          :  80   →  left: 0
+   Col 2  User        : 200   →  left: 80
+   Col 3  Category    : 200   →  left: 280
+   Col 4  Date        : 116   →  left: 480   (frozen-last edge at 596)
+   Col 5  Start Time  :  96
+   Col 6  End Time    :  96
+   Col 7  Status      : 150
+   Col 8  Project     : 220
+   Col 9  Sprint      : 220
+   Col 10 Title       : 300
+   Col 11 Remarks     : 300
+   Col 12 Act-Id      :  80
+   Col 13 SA-Id       :  80
+   Col 14 Type        : 150   →  right: 0  (frozen-right)
+
+   min-width = sum of all = 80+200+200+116+96+96+150+220+220+300+300+80+80+150 = 2288px
+   ========================================================================== */
+
+/* ── Root container ─────────────────────────────────────────────────────── */
+.edl-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ── Table pane ─────────────────────────────────────────────────────────── */
+.edl-table-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Table card */
+.edl-table-card {
+  flex: 1;
+  min-height: 0;
+  background: #ffffff;
+  border: 1px solid #c9aa8c;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(95, 81, 71, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scroll wrapper — horizontal + vertical */
+.edl-table-scroll {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  /* Needed so sticky cells inside a scrolling container work correctly */
+  position: relative;
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+.edl-table {
+  table-layout: fixed;
+  border-collapse: separate;   /* required: sticky borders need separate */
+  border-spacing: 0;
+  text-align: left;
+  /* Exact sum of all column widths — no compression, guarantees col-5 starts
+     immediately after the frozen region */
+  min-width: 2288px;
+  width: 2288px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Column widths (must match the sticky left offsets exactly)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Col 1  — Id (6 chars monospace) */
+.edl-table th:nth-child(1),
+.edl-table td:nth-child(1)  { width:  80px; min-width:  80px; }
+
+/* Col 2  — User (30-char limit) */
+.edl-table th:nth-child(2),
+.edl-table td:nth-child(2)  { width: 200px; min-width: 200px; }
+
+/* Col 3  — Category (30-char limit) */
+.edl-table th:nth-child(3),
+.edl-table td:nth-child(3)  { width: 200px; min-width: 200px; }
+
+/* Col 4  — Date (YYYY-MM-DD, 10 chars) */
+.edl-table th:nth-child(4),
+.edl-table td:nth-child(4)  { width: 116px; min-width: 116px; }
+
+/* Col 5  — Start Time (HH:MM:SS, 8 chars) */
+.edl-table th:nth-child(5),
+.edl-table td:nth-child(5)  { width:  96px; min-width:  96px; }
+
+/* Col 6  — End Time (HH:MM:SS, 8 chars) */
+.edl-table th:nth-child(6),
+.edl-table td:nth-child(6)  { width:  96px; min-width:  96px; }
+
+/* Col 7  — Status (pill) */
+.edl-table th:nth-child(7),
+.edl-table td:nth-child(7)  { width: 150px; min-width: 150px; }
+
+/* Col 8  — Project (30-char limit) */
+.edl-table th:nth-child(8),
+.edl-table td:nth-child(8)  { width: 220px; min-width: 220px; }
+
+/* Col 9  — Sprint (30-char limit) */
+.edl-table th:nth-child(9),
+.edl-table td:nth-child(9)  { width: 220px; min-width: 220px; }
+
+/* Col 10 — Title (60-char display, trimmed) */
+.edl-table th:nth-child(10),
+.edl-table td:nth-child(10) { width: 300px; min-width: 300px; }
+
+/* Col 11 — Remarks (60-char display, trimmed) */
+.edl-table th:nth-child(11),
+.edl-table td:nth-child(11) { width: 300px; min-width: 300px; }
+
+/* Col 12 — Act-Id (6 chars monospace) */
+.edl-table th:nth-child(12),
+.edl-table td:nth-child(12) { width:  80px; min-width:  80px; }
+
+/* Col 13 — SA-Id (6 chars monospace) */
+.edl-table th:nth-child(13),
+.edl-table td:nth-child(13) { width:  80px; min-width:  80px; }
+
+/* Col 14 — Type (pill, frozen-right) */
+.edl-table th:nth-child(14),
+.edl-table td:nth-child(14) { width: 150px; min-width: 150px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Sticky header
+   ═══════════════════════════════════════════════════════════════════════════ */
+.edl-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a3b32;
+  white-space: nowrap;
+  background: #ede2d4;
+  /* bottom border drawn as box-shadow so it scrolls with the header */
+  box-shadow: inset 0 -2px 0 #c9aa8c;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Frozen-left columns (1–4)
+   key fix: explicit background colours, never "inherit" from a transparent row
+   ═══════════════════════════════════════════════════════════════════════════ */
+.edl-table td.edl-col-frozen {
+  position: sticky;
+  z-index: 2;
+  /* Solid background — must match every possible row state */
+  background-color: #ffffff;
+}
+
+/* Hover state — keep frozen cells opaque */
+.edl-table tbody tr:hover td.edl-col-frozen {
+  background-color: #faf5ef;
+}
+
+/* Shadow on the right edge of col-4 to signal the freeze boundary */
+.edl-table td.edl-col-frozen--last {
+  box-shadow: 2px 0 6px rgba(95, 81, 71, 0.20);
+}
+
+/* Frozen header cells — higher z-index so they sit above body frozen cells */
+.edl-table thead th.edl-col-frozen {
+  z-index: 5;
+  background-color: #ede2d4;
+  /* shadow overrides the box-shadow from the general th rule for col-4 */
+}
+
+.edl-table thead th.edl-col-frozen--last {
+  box-shadow: inset 0 -2px 0 #c9aa8c, 2px 0 6px rgba(95, 81, 71, 0.20);
+}
+
+/* Sticky left positions — must equal cumulative widths of preceding columns */
+.edl-table .edl-col-1 { left:   0px; }
+.edl-table .edl-col-2 { left:  80px; }
+.edl-table .edl-col-3 { left: 280px; }
+.edl-table .edl-col-4 { left: 480px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Frozen-right column (14 — Type)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.edl-table td.edl-col-frozen-right {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  background-color: #ffffff;
+  box-shadow: -2px 0 6px rgba(95, 81, 71, 0.20);
+}
+
+.edl-table tbody tr:hover td.edl-col-frozen-right {
+  background-color: #faf5ef;
+}
+
+.edl-table thead th.edl-col-frozen-right {
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 5;
+  background-color: #ede2d4;
+  box-shadow: inset 0 -2px 0 #c9aa8c, -2px 0 6px rgba(95, 81, 71, 0.20);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Body rows
+   ═══════════════════════════════════════════════════════════════════════════ */
+.edl-table tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.14s ease;
+}
+
+.edl-table tbody tr:hover {
+  background-color: #faf5ef;
+}
+
+/* ── All body cells ── */
+.edl-table td {
+  padding: 11px 14px;
+  font-size: 13px;
+  color: #3b2e26;
+  vertical-align: middle;
+  border-bottom: 1px solid #ebe0d2;
+  /* Default: single-line, clip with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;   /* forces text-overflow to activate in fixed-layout tables */
+}
+
+.edl-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cell variant styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Id */
+.edl-table td.edl-td-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #810b38;
+}
+
+/* User */
+.edl-table td.edl-td-user {
+  font-weight: 600;
+  color: #2c201a;
+}
+
+/* Category */
+.edl-table td.edl-td-category {
+  font-size: 12.5px;
+  color: #5f5147;
+}
+
+/* Date */
+.edl-table td.edl-td-date {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: #5f5147;
+}
+
+/* Times */
+.edl-table td.edl-td-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: #7a6558;
+}
+
+/* Meta — project, sprint */
+.edl-table td.edl-td-meta {
+  font-size: 12.5px;
+  color: #3b2e26;
+}
+
+/* Title — bolder, 60-char trim */
+.edl-table td.edl-td-title {
+  font-weight: 600;
+  color: #241812;
+  cursor: default;   /* shows the tooltip cursor clearly */
+}
+
+/* Remarks — softer, 60-char trim */
+.edl-table td.edl-td-remarks {
+  font-size: 12px;
+  color: #7a6558;
+  cursor: default;
+}
+
+/* Numeric ids */
+.edl-table td.edl-td-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: #7a6558;
+}
+
+/* ── Color pill badge ───────────────────────────────────────────────────── */
+.edl-color-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+.edl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.edl-empty__icon {
+  font-size: 44px;
+  color: #c9aa8c;
+  margin-bottom: 14px;
+}
+
+.edl-empty__title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2c201a;
+}
+
+.edl-empty__desc {
+  margin: 0;
+  font-size: 13px;
+  color: #5f5147;
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+/* ── Null / dash placeholder ─────────────────────────────────────────── */
+.edl-null {
+  color: #b4a090;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Action column — visible only on my-entries (edl-table--with-action)
+   Adds col 15: Action (120px, frozen-right)
+   Type (col 14) becomes a regular scrollable column in this mode.
+   Total min-width: 2288 + 120 = 2408px
+   ═══════════════════════════════════════════════════════════════════════════ */
+.edl-table--with-action {
+  min-width: 2408px;
+  width:     2408px;
+}
+
+/* Col 15 — Action */
+.edl-table--with-action th:nth-child(15),
+.edl-table--with-action td:nth-child(15) { width: 120px; min-width: 120px; }
+
+/* Action header cell */
+.edl-table .edl-th-actions {
+  text-align: center;
+}
+
+/* Action body cell */
+.edl-table td.edl-td-actions {
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;      /* buttons must not clip */
+}
+
+/* ── Icon action buttons ── */
+.edl-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.14s ease, border-color 0.14s ease,
+              color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.edl-action-btn + .edl-action-btn {
+  margin-left: 6px;
+}
+
+.edl-action-btn--edit {
+  background: #ffffff;
+  border: 1px solid #c9aa8c;
+  color: #5f5147;
+}
+
+.edl-action-btn--edit:hover {
+  background: #faf5ef;
+  border-color: #810b38;
+  color: #810b38;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(129, 11, 56, 0.16);
+}
+
+.edl-action-btn--delete {
+  background: #ffffff;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+}
+
+.edl-action-btn--delete:hover {
+  background: #fff5f5;
+  border-color: #ef4444;
+  color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.18);
+}
+
+.edl-action-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

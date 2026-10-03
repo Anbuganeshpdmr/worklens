@@ -1,6 +1,7 @@
 package com.pdmrindia.worklens.module_sprint_activity.mapperDtos;
 
 import com.pdmrindia.worklens.module_activity.mapperDtos.ActivityDisplayDtoMapper;
+import com.pdmrindia.worklens.module_entry.Entry;
 import com.pdmrindia.worklens.module_sprint.Sprint;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.SimpleSprintInfoDtoMapper;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
@@ -31,6 +32,12 @@ public class SprintActivityDisplayDtoMapper {
         Sprint sprint = sprintActivity.getSprint();
         if(sprint != null){
             dto.setSimpleSprintInfo(simpleSprintInfoDtoMapper.getSimpleSprintInfo(sprint));
+        }
+
+        Entry entry = sprintActivity.getCurrentEntry();
+        if(entry != null){
+            dto.setEntryId(entry.getId());
+            dto.setCurrentUser(entry.getUser().getName());
         }
 
         return dto;

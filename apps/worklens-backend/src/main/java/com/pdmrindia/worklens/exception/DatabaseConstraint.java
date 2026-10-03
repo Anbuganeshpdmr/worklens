@@ -11,7 +11,7 @@ public enum DatabaseConstraint {
     UK_PROJECT_NAME("uk_project_name", "project name already exists"),
     UK_PROJECT_SPRINT_NAME("uk_project_sprint_name", "project has already same sprint name"),
     UK_STATUS_COLOUR("uk_status_colour", "status colour already exists"),
-    UK_STATUS_RECORD_DISPLAY_NAME("uk_status_record_display_name", "The provided Employee ID already exists."),
+    UK_STATUS_RECORD_DISPLAY_NAME("uk_status_record_display_name", "Status already exists for this record."),
     UK_SPRINT_ACTIVITY("uk_sprint_activity", "Associated Sprint And Activity already present"),
     UK_ROLE_NAME("uk_role_name", "The Role name already exists"),
     UK_CATEGORY_NAME("uk_category_name", "Category already exists"),
