@@ -38,7 +38,13 @@ public class ActivityService {
 
         ActivityType type = activityTypeService.getTypeById(newWorkActivityDto.getTypeId());
 
-        Category category = categoryService.getCategoryById(newWorkActivityDto.getCategoryId());
+        Category category;
+        if(newWorkActivityDto.getCategoryId() != null){
+            category = categoryService.getCategoryById(newWorkActivityDto.getCategoryId());
+        }else{
+            category = categoryService.getCategoryByName("sprint-testing");
+        }
+
         activity.setCategory(category);
 
         activity.setActivityType(type);

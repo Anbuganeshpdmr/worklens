@@ -29,21 +29,16 @@ const ROLE_MENUS = {
       path: "/activity-type",
       icon: "/icons/activityType.png",
     },
-
     {
       label: "Status",
       path: "/status",
       icon: "/icons/status.png",
     },
-    //{ label: "Activities", path: "/activities", icon: "/icons/activities.png" },
     {
       label: "General Activity",
       path: "/general-activity",
       icon: "/icons/general.png",
     },
-    //{ label: "Sprint", path: "/sprint", icon: "/icons/sprint.png" },
-    //{ label: "Activity Movements", path: "/activity-movements", icon: "/icons/activityMovements.png" },
-
     {
       label: "Category & Types",
       path: "/category-type",
@@ -72,7 +67,6 @@ const ROLE_MENUS = {
       path: "/entry-dashboard",
       icon: "/icons/entries.png",
     },
-
     {
       label: "Projects & Sprints",
       label: "My Entries",
@@ -94,7 +88,6 @@ const ROLE_MENUS = {
       path: "/activity-type",
       icon: "/icons/activityType.png",
     },
-
     {
       label: "Status",
       path: "/status",
@@ -105,7 +98,6 @@ const ROLE_MENUS = {
       path: "/general-activity",
       icon: "/icons/general.png",
     },
-
     {
       label: "Category & Types",
       path: "/category-type",
