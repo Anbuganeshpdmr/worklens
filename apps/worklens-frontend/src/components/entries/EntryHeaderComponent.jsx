@@ -10,7 +10,7 @@ import { getTypes } from "../../api/types";
 import { getCategories } from "../../api/category";
 import { getStatusByRecord } from "../../api/status";
 import { getUsers } from "../../api/user";
-import { getAllEntries } from "../../api/entry";
+import { getAllEntries, fetchAllEntries } from "../../api/entry";
 import { flattenEntry } from "./entryMapper";
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -146,10 +146,14 @@ function buildFilterRequest(fields) {
     fromDate: fields.fromDate || null,
     toDate: fields.toDate || null,
     userIds: fields.userIds.length ? fields.userIds : null,
-    activityIds: fields.activityIds.trim() ? parseIds(fields.activityIds) : null,
+    activityIds: fields.activityIds.trim()
+      ? parseIds(fields.activityIds)
+      : null,
     projectIds: fields.projectIds.length ? fields.projectIds : null,
     sprintIds: fields.sprintIds.length ? fields.sprintIds : null,
-    activityTypeIds: fields.activityTypeIds.length ? fields.activityTypeIds : null,
+    activityTypeIds: fields.activityTypeIds.length
+      ? fields.activityTypeIds
+      : null,
     categoryIds: fields.categoryIds.length ? fields.categoryIds : null,
     statusIds: fields.statusIds.length ? fields.statusIds : null,
   };
@@ -232,46 +236,58 @@ export default function EntryHeaderComponent({
           statusesData,
           usersData,
         ] = await Promise.allSettled([
-          getActiveProjects(),             // returns array of { projectId, projectName, ... }
-          getSprints(),                    // returns { sprints: [{ sprintId, sprintName, ... }] }
-          getTypes(),                      // returns array of { id, name, ... }
-          getCategories(),                 // returns array of { id, name, ... }
-          getStatusByRecord("ENTRY"),      // returns array of { statusId, displayName, ... }
-          getUsers(),                      // returns array of { id, name, ... }
+          getActiveProjects(), // returns array of { projectId, projectName, ... }
+          getSprints(), // returns { sprints: [{ sprintId, sprintName, ... }] }
+          getTypes(), // returns array of { id, name, ... }
+          getCategories(), // returns array of { id, name, ... }
+          getStatusByRecord("ENTRY"), // returns array of { statusId, displayName, ... }
+          getUsers(), // returns array of { id, name, ... }
         ]);
 
         if (cancelled) return;
 
         // Normalise every response to { id, name } so MultiSelect works uniformly
         setProjects(
-          projectsData.status === "fulfilled" && Array.isArray(projectsData.value)
-            ? projectsData.value.map((p) => ({ id: p.projectId, name: p.projectName }))
-            : []
+          projectsData.status === "fulfilled" &&
+            Array.isArray(projectsData.value)
+            ? projectsData.value.map((p) => ({
+                id: p.projectId,
+                name: p.projectName,
+              }))
+            : [],
         );
         setSprints(
           sprintsData.status === "fulfilled"
-            ? (sprintsData.value?.sprints ?? []).map((s) => ({ id: s.sprintId, name: s.sprintName }))
-            : []
+            ? (sprintsData.value?.sprints ?? []).map((s) => ({
+                id: s.sprintId,
+                name: s.sprintName,
+              }))
+            : [],
         );
         setTypes(
           typesData.status === "fulfilled" && Array.isArray(typesData.value)
             ? typesData.value.map((t) => ({ id: t.id, name: t.name }))
-            : []
+            : [],
         );
         setCategories(
-          categoriesData.status === "fulfilled" && Array.isArray(categoriesData.value)
+          categoriesData.status === "fulfilled" &&
+            Array.isArray(categoriesData.value)
             ? categoriesData.value.map((c) => ({ id: c.id, name: c.name }))
-            : []
+            : [],
         );
         setStatuses(
-          statusesData.status === "fulfilled" && Array.isArray(statusesData.value)
-            ? statusesData.value.map((s) => ({ id: s.statusId, name: s.displayName }))
-            : []
+          statusesData.status === "fulfilled" &&
+            Array.isArray(statusesData.value)
+            ? statusesData.value.map((s) => ({
+                id: s.statusId,
+                name: s.displayName,
+              }))
+            : [],
         );
         setUsers(
           usersData.status === "fulfilled" && Array.isArray(usersData.value)
             ? usersData.value.map((u) => ({ id: u.id, name: u.name }))
-            : []
+            : [],
         );
       } finally {
         if (!cancelled) setOptionsLoading(false);
@@ -279,25 +295,29 @@ export default function EntryHeaderComponent({
     }
 
     fetchDropdownOptions();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   /* ── Helpers ── */
-  const set = (field, value) => setFields((prev) => ({ ...prev, [field]: value }));
+  const set = (field, value) =>
+    setFields((prev) => ({ ...prev, [field]: value }));
 
   const runFetch = async (filterRequest) => {
     setFetchLoading(true);
     setFetchError("");
     try {
-      console.log("Before sending Request:",filterRequest);
-      const response = await getAllEntries(filterRequest, page, size);
+      console.log("Before sending Request:", filterRequest);
+      const response = await fetchAllEntries(filterRequest);
       console.log("API response:", response);
       console.log("API content:", response?.data?.content);
       console.log("API content count:", response?.data?.content?.length);
-      const flat = response?.data?.content?.map(flattenEntry) ?? [];
-      console.log("Response Flat:",flat);
-      setRecords(flat);       // → ReportChart re-renders
-      onResults?.(flat);      // → parent list table re-renders
+      const flat = response?.data?.map(flattenEntry) ?? [];
+      // const flat = response?.data?.content?.map(flattenEntry) ?? [];
+      console.log("Response Flat:", flat);
+      setRecords(flat); // → ReportChart re-renders
+      onResults?.(flat); // → parent list table re-renders
     } catch (e) {
       setFetchError(e?.message || "Failed to load entries.");
     } finally {
@@ -342,7 +362,6 @@ export default function EntryHeaderComponent({
 
   return (
     <div className="sa-exec-accordion">
-
       {/* ── Toggle bar ── */}
       <button
         type="button"
@@ -352,10 +371,18 @@ export default function EntryHeaderComponent({
         aria-controls="entry-header-body"
       >
         <div className="sa-exec-accordion__bar-left">
-          <i className="bi bi-layout-text-sidebar-reverse sa-exec-accordion__bar-icon" aria-hidden="true" />
-          <span className="sa-exec-accordion__bar-label">Overview &amp; Filters</span>
+          <i
+            className="bi bi-layout-text-sidebar-reverse sa-exec-accordion__bar-icon"
+            aria-hidden="true"
+          />
+          <span className="sa-exec-accordion__bar-label">
+            Overview &amp; Filters
+          </span>
           {hasActiveFilters && (
-            <span className="sa-exec-search__active-dot" title="Filters active" />
+            <span
+              className="sa-exec-search__active-dot"
+              title="Filters active"
+            />
           )}
         </div>
         <div className="sa-exec-accordion__bar-right">
@@ -371,7 +398,9 @@ export default function EntryHeaderComponent({
             </span>
           )}
           <span className="sa-exec-search__toggle" aria-hidden="true">
-            <i className={`bi ${expanded ? "bi-chevron-up" : "bi-chevron-down"}`} />
+            <i
+              className={`bi ${expanded ? "bi-chevron-up" : "bi-chevron-down"}`}
+            />
           </span>
         </div>
       </button>
@@ -379,7 +408,6 @@ export default function EntryHeaderComponent({
       {/* ── Accordion body ── */}
       {expanded && (
         <div id="entry-header-body" className="sa-exec-accordion__body">
-
           {/* LEFT — Chart */}
           <div className="sa-exec-accordion__chart">
             <div className="sa-exec-accordion__panel-title">
@@ -405,7 +433,6 @@ export default function EntryHeaderComponent({
             </div>
 
             <div className="sa-exec-search__fields">
-
               {/* Row 1: Date range */}
               <div className="sa-exec-fields-row">
                 <div className="sa-exec-field sa-exec-field--date">
@@ -495,24 +522,28 @@ export default function EntryHeaderComponent({
               </div>
 
               {/* Row 4: User */}
-              {!isMember && 
-              <div className="sa-exec-fields-row">
-                <div className="sa-exec-field sa-exec-field--ms">
-                  <MultiSelect
-                    id="ehf-user"
-                    label="User"
-                    options={users}
-                    selected={fields.userIds}
-                    onChange={(v) => set("userIds", v)}
-                    loading={optionsLoading}
-                  />
+              {!isMember && (
+                <div className="sa-exec-fields-row">
+                  <div className="sa-exec-field sa-exec-field--ms">
+                    <MultiSelect
+                      id="ehf-user"
+                      label="User"
+                      options={users}
+                      selected={fields.userIds}
+                      onChange={(v) => set("userIds", v)}
+                      loading={optionsLoading}
+                    />
+                  </div>
                 </div>
-              </div>}
+              )}
 
               {/* Row 5: Activity IDs */}
               <div className="sa-exec-fields-row">
                 <div className="sa-exec-field sa-exec-field--full">
-                  <label className="sa-exec-field__label" htmlFor="ehf-activityIds">
+                  <label
+                    className="sa-exec-field__label"
+                    htmlFor="ehf-activityIds"
+                  >
                     Activity IDs
                     <span
                       className="sa-exec-field__hint"
@@ -567,10 +598,8 @@ export default function EntryHeaderComponent({
                   Download
                 </button>
               </div>
-
             </div>
           </div>
-
         </div>
       )}
 
@@ -581,7 +610,6 @@ export default function EntryHeaderComponent({
           {fetchError}
         </div>
       )}
-
     </div>
   );
 }

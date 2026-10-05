@@ -17,17 +17,20 @@ const ROLE_MENUS = {
 
   FH: [
     { label: "Home", path: "/homepage", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
-
+    {
+      label: "Entry Dashboard",
+      path: "/entry-dashboard",
+      icon: "/icons/reportDashboard.png",
+    },
+    {
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
     {
       label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
-    },
-    {
-      label: "Activity Type",
-      path: "/activity-type",
-      icon: "/icons/activityType.png",
     },
     {
       label: "Status",
@@ -50,43 +53,26 @@ const ROLE_MENUS = {
       icon: "/icons/userManagement.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 
   TL: [
     { label: "Home", path: "/homepage", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
       label: "Entry Dashboard",
       path: "/entry-dashboard",
-      icon: "/icons/entries.png",
+      icon: "/icons/reportDashboard.png",
     },
     {
-      label: "Projects & Sprints",
       label: "My Entries",
       path: "/my-entries",
       icon: "/icons/entries.png",
     },
     {
-      label: "Record Status",
-      path: "/record-status",
-      icon: "/icons/recordStatus.png",
-    },
-    {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
-    },
-    {
-      label: "Activity Type",
-      path: "/activity-type",
-      icon: "/icons/activityType.png",
     },
     {
       label: "Status",
@@ -109,28 +95,16 @@ const ROLE_MENUS = {
       icon: "/icons/userManagement.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
-    {
-      label: "Reports-1",
-      path: "/reports1",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 
   MEMBER: [
     { label: "Home", path: "/homepage", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
     {
-      label: "Projects & Sprints",
       label: "Entry Dashboard",
       path: "/entry-dashboard",
-      icon: "/icons/entries.png",
+      icon: "/icons/reportDashboard.png",
     },
     {
       label: "My Entries",
@@ -138,7 +112,7 @@ const ROLE_MENUS = {
       icon: "/icons/entries.png",
     },
     {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -148,17 +122,12 @@ const ROLE_MENUS = {
       icon: "/icons/general.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 };
 
-function normalizeRole(role) {
+export function normalizeRole(role) {
   const roleValue =
     typeof role === "object"
       ? role?.name || role?.roleName || role?.role

@@ -1,10 +1,12 @@
 package com.pdmrindia.worklens.module_user;
 
+import com.pdmrindia.worklens.config.Permissions;
 import com.pdmrindia.worklens.module_user.mapperDtos.ChangePasswordDto;
 import com.pdmrindia.worklens.module_user.mapperDtos.NewUserDto;
 import com.pdmrindia.worklens.module_user.mapperDtos.UpdateUserDto;
 import com.pdmrindia.worklens.module_user.mapperDtos.UserInfoDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,16 +35,19 @@ public class UserController {
         return userService.getUserInfo(currentUserService.user());
     }
 
+    @PreAuthorize(Permissions.FHTLADMIN)
     @PostMapping("/user")
     public UserInfoDto createUser(@RequestBody NewUserDto newUserDto){
         return userService.getUserInfo(userService.createUser(newUserDto));
     }
 
+    @PreAuthorize(Permissions.FHTLADMIN)
     @GetMapping("/users")
     public List<UserInfoDto> getAllUsers(){
         return userService.getAllUsers();
     }
 
+    @PreAuthorize(Permissions.FHTLADMIN)
     @PutMapping("/user/{id}")
     public UserInfoDto updateUser(@PathVariable("id") long id, @RequestBody UpdateUserDto updatedUserInfoDto){
         return userService.getUserInfo(userService.updateUser(id,updatedUserInfoDto));
@@ -53,6 +58,7 @@ public class UserController {
         userService.changePassword(changePasswordDto);
     }
 
+    @PreAuthorize(Permissions.FHTLADMIN)
     @PostMapping("/user/{id}/reset_password")
     public void resetPassword(@PathVariable("id") long id, @RequestBody Map<String,String> resetPasswordDto){
         userService.resetPassword(id,resetPasswordDto);

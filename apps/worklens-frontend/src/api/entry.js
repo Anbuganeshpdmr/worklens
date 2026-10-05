@@ -7,6 +7,11 @@ export async function getAllEntries(entryFilterRequest, page, size) {
   });
 }
 
+export async function fetchAllEntries(entryFilterRequest) {
+  console.log("REQUEST BODY:", JSON.stringify(entryFilterRequest));
+  return apiClient.post(`/entry/fetch`, entryFilterRequest);
+}
+
 export async function startTestActivity(sprintActivityId) {
   return apiClient.post(`/entry/work/${sprintActivityId}`);
 }
