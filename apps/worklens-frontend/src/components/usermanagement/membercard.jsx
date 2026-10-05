@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api/axios";
+import { getMyDp } from "../../api/user";
 
 // ==========================================
 // AVATAR COLOR — derived from name hash
@@ -58,45 +58,31 @@ const MemberCard = ({ user, onEdit }) => {
   const avatarColor = getAvatarColor(name);
 
   // ── Profile photo state ──────────────────────────
-  // 1. If dpAvailable=true, fetch from backend /user/{id}/photo
-  // 2. If this card is the logged-in user, check localStorage profilePhoto
-  // 3. Otherwise show initials
   const [photoUrl, setPhotoUrl] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const loadPhoto = async () => {
-      // Check localStorage first for the logged-in user's photo
-      try {
-        const cached = localStorage.getItem("userInfo");
-        if (cached) {
-          const loggedIn = JSON.parse(cached);
-          const loggedInId = loggedIn?.id || loggedIn?.userId;
-          const cardId = user?.id || user?.userId;
-          if (loggedInId && cardId && String(loggedInId) === String(cardId)) {
-            const localPhoto = localStorage.getItem("profilePhoto");
-            if (localPhoto) {
-              setPhotoUrl(localPhoto);
-              return;
-            }
-          }
-        }
-      } catch (_) {
-        // ignore localStorage errors
-      }
+      // Revoke previous blob URL before loading a new one
+      setPhotoUrl((prev) => {
+        if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+        return null;
+      });
 
-      // If backend says dpAvailable, fetch the photo
-      if (user?.dpAvailable && user?.dpPath) {
-        try {
-          // dpPath may be a relative path — fetch as blob via axios so
-          // auth headers are included automatically
-          const res = await api.get(user.dpPath, { responseType: "blob" });
-          if (cancelled) return;
-          const objectUrl = URL.createObjectURL(res.data);
-          setPhotoUrl(objectUrl);
-        } catch (_) {
-          // photo fetch failed — fall back to initials
+      // Fetch only when the backend says a DP exists.
+      // Guard on dpAvailable OR dpPath so either field being set is enough.
+      const hasDp = user?.dpAvailable || !!user?.dpPath;
+      if (!hasDp || !user?.id) return;
+
+      try {
+        const blob = await getMyDp(user.dpPath);
+        if (cancelled) return;
+        setPhotoUrl(URL.createObjectURL(blob));
+      } catch (err) {
+        // 404 / 405 just means no photo — fall back to initials silently
+        if (err?.response?.status !== 404 && err?.response?.status !== 405) {
+          console.error("Profile photo fetch failed:", err);
         }
       }
     };
@@ -105,12 +91,15 @@ const MemberCard = ({ user, onEdit }) => {
 
     return () => {
       cancelled = true;
-      // Revoke blob URL to avoid memory leaks
-      if (photoUrl && photoUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(photoUrl);
-      }
     };
-  }, [user?.id, user?.dpAvailable, user?.dpPath]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user?.id, user?.dpAvailable, user?.dpPath]);
+
+  // Cleanup blob URL when card unmounts
+  useEffect(() => {
+    return () => {
+      if (photoUrl?.startsWith("blob:")) URL.revokeObjectURL(photoUrl);
+    };
+  }, [photoUrl]);
 
   return (
     <div className="mc-card">

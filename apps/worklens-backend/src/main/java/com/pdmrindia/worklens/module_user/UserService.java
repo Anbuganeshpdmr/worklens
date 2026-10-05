@@ -117,7 +117,7 @@ public class UserService {
     public User changeProfilePic(MultipartFile profilePic, boolean isDpChanged) {
         User user = currentUserService.user();
         if(isDpChanged){
-            if(profilePic.isEmpty()){
+            if(profilePic==null){
                 user.setDpPath(null);
             }else{
                 if (!profilePicConfig.getAllowedTypes().contains(profilePic.getContentType())) {

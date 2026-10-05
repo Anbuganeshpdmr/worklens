@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../../api/axios";
+import { uploadProfilePhoto, getMyDp } from "../../api/user";
 import "../../styles/activities/profileinfo.css";
 
 function getRoleName(role) {
@@ -33,37 +34,33 @@ async function fetchProfileData() {
   throw new Error("Unable to load profile data.");
 }
 
-const STORAGE_KEY = "profilePhoto";
+
 
 export default function ProfileInfo() {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
 
-  const [savedPhoto, setSavedPhoto]     = useState(() => localStorage.getItem(STORAGE_KEY) || null);
+  // pendingPhoto  — base64 DataURL for local preview before save
+  // pendingFile   — the actual File object waiting to be uploaded
+  // removeFlag    — user clicked the X on an existing DP (wants to delete it)
+  // savedDpUrl    — blob object URL for the current saved DP (auth-fetched)
   const [pendingPhoto, setPendingPhoto] = useState(null);
-  const [removeFlag, setRemoveFlag]     = useState(false);
+  const [pendingFile,  setPendingFile]  = useState(null);
+  const [removeFlag,   setRemoveFlag]   = useState(false);
+  const [savedDpUrl,   setSavedDpUrl]   = useState(null);
 
   const [toast, setToast] = useState(null);
   const toastTimer = useRef(null);
+  const fileInputRef = useRef(null);
 
   const showToast = (message, type = "success") => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
     setToast({ message, type });
-    toastTimer.current = setTimeout(() => setToast(null), 3000);
+    toastTimer.current = setTimeout(() => setToast(null), 2000);
   };
 
-  const fileInputRef = useRef(null);
-
-  const displayPhoto = pendingPhoto
-    ? pendingPhoto
-    : removeFlag
-      ? null
-      : savedPhoto;
-
-  const showExit = pendingPhoto !== null || (!removeFlag && savedPhoto !== null);
-  const isPreviewing = pendingPhoto !== null;
-
+  // ── Fetch profile data on mount ──────────────────────────────────────────
   useEffect(() => {
     fetchProfileData()
       .then((data) => setUser(data))
@@ -71,11 +68,66 @@ export default function ProfileInfo() {
       .finally(()   => setLoading(false));
   }, []);
 
+  // ── Fetch the saved DP as a blob whenever user.dpAvailable changes ───────
+  // This uses the authenticated axios instance so the token is always sent.
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadDp = async () => {
+      // Revoke any previous object URL to avoid memory leaks
+      setSavedDpUrl((prev) => {
+        if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+        return null;
+      });
+
+      if (!user?.dpAvailable) return;
+
+      try {
+        const blob = await getMyDp(user.dpPath);
+        if (cancelled) return;
+        setSavedDpUrl(URL.createObjectURL(blob));
+      } catch (err) {
+        console.error("Failed to load profile photo:", err);
+      }
+    };
+
+    loadDp();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, user?.dpAvailable, user?.dpPath]);
+
+  // ── Cleanup object URL on unmount ────────────────────────────────────────
+  useEffect(() => {
+    return () => {
+      if (savedDpUrl?.startsWith("blob:")) URL.revokeObjectURL(savedDpUrl);
+    };
+  }, [savedDpUrl]);
+
+  // What to actually render in the <img> / initials slot:
+  //   1. Local base64 preview (before save)
+  //   2. null if user clicked "remove" (pending removal)
+  //   3. Auth-fetched blob URL of current saved DP
+  //   4. null → show initials
+  const displayPhoto = pendingPhoto
+    ? pendingPhoto
+    : removeFlag
+      ? null
+      : savedDpUrl || null;
+
+  const showExit     = pendingPhoto !== null || (!removeFlag && !!savedDpUrl);
+  const isPreviewing = pendingPhoto !== null;
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
   const handleUploadClick = () => fileInputRef.current?.click();
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    setPendingFile(file);
+
     const reader = new FileReader();
     reader.onload = (ev) => {
       setPendingPhoto(ev.target.result);
@@ -88,22 +140,34 @@ export default function ProfileInfo() {
   const handleExit = () => {
     if (pendingPhoto !== null) {
       setPendingPhoto(null);
-    } else if (savedPhoto !== null) {
+      setPendingFile(null);
+    } else if (savedDpUrl) {
       setRemoveFlag(true);
     }
   };
 
-  const handleSave = () => {
-    if (pendingPhoto !== null) {
-      localStorage.setItem(STORAGE_KEY, pendingPhoto);
-      setSavedPhoto(pendingPhoto);
-      setPendingPhoto(null);
-      showToast("Profile photo uploaded successfully!", "success");
-    } else if (removeFlag) {
-      localStorage.removeItem(STORAGE_KEY);
-      setSavedPhoto(null);
-      setRemoveFlag(false);
-      showToast("Profile photo removed successfully!", "success");
+  const handleSave = async () => {
+    try {
+      if (pendingFile) {
+        // Upload new photo; backend returns updated user object
+        const updatedUser = await uploadProfilePhoto(pendingFile);
+        setUser(updatedUser);
+        setPendingPhoto(null);
+        setPendingFile(null);
+        showToast("Profile photo uploaded successfully!", "success");
+      } else if (removeFlag) {
+        // Remove photo: call upload with no file
+        const updatedUser = await uploadProfilePhoto(null);
+        setUser(updatedUser);
+        setRemoveFlag(false);
+        showToast("Profile photo removed successfully!", "success");
+      }
+    } catch (err) {
+      console.error("Profile picture update failed:", err);
+      showToast(
+        err.response?.data?.message || "Failed to update profile photo",
+        "error"
+      );
     }
   };
 
@@ -124,7 +188,9 @@ export default function ProfileInfo() {
   ];
 
   const saveActive = pendingPhoto !== null || removeFlag;
-const initials = user?.initials || "?";  return (
+  const initials   = user?.initials || "?";
+
+  return (
     <>
       <div className="pi-layout">
         {/* ── Avatar column ─────────────────────── */}
