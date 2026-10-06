@@ -12,6 +12,8 @@ import { getStatusByRecord } from "../../api/status";
 import { getUsers } from "../../api/user";
 import { getAllEntries, fetchAllEntries } from "../../api/entry";
 import { flattenEntry } from "./entryMapper";
+import { exportToExcel } from "../../utils/excelUtils";
+import { entryExcelColumns } from "../reports/ExcelHeaders";
 
 /* ══════════════════════════════════════════════════════════════════════════
    MultiSelect — pill-tag dropdown (id-based, label shown)
@@ -339,10 +341,14 @@ export default function EntryHeaderComponent({
     runFetch(requestBody);
   };
 
-  const handleDownload = () => {
-    const requestBody = buildFilterRequest(fields);
-    console.log("[EntryHeaderComponent] Download Request Body:", requestBody);
-    onDownload?.(requestBody);
+  // const handleDownload = () => {
+  //   const requestBody = buildFilterRequest(fields);
+  //   console.log("[EntryHeaderComponent] Download Request Body:", requestBody);
+  //   onDownload?.(requestBody);
+  // };
+
+  const handleExcelDownload = () => {
+    exportToExcel(records, entryExcelColumns, "Time-Entries");
   };
 
   const handleKeyDown = (e) => {
@@ -590,9 +596,8 @@ export default function EntryHeaderComponent({
                 <button
                   type="button"
                   className="sa-exec-search-btn sa-exec-search-btn--download"
-                  onClick={handleDownload}
-                  title="Download (coming soon)"
-                  disabled
+                  onClick={handleExcelDownload}
+                  title="Download as Excel"
                 >
                   <i className="bi bi-download" aria-hidden="true" />
                   Download

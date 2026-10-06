@@ -4,6 +4,8 @@ import {
   CriteriaOptions_SprintActivityExecuteList,
   AggregatorOptions_SprintActivityExecuteList,
 } from "../reports/CritreriaOptions";
+import { exportToExcel } from "../../utils/excelUtils";
+import { sprintActivityExcelColumns } from "../../components/reports/ExcelHeaders";
 
 /* ══════════════════════════════════════════════════════════════════════════
    MultiSelect — custom pill-tag dropdown for type / status / currentUser
@@ -104,9 +106,7 @@ function MultiSelect({ id, label, options, selected, onChange }) {
                 tabIndex={0}
               >
                 <span className="sa-ms__option-check" aria-hidden="true">
-                  {isSelected ? (
-                    <i className="bi bi-check2" />
-                  ) : null}
+                  {isSelected ? <i className="bi bi-check2" /> : null}
                 </span>
                 {opt}
               </li>
@@ -138,8 +138,8 @@ function MultiSelect({ id, label, options, selected, onChange }) {
  *   defaultAggregator   — optional default aggregator key (defaults to "count")
  */
 export default function ExecuteListHeader({
-  sprintActivities,       // filtered list  → drives the chart
-  allSprintActivities,    // full list       → drives dropdown option lists
+  sprintActivities, // filtered list  → drives the chart
+  allSprintActivities, // full list       → drives dropdown option lists
   filters,
   onFiltersChange,
   onSearch,
@@ -158,15 +158,28 @@ export default function ExecuteListHeader({
   const optionSource = allSprintActivities ?? sprintActivities;
 
   const typeOptions = useMemo(
-    () => [...new Set(optionSource.map((a) => a.activityType_name).filter(Boolean))].sort(),
+    () =>
+      [
+        ...new Set(
+          optionSource.map((a) => a.activityType_name).filter(Boolean),
+        ),
+      ].sort(),
     [optionSource],
   );
   const statusOptions = useMemo(
-    () => [...new Set(optionSource.map((a) => a.currentStatus_displayName).filter(Boolean))].sort(),
+    () =>
+      [
+        ...new Set(
+          optionSource.map((a) => a.currentStatus_displayName).filter(Boolean),
+        ),
+      ].sort(),
     [optionSource],
   );
   const userOptions = useMemo(
-    () => [...new Set(optionSource.map((a) => a.currentUser).filter(Boolean))].sort(),
+    () =>
+      [
+        ...new Set(optionSource.map((a) => a.currentUser).filter(Boolean)),
+      ].sort(),
     [optionSource],
   );
 
@@ -188,6 +201,14 @@ export default function ExecuteListHeader({
     if (e.key === "Enter") onSearch();
   };
 
+  const handleExcelDownload = () => {
+    exportToExcel(
+      sprintActivities,
+      sprintActivityExcelColumns,
+      "Sprint-Activities",
+    );
+  };
+
   return (
     <div className="sa-exec-accordion">
       {/* ── Single toggle bar ── */}
@@ -199,23 +220,38 @@ export default function ExecuteListHeader({
         aria-controls="sa-exec-accordion-body"
       >
         <div className="sa-exec-accordion__bar-left">
-          <i className="bi bi-layout-text-sidebar-reverse sa-exec-accordion__bar-icon" aria-hidden="true" />
-          <span className="sa-exec-accordion__bar-label">Overview &amp; Filters</span>
+          <i
+            className="bi bi-layout-text-sidebar-reverse sa-exec-accordion__bar-icon"
+            aria-hidden="true"
+          />
+          <span className="sa-exec-accordion__bar-label">
+            Overview &amp; Filters
+          </span>
           {hasActiveFilters && (
-            <span className="sa-exec-search__active-dot" title="Filters active" />
+            <span
+              className="sa-exec-search__active-dot"
+              title="Filters active"
+            />
           )}
         </div>
 
         <div className="sa-exec-accordion__bar-right">
           <span className="sa-exec-results-counter">
             {hasActiveFilters ? (
-              <>Showing <strong>{filteredCount}</strong> of {totalCount}</>
+              <>
+                Showing <strong>{filteredCount}</strong> of {totalCount}
+              </>
             ) : (
-              <><strong>{totalCount}</strong> {totalCount === 1 ? "activity" : "activities"}</>
+              <>
+                <strong>{totalCount}</strong>{" "}
+                {totalCount === 1 ? "activity" : "activities"}
+              </>
             )}
           </span>
           <span className="sa-exec-search__toggle" aria-hidden="true">
-            <i className={`bi ${expanded ? "bi-chevron-up" : "bi-chevron-down"}`} />
+            <i
+              className={`bi ${expanded ? "bi-chevron-up" : "bi-chevron-down"}`}
+            />
           </span>
         </div>
       </button>
@@ -223,7 +259,6 @@ export default function ExecuteListHeader({
       {/* ── Accordion body ── */}
       {expanded && (
         <div id="sa-exec-accordion-body" className="sa-exec-accordion__body">
-
           {/* LEFT 60% — Chart */}
           <div className="sa-exec-accordion__chart">
             <div className="sa-exec-accordion__panel-title">
@@ -249,11 +284,12 @@ export default function ExecuteListHeader({
             </div>
 
             <div className="sa-exec-search__fields">
-
               {/* ── Row 1: Title (full width) ── */}
               <div className="sa-exec-fields-row">
                 <div className="sa-exec-field sa-exec-field--full">
-                  <label className="sa-exec-field__label" htmlFor="saef-title">Title</label>
+                  <label className="sa-exec-field__label" htmlFor="saef-title">
+                    Title
+                  </label>
                   <input
                     id="saef-title"
                     type="text"
@@ -269,7 +305,9 @@ export default function ExecuteListHeader({
               {/* ── Row 2: numeric fields (max 6 chars each) ── */}
               <div className="sa-exec-fields-row">
                 <div className="sa-exec-field sa-exec-field--num">
-                  <label className="sa-exec-field__label" htmlFor="saef-id">ID</label>
+                  <label className="sa-exec-field__label" htmlFor="saef-id">
+                    ID
+                  </label>
                   <input
                     id="saef-id"
                     type="number"
@@ -285,7 +323,9 @@ export default function ExecuteListHeader({
                 </div>
 
                 <div className="sa-exec-field sa-exec-field--num">
-                  <label className="sa-exec-field__label" htmlFor="saef-said">SA-ID</label>
+                  <label className="sa-exec-field__label" htmlFor="saef-said">
+                    SA-ID
+                  </label>
                   <input
                     id="saef-said"
                     type="number"
@@ -300,7 +340,12 @@ export default function ExecuteListHeader({
                 </div>
 
                 <div className="sa-exec-field sa-exec-field--num">
-                  <label className="sa-exec-field__label" htmlFor="saef-parentId">Parent ID</label>
+                  <label
+                    className="sa-exec-field__label"
+                    htmlFor="saef-parentId"
+                  >
+                    Parent ID
+                  </label>
                   <input
                     id="saef-parentId"
                     type="number"
@@ -308,14 +353,21 @@ export default function ExecuteListHeader({
                     className="sa-exec-field__input sa-exec-field__input--num"
                     placeholder="—"
                     value={filters.parentId}
-                    onChange={(e) => set("parentId", e.target.value.slice(0, 6))}
+                    onChange={(e) =>
+                      set("parentId", e.target.value.slice(0, 6))
+                    }
                     onKeyDown={handleKeyDown}
                     onWheel={(e) => e.currentTarget.blur()}
                   />
                 </div>
 
                 <div className="sa-exec-field sa-exec-field--num">
-                  <label className="sa-exec-field__label" htmlFor="saef-extTicket">Ext. ID</label>
+                  <label
+                    className="sa-exec-field__label"
+                    htmlFor="saef-extTicket"
+                  >
+                    Ext. ID
+                  </label>
                   <input
                     id="saef-extTicket"
                     type="number"
@@ -323,14 +375,18 @@ export default function ExecuteListHeader({
                     className="sa-exec-field__input sa-exec-field__input--num"
                     placeholder="—"
                     value={filters.externalTicket}
-                    onChange={(e) => set("externalTicket", e.target.value.slice(0, 6))}
+                    onChange={(e) =>
+                      set("externalTicket", e.target.value.slice(0, 6))
+                    }
                     onKeyDown={handleKeyDown}
                     onWheel={(e) => e.currentTarget.blur()}
                   />
                 </div>
 
                 <div className="sa-exec-field sa-exec-field--num">
-                  <label className="sa-exec-field__label" htmlFor="saef-cEntry">C-Entry</label>
+                  <label className="sa-exec-field__label" htmlFor="saef-cEntry">
+                    C-Entry
+                  </label>
                   <input
                     id="saef-cEntry"
                     type="number"
@@ -338,7 +394,9 @@ export default function ExecuteListHeader({
                     className="sa-exec-field__input sa-exec-field__input--num"
                     placeholder="—"
                     value={filters.currentEntry}
-                    onChange={(e) => set("currentEntry", e.target.value.slice(0, 6))}
+                    onChange={(e) =>
+                      set("currentEntry", e.target.value.slice(0, 6))
+                    }
                     onKeyDown={handleKeyDown}
                     onWheel={(e) => e.currentTarget.blur()}
                   />
@@ -404,15 +462,13 @@ export default function ExecuteListHeader({
                 <button
                   type="button"
                   className="sa-exec-search-btn sa-exec-search-btn--download"
-                  onClick={onDownload}
-                  title="Download as CSV (coming soon)"
-                  disabled
+                  onClick={handleExcelDownload}
+                  title="Download as Excel"
                 >
                   <i className="bi bi-download" aria-hidden="true" />
                   Download
                 </button>
               </div>
-
             </div>
           </div>
         </div>
