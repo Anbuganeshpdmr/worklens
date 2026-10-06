@@ -37,7 +37,7 @@ public interface SprintActivityRepo extends JpaRepository<SprintActivity, Intege
     long countBySprintAndStatus(Sprint sprint, Status status);
 
     @Query("""
-    SELECT sa.activity.activityType.name, COUNT(sa)
+    SELECT sa.activity.activityType.name, COUNT(sa), sa.activity.activityType.colourCode
     FROM SprintActivity sa
     WHERE sa.sprint.id = :sprintId AND sa.isAllowed = true
     GROUP BY sa.activity.activityType.id,
@@ -48,7 +48,7 @@ public interface SprintActivityRepo extends JpaRepository<SprintActivity, Intege
             @Param("sprintId") Integer sprintId);
 
     @Query("""
-    SELECT sa.status.displayName, COUNT(sa)
+    SELECT sa.status.displayName, COUNT(sa), sa.status.colourCode
     FROM SprintActivity sa
     WHERE sa.sprint.id = :sprintId AND sa.isAllowed = true
     GROUP BY sa.status.id,
