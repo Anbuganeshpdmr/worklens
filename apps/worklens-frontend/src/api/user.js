@@ -121,3 +121,9 @@ export const getUserDp = async (userId) => {
   const response = await api.get(`/user/${userId}/dp`, { responseType: "blob" });
   return response.data;
 };
+
+
+export const fetchProfileData = async () => {
+  const res = await api.get("/me");
+  return res.data;
+}

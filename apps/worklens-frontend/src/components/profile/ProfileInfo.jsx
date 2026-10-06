@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import api from "../../api/axios";
 import { uploadProfilePhoto, getMyDp } from "../../api/user";
 import "../../styles/activities/profileinfo.css";
+import {fetchProfileData} from "../../api/user";
 
 function getRoleName(role) {
   if (!role) return "-";
@@ -9,31 +10,10 @@ function getRoleName(role) {
   return role;
 }
 
-async function fetchProfileData() {
-  try {
-    const res = await api.get("/profile");
-    return res.data;
-  } catch (_) {
-    // fall through
-  }
-
-  const cached = localStorage.getItem("userInfo");
-  const cachedUser = cached ? JSON.parse(cached) : null;
-  const userId = cachedUser?.id || cachedUser?.userId || cachedUser?.empId;
-
-  if (userId) {
-    try {
-      const res = await api.get(`/user/${userId}`);
-      return res.data;
-    } catch (_) {
-      // fall through
-    }
-  }
-
-  if (cachedUser) return cachedUser;
-  throw new Error("Unable to load profile data.");
-}
-
+// async function fetchProfileData() {
+//   const res = await api.get("/me");
+//   return res.data;
+// }
 
 
 export default function ProfileInfo() {
@@ -62,11 +42,19 @@ export default function ProfileInfo() {
 
   // ── Fetch profile data on mount ──────────────────────────────────────────
   useEffect(() => {
-    fetchProfileData()
-      .then((data) => setUser(data))
-      .catch((err)  => setError(err.message))
-      .finally(()   => setLoading(false));
-  }, []);
+  const getProfile = async () => {
+    try {
+      const data = await fetchProfileData();
+      setUser(data);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  getProfile();
+}, []);
 
   // ── Fetch the saved DP as a blob whenever user.dpAvailable changes ───────
   // This uses the authenticated axios instance so the token is always sent.
