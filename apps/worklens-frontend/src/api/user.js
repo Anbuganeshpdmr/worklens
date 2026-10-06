@@ -81,3 +81,49 @@ export const changePassword = async (passwordData) => {
   const response = await api.post("/me/password", passwordData);
   return response.data;
 };
+
+// ==========================================
+// UPLOAD / REMOVE PROFILE PHOTO (own)
+// POST /user/me/dp
+// Send file under field "profilePic"; omit it to remove.
+// Backend returns the updated user object.
+// ==========================================
+export const uploadProfilePhoto = async (file) => {
+  const formData = new FormData();
+  formData.append("isDpChanged", "true");
+  if (file) formData.append("profilePic", file);
+
+  console.log("FormData 1:", formData.get("profilePic"));
+  console.log("FormData 2:", formData.get("isDpChanged"));
+
+  const response = await api.post("/user/me/dp", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  console.log("POST /user/me/dp:", response.data);
+  return response.data; // updated user object
+};
+
+// ==========================================
+// FETCH OWN PROFILE PHOTO AS BLOB
+// GET /user/me/dp  (auth-protected)
+// ==========================================
+export const getMyDp = async (dpPath) => {
+  const response = await api.get(`/dp/${dpPath}`, { responseType: "blob" });
+  return response.data;
+};
+
+// ==========================================
+// FETCH ANOTHER USER'S PHOTO AS BLOB
+// GET /user/{id}/dp  (auth-protected)
+// ==========================================
+export const getUserDp = async (userId) => {
+  const response = await api.get(`/user/${userId}/dp`, { responseType: "blob" });
+  return response.data;
+};
+
+
+export const fetchProfileData = async () => {
+  const res = await api.get("/me");
+  return res.data;
+}
