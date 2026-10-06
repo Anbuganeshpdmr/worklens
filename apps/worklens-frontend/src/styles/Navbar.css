@@ -224,3 +224,34 @@
 .timer-inactive svg {
   opacity: 0.7;
 }
+
+/* Error Timer */
+.timer-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: help;
+}
+
+.timer-error__icon {
+  color: #ff2d2d;
+  animation: alarmPulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes alarmPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.12);
+  }
+}

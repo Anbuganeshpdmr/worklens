@@ -7,6 +7,7 @@ import { getStatusByRecord } from "../../api/status";
 import { flattenSprintActivity } from "../sprint-activities/SprintActivityMapper";
 import { flattenEntry } from "../entries/entryMapper";
 import { getEntry } from "../../api/entry";
+import { useEntryContext } from "../../context/EntryContext";
 
 export default function CloseTestEntryModal({
   onClose,
@@ -25,6 +26,9 @@ export default function CloseTestEntryModal({
   );
   const [remarks, setRemarks] = useState("");
   const [statuses, setStatuses] = useState(null);
+  const [error, setError] = useState(null);
+
+  const { notifyEntryChange } = useEntryContext();
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -74,7 +78,7 @@ export default function CloseTestEntryModal({
         const entryResponse = await getEntry(selectedEntry.id);
         const updatedEntry = flattenEntry(entryResponse.data || entryResponse);
         onUpdateEntry(updatedEntry);
-        console.log("updated Entry: ", response);
+        console.log("updated Entry: ", updatedEntry);
       } else {
         // API succeeded
         console.log("updated SA: ", response);
@@ -82,11 +86,14 @@ export default function CloseTestEntryModal({
         onUpdateSprintActivity(updated_SA);
       }
       // API succeeded
+      notifyEntryChange(); // Notify that an entry has changed
+      setError(null);
       onClose();
     } catch (error) {
       // Don't close this modal
       // Global error handling will show the error
-      console.log("API failed", error);
+      console.error("API failed", error.message);
+      setError(error.message);
     }
   };
 
@@ -107,6 +114,11 @@ export default function CloseTestEntryModal({
               </div>
 
               <div className="modal-body">
+                {error && (
+                  <div className="alert alert-danger" role="alert">
+                    {error}
+                  </div>
+                )}
                 <p>Hello from the modal</p>
                 {/* Remarks */}
                 <div className="mb-3">

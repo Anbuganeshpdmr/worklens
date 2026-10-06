@@ -1,19 +1,31 @@
 import { useState } from "react";
 import { closeGeneralActivity } from "../../api/entry";
+import { useEntryContext } from "../../context/EntryContext";
+import { flattenEntry } from "../entries/entryMapper";
 
-export default function CloseGeneralEntryModal({ onClose, entry }) {
+export default function CloseGeneralEntryModal({
+  onClose,
+  entry,
+  onUpdateEntry,
+}) {
   const [remarks, setRemarks] = useState("");
+  const { notifyEntryChange } = useEntryContext();
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const response = {
+      const request = {
         entryId: entry.id,
         remarks,
       };
-      console.log("close entry: ", response);
-      await closeGeneralActivity(response);
+      console.log("close entry: ", request);
+      const entryResponse = await closeGeneralActivity(request);
+      const updatedEntry = flattenEntry(entryResponse.data || entryResponse);
+      onUpdateEntry(updatedEntry);
+      console.log("updated Entry: ", updatedEntry);
 
       // API succeeded
+      notifyEntryChange(); // Notify that an entry has changed
       onClose();
     } catch (error) {
       // Don't close this modal

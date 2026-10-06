@@ -102,11 +102,6 @@ const ROLE_MENUS = {
   MEMBER: [
     { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     {
-      label: "Entry Dashboard",
-      path: "/entry-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
-    {
       label: "My Entries",
       path: "/my-entries",
       icon: "/icons/entries.png",

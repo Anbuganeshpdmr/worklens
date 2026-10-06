@@ -12,6 +12,7 @@ import { startGeneralActivity } from "../api/entry";
 import AddGenActivityModal from "../components/activities/AddGenActivityModal";
 import EditGenActivityModal from "../components/activities/EditGenActivityModal";
 import "../styles/activities/GeneralActivitiesPage.css";
+import { useEntryContext } from "../context/EntryContext";
 
 export default function GeneralActivitiesPage() {
   const [activities, setActivities] = useState([]);
@@ -24,6 +25,8 @@ export default function GeneralActivitiesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
+
+  const { notifyEntryChange } = useEntryContext();
 
   useEffect(() => {
     let mounted = true;
@@ -122,11 +125,10 @@ export default function GeneralActivitiesPage() {
   }, [activities, searchTerm, selectedCategoryIds]);
 
   const startEntry = async (activity) => {
-    console.log("Clicked Activity");
-    console.log(activity);
     console.log("Activity: ", activity.activityId);
     try {
       await startGeneralActivity(activity.activityId);
+      notifyEntryChange(); // Notify the context about the new entry
     } catch (error) {
       setError(error.message);
       console.error(error.message);
@@ -179,7 +181,8 @@ export default function GeneralActivitiesPage() {
     );
   };
 
-  const isFiltered = Boolean(searchTerm.trim()) || selectedCategoryIds.length > 0;
+  const isFiltered =
+    Boolean(searchTerm.trim()) || selectedCategoryIds.length > 0;
 
   return (
     <div className="gen-act-page">
@@ -230,7 +233,8 @@ export default function GeneralActivitiesPage() {
           <p className="gen-act-eyebrow">Workflow / Activities</p>
           <h1 className="gen-act-title">General Activities</h1>
           <p className="gen-act-subtitle">
-            Manage routine tasks, administrative activities, and non-project entries.
+            Manage routine tasks, administrative activities, and non-project
+            entries.
           </p>
         </div>
 

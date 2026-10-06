@@ -31,6 +31,6 @@ export async function startSprintActivity(sprintActivityId) {
   return apiClient.post(`/sprint_activity/${sprintActivityId}/start`);
 }
 
-export async function stopSprintActivity(response) {
-  return apiClient.post(`/sprint_activity/stop`, response);
+export async function stopSprintActivity(request) {
+  return apiClient.post(`/sprint_activity/stop`, request);
 }

@@ -32,3 +32,7 @@ export async function getEntry(id) {
   console.log("Fetching Entry details for ID:", id);
   return apiClient.get(`/entry/${id}`);
 }
+
+export async function getOpenEntry() {
+  return apiClient.get(`/entry/open`);
+}

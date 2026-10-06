@@ -123,6 +123,7 @@ export default function EntryDashboardList({
           <CloseGeneralEntryModal
             onClose={() => setShowModal(false)}
             entry={selectedEntry}
+            onUpdateEntry={handleUpdateEntry}
           />
         ))}
       <div className="edl-table-pane">

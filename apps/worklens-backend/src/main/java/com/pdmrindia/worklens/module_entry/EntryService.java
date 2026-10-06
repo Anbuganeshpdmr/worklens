@@ -206,7 +206,7 @@ public class EntryService {
         List<Entry> entries = entryRepo.findByUserAndEndTimeIsNull(currentUserService.user());
         System.out.println("UNFINISHED ENTRIES = " + entries.size());
         if(entries.size()>0){
-            //throw new EntryException.UnclosedEntryException("Kindly close previous entries!");
+            throw new EntryException.UnclosedEntryException("Kindly close previous entries!");
         }
     }
 

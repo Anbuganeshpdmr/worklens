@@ -2,15 +2,10 @@ import { useEffect, useState } from "react";
 import "../styles/Navbar.css";
 import { testingQuotes } from "../data/quotes";
 import { useUser } from "../context/UserContext";
-import { Timer as TimerIcon } from "lucide-react";
-
-const sampleEntry = {
-  activityDate: "2026-09-30",
-  startTime: "11:45:17",
-  endTime: null,
-  duration: null,
-  statusDisplayName: "in-process",
-};
+import { Timer as TimerIcon, AlarmClock } from "lucide-react";
+import { useEntryContext } from "../context/EntryContext";
+import { getOpenEntry } from "../api/entry";
+import { flattenEntry } from "./entries/entryMapper";
 
 const QUOTE_INTERVAL = 2 * 60 * 1000;
 
@@ -47,9 +42,7 @@ function loadQuote(setQuote) {
   }
 
   // Otherwise select a new random quote
-  const randomIndex = Math.floor(
-    Math.random() * testingQuotes.length
-  );
+  const randomIndex = Math.floor(Math.random() * testingQuotes.length);
 
   const newQuote = testingQuotes[randomIndex];
 
@@ -59,26 +52,18 @@ function loadQuote(setQuote) {
   localStorage.setItem("navbarQuoteTime", now.toString());
 }
 
-// Open entry function
-async function fetchOpenEntry(setOpenEntry) {
-  
-  setOpenEntry(null);
-  //setOpenEntry(sampleEntry);
-}
-
 function Navbar({ onMenuClick }) {
   const { user } = useUser();
 
   const [quote, setQuote] = useState("");
   const [greeting, setGreeting] = useState("");
   const [openEntry, setOpenEntry] = useState(null);
+  const [entryError, setEntryError] = useState(null);
+
+  const { entryVersion } = useEntryContext();
 
   const displayName =
-    user?.name ||
-    user?.fullName ||
-    user?.username ||
-    user?.userId ||
-    "User";
+    user?.name || user?.fullName || user?.username || user?.userId || "User";
 
   useEffect(() => {
     // Greeting based on current time
@@ -88,17 +73,35 @@ function Navbar({ onMenuClick }) {
     loadQuote(setQuote);
 
     // Check every 2 minutes
-    const timer = setInterval(() => {
+    const quoteTimer = setInterval(() => {
       loadQuote(setQuote);
     }, QUOTE_INTERVAL);
 
     // Cleanup timer
-    return () => clearInterval(timer);
+    return () => clearInterval(quoteTimer);
   }, []);
 
   useEffect(() => {
-    fetchOpenEntry(setOpenEntry);
-  }, []);
+    const fetchOpenEntry = async () => {
+      try {
+        setEntryError(null);
+        const entry = await getOpenEntry();
+
+        if (!entry || !entry.data) {
+          setOpenEntry(null);
+          return;
+        }
+        const flattenedEntry = flattenEntry(entry.data || entry);
+        setOpenEntry(flattenedEntry);
+      } catch (err) {
+        setOpenEntry(null);
+        setEntryError(err?.response?.data?.message || err?.message || "Failed to fetch open entry");
+      }
+    };
+
+    fetchOpenEntry();
+  }, [entryVersion]);
+
 
   return (
     <nav className="navbar">
@@ -131,24 +134,25 @@ function Navbar({ onMenuClick }) {
 
       {/* Right Section */}
       <div className="navbar__right">
-
         {/* Quote */}
-        <div className="navbar__quote">
-          {quote}
-        </div>
+        <div className="navbar__quote">{quote}</div>
 
         {/* entry timer */}
         <div className="navbar__timer">
-          {openEntry ? (
+          {entryError ? (
+            <span className="timer-error" title={entryError}>
+              <AlarmClock size={17} strokeWidth={1.8} className="timer-error__icon" />
+              No active entry
+            </span>
+          ) : openEntry ? (
             <Timer key={openEntry.id} entry={openEntry} />
           ) : (
             <span className="timer-inactive">
               <TimerIcon size={17} strokeWidth={1.8} />
-                No active entry
-              </span>
+              No active entry
+            </span>
           )}
         </div>
-
       </div>
     </nav>
   );
@@ -166,17 +170,13 @@ function Timer({ entry }) {
   }, []);
 
   const startDateTime = new Date(
-    `${entry.activityDate}T${entry.startTime}`
+    `${entry.activityDate}T${entry.startTime}`,
   ).getTime();
 
-  const elapsedSeconds = Math.floor(
-    (now - startDateTime) / 1000
-  );
+  const elapsedSeconds = Math.max(0, Math.floor((now - startDateTime) / 1000));
 
   const hours = Math.floor(elapsedSeconds / 3600);
-  const minutes = Math.floor(
-    (elapsedSeconds % 3600) / 60
-  );
+  const minutes = Math.floor((elapsedSeconds % 3600) / 60);
   const seconds = elapsedSeconds % 60;
 
   const formattedTime = [hours, minutes, seconds]
@@ -184,13 +184,13 @@ function Timer({ entry }) {
     .join(":");
 
   return (
-  <span className="timer-active">
-    <span className="timer-icon">
-      <TimerIcon size={17} strokeWidth={1.8} />
+    <span className="timer-active">
+      <span className="timer-icon">
+        <TimerIcon size={17} strokeWidth={1.8} />
+      </span>
+      {formattedTime}
     </span>
-    {formattedTime}
-  </span>
-);
+  );
 }
 
 export default Navbar;

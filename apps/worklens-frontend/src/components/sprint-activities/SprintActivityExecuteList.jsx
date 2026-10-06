@@ -7,6 +7,7 @@ import { flattenSprintActivity } from "./SprintActivityMapper";
 import ExecuteListHeader from "./ExecuteListHeader";
 import CloseTestEntryModal from "../entries/CloseTestEntryModal";
 import "../../styles/sprint-activities/SprintActivityExecuteList.css";
+import { useEntryContext } from "../../context/EntryContext";
 
 /* ── Default / empty filter state ──────────────────────────────────────── */
 const EMPTY_FILTERS = {
@@ -115,6 +116,8 @@ export default function SprintActivityExecuteList({ sprint }) {
   const [selectedSprintActivity, setSelectedSprintActivity] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const { notifyEntryChange } = useEntryContext();
+
   /* ── Fetch ── */
   const fetchSprintActivities = async () => {
     setLoading(true);
@@ -155,6 +158,7 @@ export default function SprintActivityExecuteList({ sprint }) {
           a.sprintActivityId === updated.sprintActivityId ? updated : a,
         ),
       );
+      notifyEntryChange();
     } catch (err) {
       setError(err?.message || "Failed to start entry.");
     }
