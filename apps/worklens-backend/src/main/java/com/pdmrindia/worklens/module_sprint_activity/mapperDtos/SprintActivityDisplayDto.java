@@ -14,6 +14,10 @@ public class SprintActivityDisplayDto {
 
     private Long version;
 
+    private Long entryId;
+
+    private String currentUser;
+
     private SimpleSprintInfoDto simpleSprintInfo;
 
     private ActivityDisplayDto simpleActivityInfo;

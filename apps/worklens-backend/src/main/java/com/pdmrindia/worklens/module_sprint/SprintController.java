@@ -1,5 +1,6 @@
 package com.pdmrindia.worklens.module_sprint;
 
+import com.pdmrindia.worklens.config.Permissions;
 import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.EditSprintDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.NewSprintReqDto;
@@ -7,6 +8,7 @@ import com.pdmrindia.worklens.module_sprint.mapperDtos.SprintDisplayDto;
 import com.pdmrindia.worklens.module_sprint.mapperDtos.SprintDisplayDtoMapper;
 import com.pdmrindia.worklens.module_status.StatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,28 +24,33 @@ public class SprintController {
     private final StatusService statusService;
 
 
+    @PreAuthorize(Permissions.FHTL)
     @PostMapping("/sprints")
     public SprintDisplayDto createSprint(@RequestBody NewSprintReqDto newSprintReqDto){
         Sprint createdSprint = sprintService.createNewSprint(newSprintReqDto);
         return sprintDisplayDtoMapper.getSprintDisplayDto(createdSprint);
     }
 
+    @PreAuthorize(Permissions.FHTL)
     @PutMapping("/sprints/{id}")
     public SprintDisplayDto editSprint(@RequestBody EditSprintDto sprintDto){
         Sprint updatedSprint = sprintService.editSprint(sprintDto);
         return sprintDisplayDtoMapper.getSprintDisplayDto(updatedSprint);
     }
 
+    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/sprints/{id}")
     public SprintDisplayDto getSprint(@PathVariable("id") int sprintId){
         return sprintDisplayDtoMapper.getSprintDisplayDto(sprintService.getSprintById(sprintId));
     }
 
+    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/sprints")
     public List<SprintDisplayDto> getAllSprints(){
         return sprintRepo.findAll().stream().map(sprintDisplayDtoMapper::getSprintDisplayDto).toList();
     }
 
+    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/sprints/active")
     public List<SprintDisplayDto> getAllActiveSprints(){
         return sprintRepo.findByStatus(statusService.getRecordStatusByName(Record.SPRINT,"active"))

@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import ModalSelect from "../components/ModalSelect";
 import "../styles/Modal.css";
-import { getAllowedSprintStatuses } from "../api/sprints";
+import {
+  getAllowedSprintStatuses,
+  getIndividualSprintDetails,
+} from "../api/sprints";
 
 function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
   const [sprintName, setSprintName] = useState("");
@@ -9,21 +13,61 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!sprint || !isOpen) return;
+    let isCurrent = true;
+
+    if (!sprint || !isOpen) {
+      setStatusId("");
+      return () => {
+        isCurrent = false;
+      };
+    }
 
     setSprintName(sprint.sprintName || sprint.name || "");
-    setStatusId(sprint.currentStatus?.recordStatusId || "");
+    setStatusId("");
+    setStatuses([]);
+    setError("");
 
-    const fetchStatuses = async () => {
+    const fetchEditData = async () => {
+      const sprintId = sprint.id || sprint.sprintId;
+
+      try {
+        const details = await getIndividualSprintDetails(sprintId);
+        const currentStatus = details?.currentStatus;
+        const currentStatusId =
+          currentStatus?.statusId ??
+          currentStatus?.StatusId ??
+          details?.statusId ??
+          details?.StatusId ??
+          "";
+
+        if (isCurrent) {
+          setStatusId(currentStatusId ? String(currentStatusId) : "");
+        }
+      } catch (err) {
+        if (isCurrent) {
+          setStatusId("");
+          setError(err.message || "Failed to load sprint status.");
+        }
+      }
+
       try {
         const data = await getAllowedSprintStatuses();
-        setStatuses(data);
+
+        if (isCurrent) {
+          setStatuses(data);
+        }
       } catch (err) {
-        setError(err.message || "Failed to load statuses.");
+        if (isCurrent) {
+          setError(err.message || "Failed to load statuses.");
+        }
       }
     };
 
-    fetchStatuses();
+    fetchEditData();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [sprint, isOpen]);
 
   const handleSubmit = async (e) => {
@@ -35,11 +79,16 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
       return;
     }
 
+    if (!statusId) {
+      setError("Please select a status.");
+      return;
+    }
+
     try {
       await onSave({
         sprintId: sprint.id || sprint.sprintId,
         sprintName: sprintName.trim(),
-        selectedRecordStatusId: Number(statusId),
+        selectedStatusId: Number(statusId),
       });
     } catch (err) {
       setError(err.message || "Failed to update sprint.");
@@ -118,24 +167,18 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
                 Status
               </label>
 
-              <select
+              <ModalSelect
                 id="editSprintStatus"
-                className="modal-input"
                 value={statusId}
-                onChange={(e) => setStatusId(e.target.value)}
+                onChange={setStatusId}
+                options={statuses.map((item) => ({
+                  value: String(item.StatusId ?? item.statusId),
+                  label: item.displayName ?? item.statusName,
+                }))}
+                placeholder="Select Status"
+                ariaLabel="Status"
                 disabled={isLoading}
-              >
-                <option value="">Select Status</option>
-
-                {statuses.map((item) => (
-                  <option
-                    key={item.recordStatusId}
-                    value={item.recordStatusId}
-                  >
-                    {item.statusName}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
 

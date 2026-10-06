@@ -11,6 +11,7 @@
   padding: 1.5rem 1.75rem 0;
   overflow-y: auto;
   overflow-x: hidden;
+  background: #ffffff;
 }
 
 .project-page__header {
@@ -59,9 +60,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid #0b4fd6;
+  border: 1px solid #970b3f;
   background: transparent;
-  color: #0b4fd6;
+  color: #970b3f;
   min-width: 150px;
 }
 
@@ -70,10 +71,10 @@
 }
 
 .project-page__action--primary {
-  background: #0d53d8;
-  border-color: #0d53d8;
+  background: #970b3f;
+  border-color: #970b3f;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(13, 83, 216, 0.22);
+  box-shadow: 0 4px 12px rgba(151, 11, 63, 0.22);
 }
 
 .project-page__action--secondary {
@@ -122,8 +123,8 @@
 }
 
 .project-page__tab--active {
-  color: #0b4fd6;
-  border-bottom-color: #0b4fd6;
+  color: #970b3f;
+  border-bottom-color: #970b3f;
   font-weight: 600;
 }
 

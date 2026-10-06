@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ModalSelect from "../components/ModalSelect";
 import "../styles/Modal.css";
 
 function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
@@ -6,6 +7,12 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
   const [sprintName, setSprintName] = useState("");
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
+  const projectOptions = [
+    ...projects.map((project) => ({
+      value: String(project.projectId),
+      label: project.projectName,
+    })),
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,23 +103,17 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
                   <label htmlFor="projectSelect" className="modal-label">
                     Project
                   </label>
-                  <select
+                  <ModalSelect
                     id="projectSelect"
-                    className={`modal-input modal-select${
-                      errors.project ? " modal-input--error" : ""
-                    }`}
                     value={selectedProject}
-                    onChange={(e) => setSelectedProject(e.target.value)}
+                    onChange={setSelectedProject}
+                    options={projectOptions}
+                    placeholder="Select a project"
+                    ariaLabel="Project"
+                    className={errors.project ? "modal-input--error" : ""}
                     disabled={isLoading || projects.length === 0}
                     autoFocus
-                  >
-                    <option value="">Select a project</option>
-                    {projects.map((project) => (
-                      <option key={project.projectId} value={project.projectId}>
-                        {project.projectName}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {errors.project && (
                     <div className="modal-error-message">{errors.project}</div>
                   )}

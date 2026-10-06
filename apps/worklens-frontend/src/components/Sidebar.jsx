@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 import "../styles/Sidebar.css";
 
 // Menu items per role.
@@ -15,73 +16,78 @@ const ROLE_MENUS = {
   ],
 
   FH: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     {
-      label: "Record Status",
-      path: "/record-status",
-      icon: "/icons/recordStatus.png",
+      label: "Entry Dashboard",
+      path: "/entry-dashboard",
+      icon: "/icons/reportDashboard.png",
     },
     {
-      label: "Sprint Management",
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
     {
-      label: "Activity Type",
-      path: "/activity-type",
-      icon: "/icons/activityType.png",
+      label: "Status",
+      path: "/status",
+      icon: "/icons/status.png",
     },
-    //{ label: "Activities", path: "/activities", icon: "/icons/activities.png" },
     {
       label: "General Activity",
       path: "/general-activity",
       icon: "/icons/general.png",
     },
-    //{ label: "Sprint", path: "/sprint", icon: "/icons/sprint.png" },
-    //{ label: "Activity Movements", path: "/activity-movements", icon: "/icons/activityMovements.png" },
+    {
+      label: "Category & Types",
+      path: "/category-type",
+      icon: "/icons/category.png",
+    },
     {
       label: "User Management",
       path: "/user-management",
       icon: "/icons/userManagement.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 
   TL: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     {
       label: "Entry Dashboard",
       path: "/entry-dashboard",
+      icon: "/icons/reportDashboard.png",
+    },
+    {
+      label: "My Entries",
+      path: "/my-entries",
       icon: "/icons/entries.png",
     },
     {
-      label: "Record Status",
-      path: "/record-status",
-      icon: "/icons/recordStatus.png",
-    },
-    {
-      label: "Sprint Management",
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
     {
-      label: "Activity Type",
-      path: "/activity-type",
-      icon: "/icons/activityType.png",
+      label: "Status",
+      path: "/status",
+      icon: "/icons/status.png",
     },
     {
       label: "General Activity",
       path: "/general-activity",
       icon: "/icons/general.png",
+    },
+    {
+      label: "Category & Types",
+      path: "/category-type",
+      icon: "/icons/category.png",
     },
     {
       label: "User Management",
@@ -89,20 +95,19 @@ const ROLE_MENUS = {
       icon: "/icons/userManagement.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 
   MEMBER: [
-    { label: "Home", path: "/home", icon: "/icons/home.png" },
-    { label: "Entries", path: "/entries", icon: "/icons/entries.png" },
+    { label: "Home", path: "/homepage", icon: "/icons/home.png" },
     {
-      label: "Sprint Management",
+      label: "My Entries",
+      path: "/my-entries",
+      icon: "/icons/entries.png",
+    },
+    {
+      label: "Projects & Sprints",
       path: "/projects",
       icon: "/icons/projectSprint.png",
     },
@@ -112,17 +117,12 @@ const ROLE_MENUS = {
       icon: "/icons/general.png",
     },
     { label: "Resource", path: "/resource", icon: "/icons/resource.png" },
-    {
-      label: "Report Dashboard",
-      path: "/report-dashboard",
-      icon: "/icons/reportDashboard.png",
-    },
     { label: "Profile", path: "/profile", icon: "/icons/profile1.png" },
     { label: "Logout", icon: "/icons/logout.png" },
   ],
 };
 
-function normalizeRole(role) {
+export function normalizeRole(role) {
   const roleValue =
     typeof role === "object"
       ? role?.name || role?.roleName || role?.role
@@ -140,6 +140,7 @@ function normalizeRole(role) {
 
 function Sidebar({ role, collapsed }) {
   const location = useLocation();
+  const { user, logoutUser } = useUser();
   const normalizedRole = normalizeRole(role);
 
   const menuItems = ROLE_MENUS[normalizedRole] ?? ROLE_MENUS["MEMBER"];
@@ -154,8 +155,14 @@ function Sidebar({ role, collapsed }) {
               <button
                 className="sidebar__nav-item sidebar__logout-btn"
                 onClick={() => {
+                  console.log("User before logout:", user);
+                  const loggedOutUser = user;
+                  logoutUser();
+                  console.log("Logged out user:", loggedOutUser);
                   localStorage.removeItem("token");
                   localStorage.removeItem("userInfo");
+                  localStorage.removeItem("navbarQuote");
+                  localStorage.removeItem("navbarQuoteTime");
                   window.location.replace("/");
                 }}
               >
@@ -164,13 +171,13 @@ function Sidebar({ role, collapsed }) {
                   alt={item.label}
                   className="sidebar__icon"
                 />
-                <span>{item.label}</span>
+                <span data-label={item.label}>{item.label}</span>
               </button>
             ) : (
               <a
                 href={item.path}
                 className={`sidebar__nav-item${
-                  location.pathname === item.path
+                  location.pathname === item.path.split("?")[0]
                     ? " sidebar__nav-item--active"
                     : ""
                 }`}
@@ -180,7 +187,7 @@ function Sidebar({ role, collapsed }) {
                   alt={item.label}
                   className="sidebar__icon"
                 />
-                <span>{item.label}</span>
+                <span data-label={item.label}>{item.label}</span>
               </a>
             )}
           </li>

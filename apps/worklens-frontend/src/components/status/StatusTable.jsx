@@ -1,101 +1,66 @@
 
-export default function StatusTable({
-    statuses,
-    onEdit
-}) {
-
+const StatusTable = ({ statuses, onEdit, onApplicableChange }) => {
     return (
+        <table className="status-table">
+            <thead>
+                <tr>
+                    <th>Applicable</th>
+                    <th>Display Name</th>
+                    <th>Colour</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-        <div className="status-table-wrapper">
+            <tbody>
+                {statuses.map((status) => (
+                    <tr key={status.statusId}>
+                        <td>
+                            <input
+                                type="checkbox"
+                                checked={status.applicable}
+                                readOnly
+                                disabled
+                            />
+                        </td>
 
-            <table className="status-table">
+                        <td>{status.displayName}</td>
 
-                <thead>
+                        <td>
+                            <span
+                                className="status-colour"
+                                style={{
+                                    backgroundColor: status.colourCode,
+                                }}
+                            />
+                        </td>
 
-                    <tr>
-
-                        <th>
-                            Name
-                        </th>
-
-                        <th>
-                            Colour
-                        </th>
-
-                        <th>
-                            Edit
-                        </th>
-
+                        <td>
+                            <button
+                                type="button"
+                                onClick={() => onEdit(status)}
+                                aria-label={`Edit ${status.displayName}`}
+                            >
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                </svg>
+                            </button>
+                        </td>
                     </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {statuses.map((status) => (
-
-                        <tr key={status.id}>
-
-                            <td>
-                                {status.name}
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    className="status-colour"
-                                    style={{
-                                        backgroundColor:
-                                            status.colourCode
-                                    }}
-                                    title={
-                                        status.colourCode
-                                    }
-                                />
-
-                            </td>
-
-
-                            <td>
-
-                                <button
-    className="status-edit-button"
-    onClick={() =>
-        onEdit(status)
-    }
-    title="Edit"
-    type="button"
->
-    <svg
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.9"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-    >
-        <path d="M13.5 6.5L17.5 10.5" />
-        <path d="M4 20h4l10.5-10.5a2.83 2.83 0 0 0-4-4L4 16v4Z" />
-    </svg>
-</button>
-                            </td>
-
-                        </tr>
-
-                    ))}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
+                ))}
+            </tbody>
+        </table>
     );
+};
 
-}
+export default StatusTable;
 

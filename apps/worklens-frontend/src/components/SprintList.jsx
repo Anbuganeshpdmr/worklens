@@ -11,6 +11,7 @@ function SprintList({
   onEdit,
 }) {
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [activeTabs, setActiveTabs] = useState({});
 
   if (isLoading) {
     return <div className="sprint-list__loader">Loading sprints...</div>;
@@ -28,8 +29,13 @@ function SprintList({
     <div className="sprint-list">
       {sprints.map((sprint, index) => {
         const sprintId = sprint.id || sprint.sprintId;
-        const statusColor = sprint.currentStatus?.colourCode;
-        const statusName = sprint.currentStatus?.statusName;
+        const statusColor = sprint.currentStatus?.colourCode || "#EAEAEA";
+        const statusName = sprint.currentStatus?.displayName || "";
+
+        const activeTab = activeTabs[sprintId] || "status";
+
+        const countItems =
+          activeTab === "status" ? sprint.statusCounts || [] : sprint.typeCounts || [];
 
         return (
           <div
@@ -135,6 +141,62 @@ function SprintList({
               </div>
             </div>
 
+            <div className="sprint-card__counts-row">
+              <div className="sprint-card__counts">
+                {countItems.length > 0 ? (
+                  countItems.map((item) => (
+                    <span
+                       key={item.name}
+                      className="sprint-card__count-item"
+                    >
+                      <span className="sprint-card__count-name">
+                        {item.name}
+                      </span>
+
+                      <span className="sprint-card__count-value">
+                        : {item.count}
+                      </span>
+                  </span>
+              ))
+            ) : (
+              <span className="sprint-card__no-counts">
+                No {activeTab} data available
+              </span>
+            )}
+          </div>
+
+            <div className="sprint-card__count-tabs">
+              <button
+                type="button"
+                className={`sprint-card__count-tab ${
+                  activeTab === "status" ? "active" : ""
+                }`}
+              onClick={() =>
+                setActiveTabs((prev) => ({
+                  ...prev,
+                  [sprintId]: "status",
+                }))
+              }
+            >
+              Status
+            </button>
+
+            <button
+              type="button"
+              className={`sprint-card__count-tab ${
+                activeTab === "type" ? "active" : ""
+              }`}
+              onClick={() =>
+                setActiveTabs((prev) => ({
+                  ...prev,
+                  [sprintId]: "type",
+                }))
+              }
+          >
+            Type
+          </button>
+        </div>
+      </div>
             <div className="sprint-card__body">
               {sprint.startDate && (
                 <div className="sprint-card__field">

@@ -40,6 +40,10 @@ public class SprintActivity {
     @OneToMany(mappedBy = "sprintActivity")
     private List<Entry> entries = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "current_entry_id")
+    private Entry currentEntry;
+
     @Version
     private Long version;
 

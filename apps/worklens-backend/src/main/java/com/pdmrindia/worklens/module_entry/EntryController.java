@@ -1,5 +1,6 @@
 package com.pdmrindia.worklens.module_entry;
 
+import com.pdmrindia.worklens.config.Permissions;
 import com.pdmrindia.worklens.module_entry.filter.EntryFilterRequest;
 import com.pdmrindia.worklens.module_entry.mapperDtos.CloseGeneralEntryDto;
 import com.pdmrindia.worklens.module_entry.mapperDtos.CloseWorkEntryDto;
@@ -10,6 +11,7 @@ import com.pdmrindia.worklens.module_user.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,7 +27,7 @@ public class EntryController {
     private final EntryDisplayDtoMapper entryDisplayDtoMapper;
     private final CurrentUserService currentUserService;
 
-    @PostMapping("/entry/work/{sprintActivityId}")
+    /*@PostMapping("/entry/work/{sprintActivityId}")
     public EntryDisplayDto createNewWorkEntry(@PathVariable("sprintActivityId") int sprintActivityId){
         Entry entry = entryService.createNewWorkEntry(sprintActivityId);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
@@ -35,21 +37,23 @@ public class EntryController {
     public EntryDisplayDto closeWorkEntry(@RequestBody CloseWorkEntryDto closeWorkEntryDto){
         Entry entry = entryService.closeWorkEntry(closeWorkEntryDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
-    }
+    }*/
 
+    @PreAuthorize(Permissions.FHTLUSER)
     @PostMapping("/entry/general/{activityId}")
     public EntryDisplayDto createNewGeneralEntry(@PathVariable("activityId") int activityId){
         Entry entry = entryService.createNewGeneralEntry(activityId);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
+    @PreAuthorize(Permissions.FHTLUSER)
     @PutMapping("/entry/general")
     public EntryDisplayDto closeGeneralEntry(@RequestBody CloseGeneralEntryDto closeGeneralEntryDto){
         Entry entry = entryService.closeGeneralEntry(closeGeneralEntryDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
-    @PostMapping("/entry/me/today")
+    /*@PostMapping("/entry/me/today")
     public Page<EntryDisplayDto> getUserTodayEntries(Pageable pageable){
 
         EntryFilterRequest request = new EntryFilterRequest();
@@ -72,12 +76,45 @@ public class EntryController {
 
         Page<Entry> entryPage = entryService.search(request, pageable);
         return entryPage.map(entryDisplayDtoMapper::getEntryDisplayDto);
+    }*/
+
+    @PreAuthorize(Permissions.FHTLUSER)
+    @GetMapping("/entry/open")
+    public EntryDisplayDto getUserOpenEntry(){
+        Entry entry = entryService.getUserCurrentEntry();
+        return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
+    //  Paginated
+    @PreAuthorize(Permissions.FHTLUSER)
     @PostMapping("/entry/search")
     public Page<EntryDisplayDto> search(@RequestBody EntryFilterRequest request, Pageable pageable) {
+        if(currentUserService.user().getRole().getName().equalsIgnoreCase("member")){
+            request.setUserIds(List.of(currentUserService.user().getId()));
+        }
         Page<Entry> entryPage = entryService.search(request, pageable);
         return entryPage.map(entryDisplayDtoMapper::getEntryDisplayDto);
+    }
+
+    //  Not-Paginated
+    @PreAuthorize(Permissions.FHTLUSER)
+    @PostMapping("/entry/fetch")
+    public List<EntryDisplayDto> search(@RequestBody EntryFilterRequest request) {
+        if(currentUserService.user().getRole().getName().equalsIgnoreCase("member")){
+            request.setUserIds(List.of(currentUserService.user().getId()));
+        }
+        List<Entry> entries = entryService.fetch(request);
+
+        return entries.stream()
+                .map(entryDisplayDtoMapper::getEntryDisplayDto)
+                .toList();
+    }
+
+    @PreAuthorize(Permissions.FHTLUSER)
+    @GetMapping("/entry/{id}")
+    public EntryDisplayDto getEntry(@PathVariable("id") long id){
+        Entry entry = entryService.getEntryById(id);
+        return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 
 }

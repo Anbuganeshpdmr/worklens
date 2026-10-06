@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getIndividualProjectDetails } from "../api/projects";
 import { mapProjectDetails } from "../components/activities/projectMapper";
 import ActivityList from "../components/activities/ActivityList";
+import Project_SprintPage from "./Project_SprintPage";
 
 function ActivitiesPage() {
   const { projectId } = useParams();
@@ -77,11 +78,8 @@ function ActivitiesPage() {
           {activeTab === "activities" && <ActivityList projectId={projectId} />}
 
           {activeTab === "sprints" && (
-            <h1>
-              List of Sprints with Metrics under this Project
-              <p>-- Under Development --</p>
-            </h1>
             // <SeparateComponent projectId={projectId} />
+            <Project_SprintPage projectId={projectId}/>
           )}
         </div>
       </main>

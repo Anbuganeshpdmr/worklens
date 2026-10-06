@@ -62,6 +62,7 @@ public class UserService {
 
         Status updatedStatus = statusService.getStatusById(updatedUserInfoDto.getSelectedStatusId());
         statusService.validateRecordStatusOfRecord(Record.MEMBER,updatedStatus);
+        user.setStatus(updatedStatus);
 
         if(updatedUserInfoDto.getName().trim().length()<2) throw new UserException.ShortUserNameException("Username should be minimum 2 characters");
 
@@ -116,7 +117,7 @@ public class UserService {
     public User changeProfilePic(MultipartFile profilePic, boolean isDpChanged) {
         User user = currentUserService.user();
         if(isDpChanged){
-            if(profilePic.isEmpty()){
+            if(profilePic==null){
                 user.setDpPath(null);
             }else{
                 if (!profilePicConfig.getAllowedTypes().contains(profilePic.getContentType())) {

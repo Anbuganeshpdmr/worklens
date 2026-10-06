@@ -46,6 +46,7 @@ public class Entry {
     private User user;
 
     private LocalDate activityDate;
+    private LocalDate activityEndDate;
     private LocalTime startTime;
     private LocalTime endTime;
     private Duration duration;

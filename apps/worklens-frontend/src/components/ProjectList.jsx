@@ -27,7 +27,7 @@ function ProjectList({
   return (
     <div className="project-list">
       {projects.map((project, index) => {
-        const statusName = project.currentStatus?.statusName || "";
+        const statusName = project.currentStatus?.displayName  || "";
         const statusColor = project.currentStatus?.colourCode || "#EAEAEA";
 
         const statusIndicatorColor = project.currentStatus?.colourCode || "#E2E3E5";
@@ -158,53 +158,32 @@ function ProjectList({
 
             {/* Stats */}
             <div className="project-card__stats">
-              {project.requirementsCount !== undefined && (
-                <div className="project-card__stat">
-                  <span className="project-card__stat-value">
-                    {project.requirementsCount}
-                  </span>
+              <div className="project-card__stat">
+                <span className="project-card__stat-label">
+                  Total Sprints : 
+                </span>
+                <span className="project-card__stat-value">
+                  {project.totalSprints ?? 0}
+                </span>
+              </div>
 
-                  <span className="project-card__stat-label">
-                    Requirements
-                  </span>
-                </div>
-              )}
+              <div className="project-card__stat">
+                <span className="project-card__stat-label">
+                  Total Activities : 
+                </span>
+                <span className="project-card__stat-value">
+                  {project.totalActivities ?? 0}
+                </span>   
+              </div>
 
-              {project.activitiesCount !== undefined && (
-                <div className="project-card__stat">
-                  <span className="project-card__stat-value">
-                    {project.activitiesCount}
-                  </span>
-
-                  <span className="project-card__stat-label">
-                    Activities
-                  </span>
-                </div>
-              )}
-
-              {project.testRunsCount !== undefined && (
-                <div className="project-card__stat">
-                  <span className="project-card__stat-value">
-                    {project.testRunsCount}
-                  </span>
-
-                  <span className="project-card__stat-label">
-                    Test Runs
-                  </span>
-                </div>
-              )}
-
-              {project.openDefectsCount !== undefined && (
-                <div className="project-card__stat">
-                  <span className="project-card__stat-value">
-                    {project.openDefectsCount}
-                  </span>
-
-                  <span className="project-card__stat-label">
-                    Open Defects
-                  </span>
-                </div>
-              )}
+              <div className="project-card__stat">
+                <span className="project-card__stat-label">
+                  Active Sprints : 
+                </span>
+                <span className="project-card__stat-value">
+                  {project.activeSprints ?? 0}
+                </span>
+              </div>
             </div>
 
             {/* Actions */}
