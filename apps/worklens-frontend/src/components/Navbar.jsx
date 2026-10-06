@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/Navbar.css";
 import { testingQuotes } from "../data/quotes";
 import { useUser } from "../context/UserContext";
@@ -25,14 +25,15 @@ function updateGreeting(setGreeting) {
 }
 
 // Quote function
-function loadQuote(setQuote) {
+function loadQuote(setQuote, force = false) {
   const storedQuote = localStorage.getItem("navbarQuote");
   const storedQuoteTime = localStorage.getItem("navbarQuoteTime");
 
   const now = Date.now();
 
-  // If existing quote is still within 2 minutes, keep it
+  // If existing quote is still within 2 minutes, keep it (unless forced)
   if (
+    !force &&
     storedQuote &&
     storedQuoteTime &&
     now - Number(storedQuoteTime) < QUOTE_INTERVAL
@@ -41,10 +42,11 @@ function loadQuote(setQuote) {
     return;
   }
 
-  // Otherwise select a new random quote
-  const randomIndex = Math.floor(Math.random() * testingQuotes.length);
-
-  const newQuote = testingQuotes[randomIndex];
+  // Select a new random quote, different from the current one if possible
+  const currentQuote = storedQuote || "";
+  const pool = testingQuotes.filter((q) => q !== currentQuote);
+  const source = pool.length > 0 ? pool : testingQuotes;
+  const newQuote = source[Math.floor(Math.random() * source.length)];
 
   setQuote(newQuote);
 
@@ -60,10 +62,26 @@ function Navbar({ onMenuClick }) {
   const [openEntry, setOpenEntry] = useState(null);
   const [entryError, setEntryError] = useState(null);
 
+  const quoteIntervalRef = useRef(null);
+
   const { entryVersion } = useEntryContext();
 
   const displayName =
     user?.name || user?.fullName || user?.username || user?.userId || "User";
+
+  // Starts (or restarts) the auto-reload interval
+  const startQuoteInterval = useCallback(() => {
+    if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    quoteIntervalRef.current = setInterval(() => {
+      loadQuote(setQuote);
+    }, QUOTE_INTERVAL);
+  }, []);
+
+  // Force reload: pick a new quote immediately and reset the interval
+  const handleQuoteClick = useCallback(() => {
+    loadQuote(setQuote, true);
+    startQuoteInterval();
+  }, [startQuoteInterval]);
 
   useEffect(() => {
     // Greeting based on current time
@@ -72,14 +90,14 @@ function Navbar({ onMenuClick }) {
     // Quote settings
     loadQuote(setQuote);
 
-    // Check every 2 minutes
-    const quoteTimer = setInterval(() => {
-      loadQuote(setQuote);
-    }, QUOTE_INTERVAL);
+    // Start auto-reload interval
+    startQuoteInterval();
 
     // Cleanup timer
-    return () => clearInterval(quoteTimer);
-  }, []);
+    return () => {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    };
+  }, [startQuoteInterval]);
 
   useEffect(() => {
     const fetchOpenEntry = async () => {
@@ -135,7 +153,16 @@ function Navbar({ onMenuClick }) {
       {/* Right Section */}
       <div className="navbar__right">
         {/* Quote */}
-        <div className="navbar__quote">{quote}</div>
+        <div
+          className="navbar__quote"
+          onClick={handleQuoteClick}
+          title="Click for a new quote"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && handleQuoteClick()}
+        >
+          {quote}
+        </div>
 
         {/* entry timer */}
         <div className="navbar__timer">
