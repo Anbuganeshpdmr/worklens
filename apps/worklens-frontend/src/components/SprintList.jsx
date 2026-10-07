@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/SprintList.css";
 import { lightenHexColor } from "../utils/colorUtils";
+import SegmentedRowChart from "./../components/reports/SegmentedRowChart";
 
 function SprintList({
   sprints,
@@ -35,7 +36,9 @@ function SprintList({
         const activeTab = activeTabs[sprintId] || "status";
 
         const countItems =
-          activeTab === "status" ? sprint.statusCounts || [] : sprint.typeCounts || [];
+          activeTab === "status"
+            ? sprint.statusCounts || []
+            : sprint.typeCounts || [];
 
         return (
           <div
@@ -77,10 +80,7 @@ function SprintList({
                   <span
                     className="sprint-card__status"
                     style={{
-                      backgroundColor: lightenHexColor(
-                        statusColor,
-                        80
-                      ),
+                      backgroundColor: lightenHexColor(statusColor, 80),
                       color: statusColor,
                       borderColor: statusColor,
                     }}
@@ -95,9 +95,7 @@ function SprintList({
                     className="sprint-card__menu-btn"
                     aria-label="Sprint actions"
                     onClick={() => {
-                      setOpenMenuId(
-                        openMenuId === sprintId ? null : sprintId
-                      );
+                      setOpenMenuId(openMenuId === sprintId ? null : sprintId);
                     }}
                   >
                     ⋮
@@ -115,10 +113,7 @@ function SprintList({
                         type="button"
                         className="sprint-card__menu-item"
                         onClick={() => {
-                          console.log(
-                            "Requirements clicked",
-                            sprint
-                          );
+                          console.log("Requirements clicked", sprint);
                           setOpenMenuId(null);
                         }}
                       >
@@ -144,93 +139,81 @@ function SprintList({
             <div className="sprint-card__counts-row">
               <div className="sprint-card__counts">
                 {countItems.length > 0 ? (
-                  countItems.map((item) => (
-                    <span
-                       key={item.name}
-                      className="sprint-card__count-item"
-                    >
-                      <span className="sprint-card__count-name">
-                        {item.name}
-                      </span>
+                  <SegmentedRowChart data={countItems} />
+                ) : (
+                  // countItems.map((item) => (
+                  //   <span key={item.name} className="sprint-card__count-item">
+                  //     <span className="sprint-card__count-name">
+                  //       {item.name}
+                  //     </span>
 
-                      <span className="sprint-card__count-value">
-                        : {item.count}
-                      </span>
+                  //     <span className="sprint-card__count-value">
+                  //       : {item.count}
+                  //     </span>
+                  //   </span>
+                  // ))
+                  <span className="sprint-card__no-counts">
+                    No {activeTab} data available
                   </span>
-              ))
-            ) : (
-              <span className="sprint-card__no-counts">
-                No {activeTab} data available
-              </span>
-            )}
-          </div>
+                )}
+              </div>
 
-            <div className="sprint-card__count-tabs">
-              <button
-                type="button"
-                className={`sprint-card__count-tab ${
-                  activeTab === "status" ? "active" : ""
-                }`}
-              onClick={() =>
-                setActiveTabs((prev) => ({
-                  ...prev,
-                  [sprintId]: "status",
-                }))
-              }
-            >
-              Status
-            </button>
+              <div className="sprint-card__count-tabs">
+                <button
+                  type="button"
+                  className={`sprint-card__count-tab ${
+                    activeTab === "status" ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setActiveTabs((prev) => ({
+                      ...prev,
+                      [sprintId]: "status",
+                    }))
+                  }
+                >
+                  Status
+                </button>
 
-            <button
-              type="button"
-              className={`sprint-card__count-tab ${
-                activeTab === "type" ? "active" : ""
-              }`}
-              onClick={() =>
-                setActiveTabs((prev) => ({
-                  ...prev,
-                  [sprintId]: "type",
-                }))
-              }
-          >
-            Type
-          </button>
-        </div>
-      </div>
+                <button
+                  type="button"
+                  className={`sprint-card__count-tab ${
+                    activeTab === "type" ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setActiveTabs((prev) => ({
+                      ...prev,
+                      [sprintId]: "type",
+                    }))
+                  }
+                >
+                  Type
+                </button>
+              </div>
+            </div>
             <div className="sprint-card__body">
               {sprint.startDate && (
                 <div className="sprint-card__field">
-                  <span className="sprint-card__label">
-                    Start Date:
-                  </span>
+                  <span className="sprint-card__label">Start Date:</span>
 
                   <span className="sprint-card__value">
-                    {new Date(
-                      sprint.startDate
-                    ).toLocaleDateString("en-GB")}
+                    {new Date(sprint.startDate).toLocaleDateString("en-GB")}
                   </span>
                 </div>
               )}
 
               {sprint.endDate && (
                 <div className="sprint-card__field">
-                  <span className="sprint-card__label">
-                    End Date:
-                  </span>
+                  <span className="sprint-card__label">End Date:</span>
 
                   <span className="sprint-card__value">
-                    {new Date(
-                      sprint.endDate
-                    ).toLocaleDateString("en-GB")}
+                    {new Date(sprint.endDate).toLocaleDateString("en-GB")}
                   </span>
                 </div>
               )}
 
               {sprint.description && (
                 <div className="sprint-card__field sprint-card__field--full-width">
-                  <span className="sprint-card__label">
-                    Description:
-                  </span>
+                  <span className="sprint-card__label">Description:</span>
 
                   <p className="sprint-card__description">
                     {sprint.description}
