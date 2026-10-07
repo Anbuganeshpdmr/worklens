@@ -65,7 +65,7 @@ public class StatusController {
         List<Status> recordStatusList = statusService.getAllowedStatus(record);
         return recordStatusList.stream().map(statusDisplayDtoMapper::getStatusDisplayDto).collect(Collectors.toList());
     }
-    
+
     @GetMapping("/records")
     public List<String> getRecordTypes() {
         return Arrays.stream(Record.values())
