@@ -10,21 +10,18 @@ import com.pdmrindia.worklens.module_entry.mapperDtos.CloseWorkEntryDto;
 
 import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
-import com.pdmrindia.worklens.module_sprint_activity.SprintActivityService;
 import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_status.StatusService;
 import com.pdmrindia.worklens.module_user.CurrentUserService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -189,7 +186,6 @@ public class EntryService {
     }
 
     private void checkUserUnclosedEntry(){
-        //Status inProcessStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
         List<Entry> entries = entryRepo.findByUserAndEndDateTimeIsNull(currentUserService.user());
         System.out.println("UNFINISHED ENTRIES = " + entries.size());
         if(entries.size()>0){

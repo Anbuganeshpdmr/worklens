@@ -5,7 +5,6 @@ import com.pdmrindia.worklens.module_activity_type.mapperDtos.NewTypeDto;
 import com.pdmrindia.worklens.module_activity_type.mapperDtos.UpdateTypeDto;
 import com.pdmrindia.worklens.module_category.Category;
 import com.pdmrindia.worklens.module_category.CategoryService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

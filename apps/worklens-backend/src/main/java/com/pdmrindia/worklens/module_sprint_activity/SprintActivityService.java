@@ -15,7 +15,7 @@ import com.pdmrindia.worklens.module_sprint.SprintService;
 import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_status.StatusService;
 import com.pdmrindia.worklens.module_user.CurrentUserService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -15,6 +15,7 @@ export function flattenEntry(entry) {
     activityDate: entry.activityDate,
     startTime: entry.startTime,
     endTime: entry.endTime,
+    activityEndDate: entry.activityEndDate,
     duration: entry.duration, // Keeps ISO-8601 string duration format
 
     // Flattened Activity Type

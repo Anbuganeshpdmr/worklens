@@ -2,10 +2,7 @@ package com.pdmrindia.worklens.module_entry;
 
 import com.pdmrindia.worklens.config.Permissions;
 import com.pdmrindia.worklens.module_entry.filter.EntryFilterRequest;
-import com.pdmrindia.worklens.module_entry.mapperDtos.CloseGeneralEntryDto;
-import com.pdmrindia.worklens.module_entry.mapperDtos.CloseWorkEntryDto;
-import com.pdmrindia.worklens.module_entry.mapperDtos.EntryDisplayDto;
-import com.pdmrindia.worklens.module_entry.mapperDtos.EntryDisplayDtoMapper;
+import com.pdmrindia.worklens.module_entry.mapperDtos.*;
 
 import com.pdmrindia.worklens.module_user.CurrentUserService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +23,7 @@ public class EntryController {
     private final EntryService entryService;
     private final EntryDisplayDtoMapper entryDisplayDtoMapper;
     private final CurrentUserService currentUserService;
+    private final EntryUpdateService entryUpdateService;
 
     /*@PostMapping("/entry/work/{sprintActivityId}")
     public EntryDisplayDto createNewWorkEntry(@PathVariable("sprintActivityId") int sprintActivityId){
@@ -114,6 +112,13 @@ public class EntryController {
     @GetMapping("/entry/{id}")
     public EntryDisplayDto getEntry(@PathVariable("id") long id){
         Entry entry = entryService.getEntryById(id);
+        return entryDisplayDtoMapper.getEntryDisplayDto(entry);
+    }
+
+    @PreAuthorize(Permissions.FHTL)
+    @PatchMapping("/entry/period")
+    public EntryDisplayDto updateEntryPeriod(@RequestBody UpdateEntryPeriodDto updateEntryPeriodDto){
+        Entry entry = entryUpdateService.updateEntryPeriod(updateEntryPeriodDto);
         return entryDisplayDtoMapper.getEntryDisplayDto(entry);
     }
 

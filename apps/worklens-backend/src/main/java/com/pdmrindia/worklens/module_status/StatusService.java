@@ -5,7 +5,7 @@ import com.pdmrindia.worklens.exception.StatusException;
 import com.pdmrindia.worklens.module_status.mapperDtos.NewStatusDto;
 import com.pdmrindia.worklens.module_status.mapperDtos.UpdateRecordStatusesDto;
 import com.pdmrindia.worklens.module_status.mapperDtos.UpdateStatusMetaDto;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

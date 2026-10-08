@@ -10,7 +10,7 @@ import com.pdmrindia.worklens.module_user.mapperDtos.*;
 import com.pdmrindia.worklens.module_user_role.Role;
 
 import com.pdmrindia.worklens.module_user_role.UserRoleService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
