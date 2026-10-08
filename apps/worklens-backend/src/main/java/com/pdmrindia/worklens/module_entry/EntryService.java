@@ -90,8 +90,7 @@ public class EntryService {
         entry.setDescription(activity.getDescription());
         entry.setActivity(activity);
         entry.setUser(currentUserService.user());
-        entry.setActivityDate(LocalDate.now());
-        entry.setStartTime(LocalTime.now());
+        entry.setStartDateTime(LocalDateTime.now());
         entry.setExternalTicketId(activity.getExternalTicketId() != null ? activity.getExternalTicketId() : null);
 
         //  Setting Entry Status
@@ -134,16 +133,7 @@ public class EntryService {
         }
         validateEntryClosingUser(currentEntry);
 
-        LocalDate endDate = LocalDate.now();
-        LocalTime endTime = LocalTime.now();
-
-        currentEntry.setActivityEndDate(endDate);
-        currentEntry.setEndTime(endTime);
-
-        LocalDateTime exactStartTime = LocalDateTime.of(currentEntry.getActivityDate(),currentEntry.getStartTime());
-        LocalDateTime exactEndTime = LocalDateTime.of(endDate,endTime);
-
-        currentEntry.setDuration(Duration.between(exactStartTime, exactEndTime));
+        currentEntry.setEndDateTime(LocalDateTime.now());
         currentEntry.setRemarks(remarks);
 
         Status entryStatus = statusService.getRecordStatusByName(Record.ENTRY,"complete");
@@ -170,8 +160,7 @@ public class EntryService {
         entry.setDescription(activity.getDescription());
         entry.setActivity(activity);
         entry.setUser(currentUserService.user());
-        entry.setActivityDate(LocalDate.now());
-        entry.setStartTime(LocalTime.now());
+        entry.setStartDateTime(LocalDateTime.now());
         entry.setExternalTicketId(activity.getExternalTicketId() != null ? activity.getExternalTicketId() : null);
 
         //  Setting Entry Status
@@ -188,9 +177,7 @@ public class EntryService {
 
         validateEntryClosingUser(currentEntry);
 
-        LocalTime endTime = LocalTime.now();
-        currentEntry.setEndTime(endTime);
-        currentEntry.setDuration(Duration.between(currentEntry.getStartTime(), endTime));
+        currentEntry.setEndDateTime(LocalDateTime.now());
         currentEntry.setRemarks(closeGeneralEntryDto.getRemarks());
 
         //  Setting Entry Status
@@ -203,7 +190,7 @@ public class EntryService {
 
     private void checkUserUnclosedEntry(){
         //Status inProcessStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
-        List<Entry> entries = entryRepo.findByUserAndEndTimeIsNull(currentUserService.user());
+        List<Entry> entries = entryRepo.findByUserAndEndDateTimeIsNull(currentUserService.user());
         System.out.println("UNFINISHED ENTRIES = " + entries.size());
         if(entries.size()>0){
             throw new EntryException.UnclosedEntryException("Kindly close previous entries!");
@@ -260,7 +247,7 @@ public class EntryService {
     }
 
     public Entry getUserCurrentEntry() {
-        List<Entry> currentOpenEntries = entryRepo.findByUserAndEndTimeIsNull(currentUserService.user());
+        List<Entry> currentOpenEntries = entryRepo.findByUserAndEndDateTimeIsNull(currentUserService.user());
         System.out.println("Open Entries:"+currentOpenEntries.size());
         if(currentOpenEntries.isEmpty()) {
             return null;

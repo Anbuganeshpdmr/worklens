@@ -7,6 +7,6 @@
             http://www.liquibase.org/xml/ns/dbchangelog
             https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-<!--    <includeAll path="db/changelog/migrations"/>-->
+    <includeAll path="db/changelog/migrations"/>
 
 </databaseChangeLog>

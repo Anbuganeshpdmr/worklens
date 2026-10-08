@@ -78,25 +78,23 @@ public final class EntrySpecification {
         return specification;
     }
 
-
     private static Specification<Entry> activityDateGreaterThanOrEqualTo(
             LocalDate date) {
 
         return (root, query, cb) ->
                 cb.greaterThanOrEqualTo(
-                        root.get("activityDate"),
-                        date
+                        root.get("startDateTime"),
+                        date.atStartOfDay()
                 );
     }
-
 
     private static Specification<Entry> activityDateLessThanOrEqualTo(
             LocalDate date) {
 
         return (root, query, cb) ->
-                cb.lessThanOrEqualTo(
-                        root.get("activityDate"),
-                        date
+                cb.lessThan(
+                        root.get("startDateTime"),
+                        date.plusDays(1).atStartOfDay()
                 );
     }
 

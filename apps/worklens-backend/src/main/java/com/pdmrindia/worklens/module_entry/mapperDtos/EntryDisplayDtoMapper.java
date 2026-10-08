@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -27,11 +26,12 @@ public class EntryDisplayDtoMapper {
         dto.setName(entry.getName());
         dto.setDescription(entry.getDescription());
         dto.setRemarks(entry.getRemarks());
-        dto.setActivityDate(entry.getActivityDate().toString());
-        dto.setStartTime(entry.getStartTime().toString());
-        if(entry.getEndTime()!=null){
-            dto.setEndTime(entry.getEndTime().toString());
-            dto.setDuration(entry.getDuration().toString());
+        dto.setActivityDate(entry.getStartDateTime().toLocalDate().toString());
+        dto.setStartTime(entry.getStartDateTime().toLocalTime().toString());
+        if(entry.getEndDateTime()!=null){
+            dto.setActivityEndDate(entry.getEndDateTime().toLocalDate().toString());
+            dto.setEndTime(entry.getEndDateTime().toLocalTime().toString());
+            dto.setDuration(Duration.between(entry.getStartDateTime(), entry.getEndDateTime()).toString());
         }
         dto.setUser(entry.getUser().getName());
         dto.setCurrentStatus(statusDisplayDtoMapper.getStatusDisplayDto(entry.getStatus()));
@@ -44,14 +44,6 @@ public class EntryDisplayDtoMapper {
         dto.setSprintActivityId(entry.getSprintActivity() != null ? entry.getSprintActivity().getId() : null);
         dto.setSprintName(entry.getSprintActivity() != null ? entry.getSprintActivity().getSprint().getName() : null);
         dto.setProjectName(entry.getActivity().getProject() != null ? entry.getActivity().getProject().getName() : null);
-
-        LocalDateTime exactStartTime = LocalDateTime.of(entry.getActivityDate(),entry.getStartTime());
-        if(entry.getActivityEndDate()!=null && entry.getEndTime()!=null){
-
-            LocalDateTime exactEndTime = LocalDateTime.of(entry.getActivityEndDate(),entry.getEndTime());
-            dto.setDuration2(Duration.between(exactStartTime, exactEndTime).toString());
-        }
-
 
         return dto;
     }

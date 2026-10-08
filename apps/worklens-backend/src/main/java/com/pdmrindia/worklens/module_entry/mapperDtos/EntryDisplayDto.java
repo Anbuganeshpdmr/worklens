@@ -29,5 +29,5 @@ public class EntryDisplayDto {
     private String endTime;
     private String duration;
     private String remarks;
-    private String duration2;
+    private String activityEndDate;
 }

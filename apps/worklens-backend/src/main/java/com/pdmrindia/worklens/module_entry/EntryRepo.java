@@ -17,5 +17,5 @@ public interface EntryRepo extends JpaRepository<Entry, Long>,
 
     List<Entry> findBySprintActivityAndStatus(SprintActivity sprintActivity, Status status);
 
-    List<Entry> findByUserAndEndTimeIsNull(User user);
+    List<Entry> findByUserAndEndDateTimeIsNull(User user);
 }
