@@ -18,6 +18,7 @@ function SegmentedRowChart({ data, height = 30 }) {
       style={{
         display: "flex",
         width: "100%",
+        minWidth: 0,
         height: `${height}px`,
         overflow: "hidden",
         borderRadius: "6px",
@@ -31,6 +32,8 @@ function SegmentedRowChart({ data, height = 30 }) {
             key={item.name}
             style={{
               width: `${percentage}%`,
+              minWidth: 0,
+              flexShrink: 0,
               backgroundColor: item.colourCode,
             }}
             title={`${item.name}: ${item.count}`}

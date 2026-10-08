@@ -40,21 +40,18 @@ public class StatusController {
         return statusList.stream().map(statusDisplayDtoMapper::getStatusDisplayDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/status/all")
     public List<StatusDisplayDto> getAllStatus(){
         List<Status> statusList = statusRepo.findAll();
         return statusList.stream().map(statusDisplayDtoMapper::getStatusDisplayDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/status/{id}")
     public StatusDisplayDto getStatus(@PathVariable("id") int id){
         Status status = statusService.getStatusById(id);
         return statusDisplayDtoMapper.getStatusDisplayDto(status);
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/status/records/{recordName}")
     public List<StatusDisplayDto> getAllStatusesForRecord(@PathVariable("recordName") String recordName){
         Record record = Record.valueOf(recordName.toUpperCase());
@@ -62,7 +59,6 @@ public class StatusController {
         return recordStatusList.stream().map(statusDisplayDtoMapper::getStatusDisplayDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/status/records/{recordName}/applicable")
     public List<StatusDisplayDto> getApplicableStatusesForRecord(@PathVariable("recordName") String recordName){
         Record record = Record.valueOf(recordName.toUpperCase());
@@ -70,7 +66,6 @@ public class StatusController {
         return recordStatusList.stream().map(statusDisplayDtoMapper::getStatusDisplayDto).collect(Collectors.toList());
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/records")
     public List<String> getRecordTypes() {
         return Arrays.stream(Record.values())
