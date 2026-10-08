@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <!-- 1. Add the new datetime columns -->
+    <changeSet id="add-entry-datetime-columns" author="anbu">
+
+        <sql>
+            ALTER TABLE entries
+            ADD COLUMN start_date_time DATETIME NULL,
+            ADD COLUMN end_date_time DATETIME NULL;
+        </sql>
+
+    </changeSet>
+
+
+    <!-- 2. Migrate existing start/end time data -->
+    <changeSet id="migrate-entry-datetime-data" author="anbu">
+
+        <sql>
+            UPDATE entries
+            SET start_date_time = TIMESTAMP(activity_date, start_time)
+            WHERE start_date_time IS NULL;
+        </sql>
+
+        <sql>
+            UPDATE entries
+            SET end_date_time = TIMESTAMP(activity_end_date, end_time)
+            WHERE end_date_time IS NULL
+            AND end_time IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+
+    <!-- 3. Verify that every entry has a start datetime -->
+    <changeSet id="validate-entry-start-datetime" author="anbu">
+
+        <preConditions onFail="HALT" onError="HALT">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM entries
+                WHERE start_date_time IS NULL;
+            </sqlCheck>
+        </preConditions>
+
+    </changeSet>
+
+
+    <!-- 4. Make start datetime mandatory -->
+    <changeSet id="make-entry-start-datetime-required" author="anbu">
+
+        <sql>
+            ALTER TABLE entries
+            MODIFY COLUMN start_date_time DATETIME NOT NULL;
+        </sql>
+
+    </changeSet>
+
+
+    <!-- 5. Remove the old datetime/duration columns -->
+    <changeSet id="remove-old-entry-datetime-columns" author="anbu">
+
+        <sql>
+            ALTER TABLE entries
+            DROP COLUMN activity_date,
+            DROP COLUMN start_time,
+            DROP COLUMN activity_end_date,
+            DROP COLUMN end_time,
+            DROP COLUMN duration;
+        </sql>
+
+    </changeSet>
+
+
+</databaseChangeLog>

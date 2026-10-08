@@ -1,7 +1,6 @@
 package com.pdmrindia.worklens.module_entry;
 
 import com.pdmrindia.worklens.module_activity.Activity;
-import com.pdmrindia.worklens.module_activity_type.ActivityType;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_status.Status;
 import com.pdmrindia.worklens.module_user.User;
@@ -9,9 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -45,11 +42,12 @@ public class Entry {
     @JoinColumn(name = "creator_id", nullable = false)
     private User user;
 
-    private LocalDate activityDate;
-    private LocalDate activityEndDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private Duration duration;
+    @Column(name = "start_date_time")
+    private LocalDateTime startDateTime;
+
+    @Column(name = "end_date_time")
+    private LocalDateTime endDateTime;
+
     private String remarks;
 
     @Override
