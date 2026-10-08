@@ -5,6 +5,7 @@ import { useUser } from "../context/UserContext";
 import { Timer as TimerIcon, AlarmClock } from "lucide-react";
 import { useEntryContext } from "../context/EntryContext";
 import { getOpenEntry } from "../api/entry";
+import { getMyDp } from "../api/user";
 import { flattenEntry } from "./entries/entryMapper";
 
 const QUOTE_INTERVAL = 2 * 60 * 1000;
@@ -61,7 +62,7 @@ function Navbar({ onMenuClick }) {
   const [greeting, setGreeting] = useState("");
   const [openEntry, setOpenEntry] = useState(null);
   const [entryError, setEntryError] = useState(null);
-
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const quoteIntervalRef = useRef(null);
 
   const { entryVersion } = useEntryContext();
@@ -120,6 +121,47 @@ function Navbar({ onMenuClick }) {
     fetchOpenEntry();
   }, [entryVersion]);
 
+  useEffect(() => {
+  let cancelled = false;
+  let objectUrl = null;
+
+  const loadProfilePhoto = async () => {
+    if (!user?.dpAvailable || !user?.dpPath || !user?.id) {
+      setProfilePhoto(null);
+      return;
+    }
+
+    try {
+      const blob = await getMyDp(user.dpPath);
+
+      if (cancelled) return;
+
+      objectUrl = URL.createObjectURL(blob);
+      setProfilePhoto(objectUrl);
+    } catch (err) {
+      if (!cancelled) {
+        setProfilePhoto(null);
+      }
+
+      if (
+        err?.response?.status !== 404 &&
+        err?.response?.status !== 405
+      ) {
+        console.error("Profile photo fetch failed:", err);
+      }
+    }
+  };
+
+  loadProfilePhoto();
+
+  return () => {
+    cancelled = true;
+
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+    }
+  };
+}, [user?.id, user?.dpAvailable, user?.dpPath]);
 
   return (
     <nav className="navbar">
@@ -179,6 +221,18 @@ function Navbar({ onMenuClick }) {
               No active entry
             </span>
           )}
+        </div>
+
+        {/* Profile */}
+        <div className="navbar__profile">
+          {profilePhoto ? (
+            <img
+              src={profilePhoto}
+              alt={user?.name || "Profile"}
+            />
+          ) : (
+            <span>{user?.initials || "U"}</span>
+         )}
         </div>
       </div>
     </nav>

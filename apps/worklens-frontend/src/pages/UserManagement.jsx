@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { getUsers, addUser, updateUser, getRoles } from "../api/user";
+import { useUser } from "../context/UserContext";
 import UserModal from "../components/usermanagement/UserModal";
 import MemberCard from "../components/usermanagement/membercard";
 import UserFilter from "../components/UseFilter";
 import "../styles/UserManagement.css";
 
 const UserManagement = () => {
+  const { user: loggedInUser, updateUser: updateLoggedInUser } = useUser();
   /* ── states ─────────────────────────────────────── */
   const [activeTab, setActiveTab] = useState("users");
 
@@ -151,6 +153,13 @@ const UserManagement = () => {
           ...(updatedUser || modal.user),
           ...(freshStatus ? { currentStatus: freshStatus } : {}),
         };
+
+        if (
+          loggedInUser &&
+          String(loggedInUser.id ?? loggedInUser.userId) === String(numericId)
+        ) {
+          updateLoggedInUser(finalUser);
+        }
 
         setUsers((prev) =>
           prev.map((u) =>

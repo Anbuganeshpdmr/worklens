@@ -1,0 +1,21 @@
+.copyright-footer {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  border-top: 1px solid #d9d9d9;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #202936;
+
+  flex-shrink: 0;
+}
+
+.footer-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
