@@ -22,5 +22,5 @@ export const updateStatus = async (statusData) => {
 
 export async function getStatusByRecord(recordName) {
   const response = await api.get(`/status/records/${recordName}/applicable`);
-  return response.data;
+  return Array.isArray(response.data) ? response.data : [];
 }

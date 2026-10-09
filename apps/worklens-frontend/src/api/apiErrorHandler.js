@@ -12,7 +12,12 @@ export function commonApiErrorHandler(
 
     // Authentication / authorization
     if (status === 401 || status === 403) {
+      if(serverMessage) {
+        console.error("Authentication/Authorization Error:", serverMessage);
+        throw new Error(serverMessage);
+      }else {
       throw new Error("Session expired. Please log in again.");
+      }
     }
 
     // Server provided a meaningful message

@@ -1,13 +1,14 @@
 import axios from "axios";
+import {commonApiErrorHandler} from "./apiErrorHandler";
 
-const api = axios.create({
+const customApiClient = axios.create({
   baseURL: "http://localhost:8080",
   headers: { "Content-Type": "application/json" },
   timeout: 10000,
 });
 
 // Attach Bearer token on every request
-api.interceptors.request.use(
+customApiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) config.headers["Authorization"] = `Bearer ${token}`;
@@ -17,7 +18,7 @@ api.interceptors.request.use(
 );
 
 // Redirect to login on 401
-api.interceptors.response.use(
+customApiClient.interceptors.response.use(
   (response) => response,
 
   (error) => {
@@ -27,8 +28,9 @@ api.interceptors.response.use(
       window.location.href = "/";
     }
 
-    return Promise.reject(error);
+    commonApiErrorHandler(error);
+    //return Promise.reject(error);
   },
 );
 
-export default api;
+export default customApiClient;
