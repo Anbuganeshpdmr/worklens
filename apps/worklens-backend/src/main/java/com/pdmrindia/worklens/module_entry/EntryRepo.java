@@ -25,7 +25,7 @@ public interface EntryRepo extends JpaRepository<Entry, Long>,
     @Query(value = """
         SELECT e.id
         FROM entries e
-        WHERE e.user_id = :userId
+        WHERE e.creator_id = :userId
           AND e.id <> :entryId
           AND e.start_date_time < COALESCE(:newEndDateTime, NOW())
           AND COALESCE(e.end_date_time, NOW()) > :newStartDateTime

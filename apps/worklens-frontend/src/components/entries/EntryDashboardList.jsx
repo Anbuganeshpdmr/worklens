@@ -1,6 +1,7 @@
 import "../../styles/entries/EntryDashboardList.css";
 import CloseTestEntryModal from "./CloseTestEntryModal";
 import CloseGeneralEntryModal from "./CloseGeneralEntryModal";
+import EditEntryModal from "./EditEntryModal";
 import { useState } from "react";
 
 /* ── Hex color → readable foreground (white or dark) ───────────────────── */
@@ -90,6 +91,7 @@ export default function EntryDashboardList({
   const isMyEntries = page === PAGE.MY_ENTRIES;
   const [showModal, setShowModal] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [showEditEntryModal, setShowEditEntryModal] = useState(false);
 
   const stored = localStorage.getItem("userInfo");
   const userInfo = stored ? JSON.parse(stored) : null;
@@ -102,12 +104,24 @@ export default function EntryDashboardList({
     setShowModal(true);
   };
 
+  const handleEditEntry = (entry) => {
+    setSelectedEntry(entry);
+    setShowEditEntryModal(true);
+  };
+
   const handleUpdateEntry = (updated) => {
     setEntries((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));
   };
 
   return (
     <div className="edl-root">
+      {showEditEntryModal && selectedEntry && (
+        <EditEntryModal
+          onClose={() => setShowEditEntryModal(false)}
+          selectedEntry={selectedEntry}
+          onUpdateEntry={handleUpdateEntry}
+        />
+      )}
       {showModal &&
         selectedEntry &&
         (selectedEntry.sprintActivityId !== null ? (
@@ -307,7 +321,7 @@ export default function EntryDashboardList({
                                 type="button"
                                 className="edl-action-btn edl-action-btn--edit"
                                 title="Edit entry"
-                                onClick={() => {}}
+                                onClick={() => handleEditEntry(entry)}
                               >
                                 <i
                                   className="bi bi-pencil"

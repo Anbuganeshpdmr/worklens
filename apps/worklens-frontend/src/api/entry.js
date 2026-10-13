@@ -16,16 +16,16 @@ export async function startTestActivity(sprintActivityId) {
   return apiClient.post(`/entry/work/${sprintActivityId}`);
 }
 
-export async function closeWorkActivity(response) {
-  return apiClient.put(`/entry/work`, response);
+export async function closeWorkActivity(request) {
+  return apiClient.put(`/entry/work`, request);
 }
 
 export async function startGeneralActivity(activityId) {
   return apiClient.post(`/entry/general/${activityId}`);
 }
 
-export async function closeGeneralActivity(response) {
-  return apiClient.put(`/entry/general`, response);
+export async function closeGeneralActivity(request) {
+  return apiClient.put(`/entry/general`, request);
 }
 
 export async function getEntry(id) {
@@ -35,4 +35,9 @@ export async function getEntry(id) {
 
 export async function getOpenEntry() {
   return apiClient.get(`/entry/open`);
+}
+
+export async function updateEntryPeriod(request) {
+  console.log("Updating Entry Period with request:", request);
+  return apiClient.patch(`/entry/period`, request);
 }

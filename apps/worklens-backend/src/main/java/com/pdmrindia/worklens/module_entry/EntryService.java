@@ -29,50 +29,13 @@ import java.util.List;
 public class EntryService {
 
     private final EntryRepo entryRepo;
-    //private final SprintActivityService sprintActivityService;
     private final CurrentUserService currentUserService;
     private final StatusService statusService;
     private final ActivityService activityService;
 
-    /*@Transactional
-    public Entry createNewWorkEntry(int sprintActivityId){
-        //  Ensure user has all previous entries closed
-        checkUserUnclosedEntry();
-
-        Entry entry = new Entry();
-
-        SprintActivity sprintActivity = sprintActivityService.getSprintActivityById(sprintActivityId);
-
-        //  Ensure Related Spr-Activity has no unclosed entries
-        validateSprintActivityAvailableForTesting(sprintActivity);
-
-        Activity activity = sprintActivity.getActivity();
-
-        //  validate Activity status before starting first Entry
-        activity = activityService.processActivityStatusForEntry(activity);
-
-        entry.setName(activity.getTitle());
-        entry.setDescription(activity.getDescription());
-        entry.setActivity(activity);
-        entry.setUser(currentUserService.user());
-        entry.setActivityDate(LocalDate.now());
-        entry.setStartTime(LocalTime.now());
-        entry.setExternalTicketId(activity.getExternalTicketId() != null ? activity.getExternalTicketId() : null);
-
-        //  Setting Entry Status
-        Status entryStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
-        statusService.validateRecordStatusOfRecord(Record.ENTRY,entryStatus);
-        entry.setStatus(entryStatus);
-
-        //  Setting Sprint-Activity Status to "in-testing"
-        sprintActivityService.updateStatus(sprintActivity,statusService.getRecordStatusByName(Record.SPRINT_ACTIVITY,"in-testing"));
-        entry.setSprintActivity(sprintActivity);
-
-        return entryRepo.save(entry);
-    }*/
 
     @Transactional
-    public Entry createNewWorkEntry2(SprintActivity sprintActivity){
+    public Entry createNewWorkEntry(SprintActivity sprintActivity){
         //  Ensure user has all previous entries closed
         checkUserUnclosedEntry();
 
@@ -102,26 +65,6 @@ public class EntryService {
         return entryRepo.save(entry);
     }
 
-    /*@Transactional
-    public Entry closeWorkEntry(CloseWorkEntryDto closeWorkEntryDto){
-        Entry currentEntry = getEntryById(closeWorkEntryDto.getEntryId());
-
-        validateEntryClosingUser(currentEntry);
-
-        LocalTime endTime = LocalTime.now();
-        currentEntry.setEndTime(endTime);
-        currentEntry.setDuration(Duration.between(currentEntry.getStartTime(), endTime));
-        currentEntry.setRemarks(closeWorkEntryDto.getRemarks());
-
-        Status SA_NewSelectedStatus = statusService.getStatusById(closeWorkEntryDto.getSprintActivityStatusId());
-        setEntryStatus(currentEntry, SA_NewSelectedStatus);
-
-        //  Setting Sprint-Activity Status
-        sprintActivityService.updateStatus(currentEntry.getSprintActivity(), SA_NewSelectedStatus);
-
-        return entryRepo.save(currentEntry);
-    }*/
-
     @Transactional
     public Entry closeWorkEntry2(Entry currentEntry, String remarks){
 
@@ -130,7 +73,11 @@ public class EntryService {
         }
         validateEntryClosingUser(currentEntry);
 
-        currentEntry.setEndDateTime(LocalDateTime.now());
+        LocalDateTime endDateTime = LocalDateTime.now();
+        if(endDateTime.isBefore(currentEntry.getStartDateTime())){
+            throw new EntryException.EntryOverlapException("Start-Time < End-Time");
+        }
+        currentEntry.setEndDateTime(endDateTime);
         currentEntry.setRemarks(remarks);
 
         Status entryStatus = statusService.getRecordStatusByName(Record.ENTRY,"complete");
@@ -174,7 +121,11 @@ public class EntryService {
 
         validateEntryClosingUser(currentEntry);
 
-        currentEntry.setEndDateTime(LocalDateTime.now());
+        LocalDateTime endDateTime = LocalDateTime.now();
+        if(endDateTime.isBefore(currentEntry.getStartDateTime())){
+            throw new EntryException.EntryOverlapException("Start-Time < End-Time");
+        }
+        currentEntry.setEndDateTime(endDateTime);
         currentEntry.setRemarks(closeGeneralEntryDto.getRemarks());
 
         //  Setting Entry Status

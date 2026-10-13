@@ -143,7 +143,7 @@ public class SprintActivityService {
         if(sprintActivity.getCurrentEntry() != null){
             throw new RuntimeException("SprintActivity has Active Entry");
         }
-        Entry newEntry = entryService.createNewWorkEntry2(sprintActivity);
+        Entry newEntry = entryService.createNewWorkEntry(sprintActivity);
         sprintActivity.setCurrentEntry(newEntry);
 
         Status sprintActivity_InTestingStatus = statusService.getRecordStatusByName(Record.SPRINT_ACTIVITY,"in-testing");

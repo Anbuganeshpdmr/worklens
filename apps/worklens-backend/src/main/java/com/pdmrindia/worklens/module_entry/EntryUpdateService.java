@@ -4,7 +4,6 @@ import com.pdmrindia.worklens.exception.EntryException;
 import com.pdmrindia.worklens.module_entry.mapperDtos.UpdateEntryPeriodDto;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivity;
 import com.pdmrindia.worklens.module_sprint_activity.SprintActivityRepo;
-import com.pdmrindia.worklens.module_sprint_activity.SprintActivityService;
 
 import com.pdmrindia.worklens.module_status.Record;
 import com.pdmrindia.worklens.module_status.Status;
@@ -45,6 +44,13 @@ public class EntryUpdateService {
             );
         }
 
+        if (updateEntryPeriodDto.getNewEndDateTime() != null && updateEntryPeriodDto.getNewEndDateTime().isBefore(updateEntryPeriodDto.getNewStartDateTime())) {
+            throw new EntryException.EntryOverlapException("Start-Time < End-Time");
+        }
+
+        //  Set status
+        entry.setStatus(getNewEntryStatus(entry,updateEntryPeriodDto));
+
         entry.setStartDateTime(updateEntryPeriodDto.getNewStartDateTime());
         entry.setEndDateTime(updateEntryPeriodDto.getNewEndDateTime());
         entry.setRemarks(updateEntryPeriodDto.getRemarks());
@@ -55,17 +61,38 @@ public class EntryUpdateService {
         if(sprintActivity != null){
             //  Sprint-Activity attached
             if(sprintActivity.getCurrentEntry() != null && updateEntryPeriodDto.getNewEndDateTime() != null){
-                //  Detach Sprint-Activity from Entry
+                //  De-link Sprint-Activity from Entry
                 sprintActivity.setCurrentEntry(null);
             }
             sprintActivityRepo.save(sprintActivity);
         }
 
-        //  Set status
-        Status entryStatus = statusService.getRecordStatusByName(Record.ENTRY,"hold");
-        statusService.validateRecordStatusOfRecord(Record.ENTRY,entryStatus);
-        entry.setStatus(entryStatus);
-
         return entryRepo.save(entry);
+    }
+
+    private Status getNewEntryStatus(Entry entry, UpdateEntryPeriodDto updateEntryPeriodDto){
+        Status entryExistingStatus = entry.getStatus();
+        Status entryNewStatus = null;
+        if(entryExistingStatus.getDisplayName().contains("in-process")){
+            if(updateEntryPeriodDto.getNewEndDateTime() != null){
+                entryNewStatus = statusService.getRecordStatusByName(Record.ENTRY,"hold");
+            }
+            else{
+                entryNewStatus = statusService.getRecordStatusByName(Record.ENTRY,"in-process");
+            }
+        } else if (entryExistingStatus.getDisplayName().contains("hold")) {
+            if(updateEntryPeriodDto.getNewEndDateTime() != null){
+                entryNewStatus = statusService.getRecordStatusByName(Record.ENTRY,"hold");
+            }else{
+                throw new EntryException.UnclosedEntryException("HOLD/COMPLETE entries must have valid end-time");
+            }
+        } else if (entryExistingStatus.getDisplayName().contains("complete")){
+            if(updateEntryPeriodDto.getNewEndDateTime() != null){
+                entryNewStatus = statusService.getRecordStatusByName(Record.ENTRY,"hold");
+            }else{
+                throw new EntryException.UnclosedEntryException("HOLD/COMPLETE entries must have valid end-time");
+            }
+        }
+        return entryNewStatus;
     }
 }
