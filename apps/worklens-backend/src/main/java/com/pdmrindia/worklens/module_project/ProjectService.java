@@ -36,6 +36,8 @@ public class ProjectService {
         statusService.validateRecordStatusOfRecord(Record.PROJECT,updatedStatus);
         project.setStatus(updatedStatus);
 
+        project.setOpenprojectProjectId(projectDto.getOpenprojectProjectId());
+
         return projectRepo.save(project);
     }
 

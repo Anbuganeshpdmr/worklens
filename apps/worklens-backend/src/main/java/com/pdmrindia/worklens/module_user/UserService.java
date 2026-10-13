@@ -31,6 +31,7 @@ public class UserService {
     private final StatusService statusService;
     private final ProfilePicConfig profilePicConfig;
     private final ResourceService resourceService;
+    private final OpenprojectCredentialService openprojectCredentialService;
 
 
     public User createUser(NewUserDto newUserDto){
@@ -130,5 +131,17 @@ public class UserService {
             }
         }
         return userRepo.save(user);
+    }
+
+    @Transactional
+    public User updateOpenprojectCredentials(OpenprojectCredentials openprojectCredentials){
+        User currentUser = currentUserService.user();
+
+        currentUser.setOpenprojectApiUsername(openprojectCredentials.getOpenProjectApiUsername());
+
+        String encryptedOpenprojectKey = openprojectCredentialService
+                .encrypt(openprojectCredentials.getOpenProjectApiPassword());
+        currentUser.setOpenprojectApiPassword(encryptedOpenprojectKey);
+        return userRepo.save(currentUser);
     }
 }

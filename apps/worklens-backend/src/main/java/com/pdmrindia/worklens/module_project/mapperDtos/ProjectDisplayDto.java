@@ -16,5 +16,6 @@ public class ProjectDisplayDto {
     private long totalSprints;
     private long activeSprints;
     private long totalActivities;
+    private Integer openprojectProjectId;
 
 }

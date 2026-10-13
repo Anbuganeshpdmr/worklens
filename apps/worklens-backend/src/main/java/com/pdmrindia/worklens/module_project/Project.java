@@ -43,6 +43,8 @@ public class Project {
 
     private Instant createdOn;
 
+    private Integer openprojectProjectId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

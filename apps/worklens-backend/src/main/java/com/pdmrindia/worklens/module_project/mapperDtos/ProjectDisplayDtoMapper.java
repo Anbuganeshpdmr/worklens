@@ -34,6 +34,7 @@ public class ProjectDisplayDtoMapper {
         dto.setTotalSprints(sprintList.size());
 
         dto.setActiveSprints(sprintList.stream().filter(s->s.getStatus().getDisplayName().equals("active")).count());
+        dto.setOpenprojectProjectId(project.getOpenprojectProjectId());
 
         return dto;
     }

@@ -53,7 +53,8 @@ public class CustomExceptionHandler {
             ProjectException.ProjectAlreadyExistsException.class,
             SprintException.SprintProjectMismatchException.class,
             UserException.PasswordNotCorrectException.class,
-            EntryException.EntryOverlapException.class
+            EntryException.EntryOverlapException.class,
+            RecordStatusException.RecordStatusMismatchException.class
     })
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictExceptions(RuntimeException ex) {

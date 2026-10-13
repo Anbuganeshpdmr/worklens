@@ -48,6 +48,10 @@ public class User implements UserDetails {
 
     private String dpPath;
 
+    private String openprojectApiUsername;
+
+    private String openprojectApiPassword;
+
     @Transient
     public boolean isDpAvailable() {
         return dpPath != null && !dpPath.isBlank();

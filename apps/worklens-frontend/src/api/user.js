@@ -96,11 +96,11 @@ export const uploadProfilePhoto = async (file) => {
   console.log("FormData 1:", formData.get("profilePic"));
   console.log("FormData 2:", formData.get("isDpChanged"));
 
-  const response = await api.post("/user/me/dp", formData, {
+  const response = await api.post("/me/dp", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-  console.log("POST /user/me/dp:", response.data);
+  console.log("POST /me/dp:", response.data);
   return response.data; // updated user object
 };
 
@@ -118,12 +118,13 @@ export const getMyDp = async (dpPath) => {
 // GET /user/{id}/dp  (auth-protected)
 // ==========================================
 export const getUserDp = async (userId) => {
-  const response = await api.get(`/user/${userId}/dp`, { responseType: "blob" });
+  const response = await api.get(`/user/${userId}/dp`, {
+    responseType: "blob",
+  });
   return response.data;
 };
-
 
 export const fetchProfileData = async () => {
   const res = await api.get("/me");
   return res.data;
-}
+};

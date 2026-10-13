@@ -1,10 +1,7 @@
 package com.pdmrindia.worklens.module_user;
 
 import com.pdmrindia.worklens.config.Permissions;
-import com.pdmrindia.worklens.module_user.mapperDtos.ChangePasswordDto;
-import com.pdmrindia.worklens.module_user.mapperDtos.NewUserDto;
-import com.pdmrindia.worklens.module_user.mapperDtos.UpdateUserDto;
-import com.pdmrindia.worklens.module_user.mapperDtos.UserInfoDto;
+import com.pdmrindia.worklens.module_user.mapperDtos.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +16,9 @@ import java.util.Map;
 public class UserController {
 
 
-    //  User - User allowed to modify their DP only
-    //  Password - change password, forgot password
-
     private final UserService userService;
     private final CurrentUserService currentUserService;
+    private final OP_CredentialMapper opCredentialMapper;
 
     @PostMapping("/login")
     public UserInfoDto getCurrentUserInfoInitial(){
@@ -64,10 +59,23 @@ public class UserController {
         userService.resetPassword(id,resetPasswordDto);
     }
 
-    @PostMapping("/user/me/dp")
+    @PostMapping("/me/dp")
     public UserInfoDto updateProfilePic(@RequestParam(value = "profilePic",required = false) MultipartFile profilePic,
                                         @RequestParam("isDpChanged") boolean isDpChanged){
         User user = userService.changeProfilePic(profilePic,isDpChanged);
         return userService.getUserInfo(user);
     }
+
+    @PostMapping("/me/key")
+    public OpenprojectCredentials updateOpCredentials(@RequestBody OpenprojectCredentials openprojectCredentials){
+        User user = userService.updateOpenprojectCredentials(openprojectCredentials);
+        return opCredentialMapper.getOpCredentials(user);
+    }
+
+    @GetMapping("/me/key")
+    public OpenprojectCredentials getOpCredentials(){
+        User user = currentUserService.user();
+        return opCredentialMapper.getOpCredentials(user);
+    }
+
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+<!--    1. Add openproject credential columns-->
+    <changeSet id="openproject-credentials-add" author="anbu">
+
+        <sql>
+            ALTER TABLE users
+            ADD COLUMN openproject_api_username VARCHAR(255) NULL,
+            ADD COLUMN openproject_api_password VARCHAR(255) NULL;
+        </sql>
+
+    </changeSet>
+
+    <!--    2. Add openproject project-id column-->
+    <changeSet id="openproject-project-id-add" author="anbu">
+
+        <sql>
+            ALTER TABLE projects
+            ADD COLUMN openproject_project_id INT;
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

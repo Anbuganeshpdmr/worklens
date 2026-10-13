@@ -10,4 +10,5 @@ public class ProjectDto {
     private int projectId;
     private String projectName;
     private int selectedStatusId;
+    private Integer openprojectProjectId;
 }
