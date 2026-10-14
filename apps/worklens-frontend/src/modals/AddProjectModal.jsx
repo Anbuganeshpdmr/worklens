@@ -16,8 +16,6 @@ function AddProjectModal({ isOpen, onClose, onSave, isLoading }) {
     return;
   }
 
-  console.log("SAVE BUTTON CLICKED:", projectName.trim());
-
   try {
     await onSave(projectName.trim());
     setSuccess(`Project "${projectName.trim()}" created successfully!`);

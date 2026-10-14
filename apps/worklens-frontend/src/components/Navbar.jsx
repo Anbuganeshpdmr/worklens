@@ -5,7 +5,9 @@ import { useUser } from "../context/UserContext";
 import { Timer as TimerIcon, AlarmClock } from "lucide-react";
 import { useEntryContext } from "../context/EntryContext";
 import { getOpenEntry } from "../api/entry";
+import { getMyDp } from "../api/user";
 import { flattenEntry } from "./entries/entryMapper";
+import { normalizeRole } from "./Sidebar";
 
 const QUOTE_INTERVAL = 2 * 60 * 1000;
 
@@ -61,9 +63,11 @@ function Navbar({ onMenuClick }) {
   const [greeting, setGreeting] = useState("");
   const [openEntry, setOpenEntry] = useState(null);
   const [entryError, setEntryError] = useState(null);
-
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const quoteIntervalRef = useRef(null);
 
+  const normalizedRole = normalizeRole(user?.role);
+  const isAdmin = normalizedRole === "ADMIN";
   const { entryVersion } = useEntryContext();
 
   const displayName =
@@ -84,22 +88,10 @@ function Navbar({ onMenuClick }) {
   }, [startQuoteInterval]);
 
   useEffect(() => {
-    // Greeting based on current time
-    updateGreeting(setGreeting);
+    if (isAdmin) {
+      return;
+    }
 
-    // Quote settings
-    loadQuote(setQuote);
-
-    // Start auto-reload interval
-    startQuoteInterval();
-
-    // Cleanup timer
-    return () => {
-      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
-    };
-  }, [startQuoteInterval]);
-
-  useEffect(() => {
     const fetchOpenEntry = async () => {
       try {
         setEntryError(null);
@@ -118,8 +110,65 @@ function Navbar({ onMenuClick }) {
     };
 
     fetchOpenEntry();
-  }, [entryVersion]);
+  }, [entryVersion, isAdmin]);
 
+  useEffect(() => {
+    // Greeting based on current time
+    updateGreeting(setGreeting);
+
+    // Quote settings
+    loadQuote(setQuote);
+
+    // Start auto-reload interval
+    startQuoteInterval();
+
+    // Cleanup timer
+    return () => {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    };
+  }, [startQuoteInterval]);
+
+  useEffect(() => {
+  let cancelled = false;
+  let objectUrl = null;
+
+  const loadProfilePhoto = async () => {
+    if (!user?.dpAvailable || !user?.dpPath || !user?.id) {
+      setProfilePhoto(null);
+      return;
+    }
+
+    try {
+      const blob = await getMyDp(user.dpPath);
+
+      if (cancelled) return;
+
+      objectUrl = URL.createObjectURL(blob);
+      setProfilePhoto(objectUrl);
+    } catch (err) {
+      if (!cancelled) {
+        setProfilePhoto(null);
+      }
+
+      if (
+        err?.response?.status !== 404 &&
+        err?.response?.status !== 405
+      ) {
+        console.error("Profile photo fetch failed:", err);
+      }
+    }
+  };
+
+  loadProfilePhoto();
+
+  return () => {
+    cancelled = true;
+
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+    }
+  };
+}, [user?.id, user?.dpAvailable, user?.dpPath]);
 
   return (
     <nav className="navbar">
@@ -164,21 +213,34 @@ function Navbar({ onMenuClick }) {
           {quote}
         </div>
 
-        {/* entry timer */}
-        <div className="navbar__timer">
-          {entryError ? (
-            <span className="timer-error" title={entryError}>
-              <AlarmClock size={17} strokeWidth={1.8} className="timer-error__icon" />
-              No active entry
-            </span>
-          ) : openEntry ? (
-            <Timer key={openEntry.id} entry={openEntry} />
+        {!isAdmin && (
+          <div className="navbar__timer">
+            {entryError ? (
+              <span className="timer-error" title={entryError}>
+                <AlarmClock size={17} strokeWidth={1.8} className="timer-error__icon" />
+                No active entry
+              </span>
+            ) : openEntry ? (
+              <Timer key={openEntry.id} entry={openEntry} />
+            ) : (
+              <span className="timer-inactive">
+                <TimerIcon size={17} strokeWidth={1.8} />
+                No active entry
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Profile */}
+        <div className="navbar__profile">
+          {profilePhoto ? (
+            <img
+              src={profilePhoto}
+              alt={user?.name || "Profile"}
+            />
           ) : (
-            <span className="timer-inactive">
-              <TimerIcon size={17} strokeWidth={1.8} />
-              No active entry
-            </span>
-          )}
+            <span>{user?.initials || "U"}</span>
+         )}
         </div>
       </div>
     </nav>
@@ -186,7 +248,7 @@ function Navbar({ onMenuClick }) {
 }
 
 function Timer({ entry }) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {

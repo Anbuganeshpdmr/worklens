@@ -2,11 +2,17 @@ import { useState, useEffect } from "react";
 import ModalSelect from "../components/ModalSelect";
 import "../styles/Modal.css";
 import {
-  getAllowedSprintStatuses,
+  getStatusByRecord,
   getIndividualSprintDetails,
 } from "../api/sprints";
 
-function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
+function EditSprintModal({
+  isOpen,
+  sprint,
+  onClose,
+  onSave,
+  isLoading,
+}) {
   const [sprintName, setSprintName] = useState("");
   const [statusId, setStatusId] = useState("");
   const [statuses, setStatuses] = useState([]);
@@ -27,44 +33,32 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
     setStatuses([]);
     setError("");
 
-    const fetchEditData = async () => {
+   const fetchEditData = async () => {
       const sprintId = sprint.id || sprint.sprintId;
-
-      try {
-        const details = await getIndividualSprintDetails(sprintId);
-        const currentStatus = details?.currentStatus;
-        const currentStatusId =
-          currentStatus?.statusId ??
-          currentStatus?.StatusId ??
-          details?.statusId ??
-          details?.StatusId ??
-          "";
-
-        if (isCurrent) {
-          setStatusId(currentStatusId ? String(currentStatusId) : "");
-        }
-      } catch (err) {
-        if (isCurrent) {
-          setStatusId("");
-          setError(err.message || "Failed to load sprint status.");
-        }
-      }
-
-      try {
-        const data = await getAllowedSprintStatuses();
-
-        if (isCurrent) {
-          setStatuses(data);
-        }
-      } catch (err) {
-        if (isCurrent) {
-          setError(err.message || "Failed to load statuses.");
-        }
+ 
+      const details = await getIndividualSprintDetails(sprintId);
+      const currentStatus = details?.currentStatus;
+ 
+      const currentStatusId =
+        currentStatus?.statusId ??
+        currentStatus?.StatusId ??
+        details?.statusId ??
+        details?.StatusId ??
+        "";
+ 
+      const data = await getStatusByRecord("SPRINT");
+      console.log("SPRINT STATUSES:", data);
+      if (isCurrent) {
+        setStatusId(
+          currentStatusId ? String(currentStatusId) : ""
+        );
+        setStatuses(Array.isArray(data) ? data : []);
       }
     };
-
-    fetchEditData();
-
+ 
+    // API errors are handled by the common Axios interceptor.
+    fetchEditData().catch(() => {});
+ 
     return () => {
       isCurrent = false;
     };
@@ -84,15 +78,11 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
       return;
     }
 
-    try {
-      await onSave({
-        sprintId: sprint.id || sprint.sprintId,
-        sprintName: sprintName.trim(),
-        selectedStatusId: Number(statusId),
-      });
-    } catch (err) {
-      setError(err.message || "Failed to update sprint.");
-    }
+    await onSave({
+      sprintId: sprint.id || sprint.sprintId,
+      sprintName: sprintName.trim(),
+      selectedStatusId: Number(statusId),
+    });
   };
 
   if (!isOpen) return null;
@@ -154,7 +144,9 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
                 type="text"
                 className="modal-input"
                 value={sprintName}
-                onChange={(e) => setSprintName(e.target.value)}
+                onChange={(e) =>
+                  setSprintName(e.target.value)
+                }
                 disabled={isLoading}
               />
             </div>
@@ -172,8 +164,11 @@ function EditSprintModal({ isOpen, sprint, onClose, onSave, isLoading }) {
                 value={statusId}
                 onChange={setStatusId}
                 options={statuses.map((item) => ({
-                  value: String(item.StatusId ?? item.statusId),
-                  label: item.displayName ?? item.statusName,
+                  value: String(
+                    item.StatusId ?? item.statusId
+                  ),
+                  label:
+                    item.displayName ?? item.statusName,
                 }))}
                 placeholder="Select Status"
                 ariaLabel="Status"

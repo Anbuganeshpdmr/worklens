@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useUser } from "../../context/UserContext";
 import api from "../../api/axios";
 import { uploadProfilePhoto, getMyDp } from "../../api/user";
 import "../../styles/activities/profileinfo.css";
@@ -17,6 +18,7 @@ function getRoleName(role) {
 
 
 export default function ProfileInfo() {
+  const { updateUser } = useUser();
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
@@ -140,13 +142,16 @@ export default function ProfileInfo() {
         // Upload new photo; backend returns updated user object
         const updatedUser = await uploadProfilePhoto(pendingFile);
         setUser(updatedUser);
+        updateUser(updatedUser);
         setPendingPhoto(null);
         setPendingFile(null);
         showToast("Profile photo uploaded successfully!", "success");
       } else if (removeFlag) {
         // Remove photo: call upload with no file
         const updatedUser = await uploadProfilePhoto(null);
+        console.log("REMOVE DP RESPONSE:", updatedUser);
         setUser(updatedUser);
+        updateUser(updatedUser);
         setRemoveFlag(false);
         showToast("Profile photo removed successfully!", "success");
       }

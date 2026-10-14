@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ModalSelect from "../components/ModalSelect";
 import "../styles/Modal.css";
 import {
-  getAllowedProjectStatuses,
+  getStatusByRecord,
   getIndividualProjectDetails,
 } from "../api/projects";
 
@@ -36,40 +36,28 @@ function EditProjectModal({
     const fetchEditData = async () => {
       const projectId = project.projectId || project.id;
 
-      try {
-        const details = await getIndividualProjectDetails(projectId);
-        const currentStatus = details?.currentStatus;
-        const currentStatusId =
-          currentStatus?.statusId ??
-          currentStatus?.StatusId ??
-          details?.statusId ??
-          details?.StatusId ??
-          "";
+      const details = await getIndividualProjectDetails(projectId);
+      const currentStatus = details?.currentStatus;
 
-        if (isCurrent) {
-          setStatusId(currentStatusId ? String(currentStatusId) : "");
-        }
-      } catch (err) {
-        if (isCurrent) {
-          setStatusId("");
-          setError(err.message || "Failed to load project status.");
-        }
-      }
+      const currentStatusId =
+        currentStatus?.statusId ??
+        currentStatus?.StatusId ??
+        details?.statusId ??
+        details?.StatusId ??
+        "";
 
-      try {
-        const data = await getAllowedProjectStatuses();
+      const data = await getStatusByRecord("PROJECT");
 
-        if (isCurrent) {
-          setStatuses(data);
-        }
-      } catch (err) {
-        if (isCurrent) {
-          setError(err.message || "Failed to load statuses.");
-        }
+      if (isCurrent) {
+        setStatusId(
+          currentStatusId ? String(currentStatusId) : ""
+        );
+        setStatuses(Array.isArray(data) ? data : []);
       }
     };
 
-    fetchEditData();
+    // API errors are handled by the common Axios error handler.
+    fetchEditData().catch(() => {});
 
     return () => {
       isCurrent = false;
@@ -90,15 +78,11 @@ function EditProjectModal({
       return;
     }
 
-    try {
-      await onSave({
-        projectId: project.projectId,
-        projectName: projectName.trim(),
-        selectedStatusId: Number(statusId),
-      });
-    } catch (err) {
-      setError(err.message || "Failed to update project.");
-    }
+    await onSave({
+      projectId: project.projectId || project.id,
+      projectName: projectName.trim(),
+      selectedStatusId: Number(statusId),
+    });
   };
 
   if (!isOpen) return null;
@@ -147,7 +131,26 @@ function EditProjectModal({
                 type="text"
                 className="modal-input"
                 value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+                onChange={(e) =>
+                  setProjectName(e.target.value)
+                }
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label
+                htmlFor="openProjectId"
+                className="modal-label"
+              >
+                Open Project - Project ID
+              </label>
+
+              <input
+                id="openProjectId"
+                type="text"
+                className="modal-input"
+                placeholder="Enter Project ID"
                 disabled={isLoading}
               />
             </div>
@@ -165,8 +168,11 @@ function EditProjectModal({
                 value={statusId}
                 onChange={setStatusId}
                 options={statuses.map((item) => ({
-                  value: String(item.StatusId ?? item.statusId),
-                  label: item.displayName ?? item.statusName,
+                  value: String(
+                    item.StatusId ?? item.statusId
+                  ),
+                  label:
+                    item.displayName ?? item.statusName,
                 }))}
                 placeholder="Select Status"
                 ariaLabel="Status"

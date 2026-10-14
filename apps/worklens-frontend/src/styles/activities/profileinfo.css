@@ -22,12 +22,18 @@
   display: inline-block;
   padding: 8px 20px;
   background: #fff;
-  border: 2px solid #2eab6f;
+  border: 2px solid #800b3b;
   border-radius: 6px;
   font-size: 15px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #800b3b;
   margin: 0;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.profile-page-title:hover {
+  background: #800b3b;
+  color: #fff;
 }
 
 /* ── Outer card ─────────────────────────────────────── */
@@ -68,8 +74,8 @@
 }
 
 .profile-card-tab--active {
-  color: #2eab6f;
-  border-bottom-color: #2eab6f;
+  color: #800b3b;
+  border-bottom-color: #800b3b;
   font-weight: 600;
 }
 
@@ -419,4 +425,179 @@
     transform: translateX(0);
     
   }
+}
+
+
+/* ============================================================
+   OPENPROJECT SETTINGS (op-*)
+   ============================================================ */
+
+.op-settings {
+  max-width: 420px;
+  margin: 20px auto;
+}
+
+.op-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.op-description {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.5;
+  margin: 0 0 26px;
+}
+
+.op-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.op-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.op-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.op-input-wrap {
+  position: relative;
+}
+
+.op-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.op-input:focus {
+  border-color: #800b3b;
+  box-shadow: 0 0 0 2px rgba(128, 11, 59, 0.1);
+}
+
+.op-input::placeholder {
+  color: #9ca3af;
+}
+
+.op-eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #800b3b;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.op-eye-btn:hover {
+  background-color: rgba(128, 11, 59, 0.08);
+  color: #6b1c3e;
+}
+
+.op-eye-btn:active {
+  transform: translateY(-50%) scale(0.94);
+}
+
+.op-eye-btn:focus-visible {
+  outline: 2px solid #800b3b;
+  outline-offset: 2px;
+}
+
+.op-eye-btn svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.8;
+}
+
+.op-input--password {
+  padding-right: 48px;
+}
+
+.op-input--password {
+  padding-right: 42px;
+}
+
+.op-submit-btn {
+  padding: 11px 24px;
+  background: #800b3b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.18s, transform 0.12s;
+}
+
+.op-submit-btn:hover {
+  background: #6b1c3e;
+  transform: translateY(-1px);
+}
+
+.op-submit-btn:disabled {
+  background: #c4a1b0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-page {
+    padding: 20px 14px;
+  }
+
+  .profile-card-tabs {
+    padding: 0 8px;
+    overflow-x: auto;
+  }
+
+  .profile-card-tab {
+    padding: 14px 12px;
+    font-size: 12px;
+  }
+
+  .profile-card-body {
+    padding: 22px 18px;
+  }
+
+  .op-settings {
+    width: 100%;
+  }
+}
+
+.op-success-message {
+  margin: 0;
+  color: #6b1c3e;
+  font-size: 13px;
+  font-weight: 600;
 }

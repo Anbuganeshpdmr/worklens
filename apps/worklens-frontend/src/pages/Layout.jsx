@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
 import "../styles/Layout.css";
 
 function Layout() {
@@ -15,10 +16,14 @@ function Layout() {
   return (
     <div className="app-layout">
       {/* Left Layout */}
-      <div className={`app-layout__left ${sidebarCollapsed ? "collapsed" : ""}`}>
-        <Sidebar 
-            collapsed={sidebarCollapsed}
-            role={role}
+      <div
+        className={`app-layout__left ${
+          sidebarCollapsed ? "collapsed" : ""
+        }`}
+      >
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          role={role}
         />
       </div>
 
@@ -35,6 +40,9 @@ function Layout() {
         <main className="app-layout__work-area">
           <Outlet />
         </main>
+
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );

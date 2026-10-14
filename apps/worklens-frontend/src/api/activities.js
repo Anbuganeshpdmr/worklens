@@ -1,75 +1,33 @@
 import apiClient from "./axios";
 
-/* ─────────────────────────────────────────────────────────────
-   SPRINT-ACTIVITY API
-   Base domain: sprint activities that belong to a specific sprint
-───────────────────────────────────────────────────────────── */
-
-/**
- * GET /sprint_activity/sprint/{sprintId}
- * List all sprint-activities for a sprint (paginated).
- */
+/* SPRINT-ACTIVITY API */
 export async function getSprintActivities(sprintId, params = {}) {
-  try {
-    const response = await apiClient.get(
-      `/sprint_activity/sprint/${sprintId}`,
-      { params },
-    );
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    throw buildError(error);
-  }
+  const response = await apiClient.get(
+    `/sprint_activity/sprint/${sprintId}`,
+    { params },
+  );
+  return response.data;
 }
 
-/**
- * GET /sprint_activity/{sprintActivityId}/children
- * List child scenarios under a parent sprint-activity.
- */
 export async function getSprintActivityChildren(sprintActivityId) {
-  try {
-    const response = await apiClient.get(
-      `/sprint_activity/${sprintActivityId}/children`,
-    );
-    return response.data;
-  } catch (error) {
-    throw buildError(error);
-  }
+  const response = await apiClient.get(
+    `/sprint_activity/${sprintActivityId}/children`,
+  );
+  return response.data;
 }
 
-/**
- * PUT /sprint_activity/{sprintActivityId}
- * Update editable fields of a sprint-activity.
- */
 export async function updateSprintActivity(sprintActivityId, payload) {
-  try {
-    const response = await apiClient.put(
-      `/sprint_activity/${sprintActivityId}`,
-      payload,
-    );
-    return response.data;
-  } catch (error) {
-    throw buildError(error);
-  }
+  const response = await apiClient.put(
+    `/sprint_activity/${sprintActivityId}`,
+    payload,
+  );
+  return response.data;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   ACTIVITY API
-   Base domain: project-level activities (management page — UI TBD)
-───────────────────────────────────────────────────────────── */
-
-/**
- * GET /activity
- * List all activities for a project.
- * TODO: confirm full endpoint and query params with backend.
- */
+/* ACTIVITY API */
 export async function getActivities(params = {}) {
-  try {
-    const response = await apiClient.get(`/activity`, { params });
-    return response.data;
-  } catch (error) {
-    throw buildError(error);
-  }
+  const response = await apiClient.get("/activity", { params });
+  return response.data;
 }
 
 export async function getAllProjectActivities(projectId) {
@@ -78,44 +36,26 @@ export async function getAllProjectActivities(projectId) {
 }
 
 export async function getAllGeneralActivities() {
-  const response = await apiClient.get(`/activity/general`);
+  const response = await apiClient.get("/activity/general");
   return response.data;
 }
 
-// Response Data is ignored. Only status code is needed
 export async function createTestActivity(payload) {
-  const response = await apiClient.post(`/activity/work`, payload);
+  const response = await apiClient.post("/activity/work", payload);
   return response.status;
 }
 
 export async function updateTestActivity(payload) {
-  const response = await apiClient.put(`/activity/work`, payload);
+  const response = await apiClient.put("/activity/work", payload);
   return response.status;
 }
 
 export async function createGeneralActivity(payload) {
-  const response = await apiClient.post(`/activity/general`, payload);
+  const response = await apiClient.post("/activity/general", payload);
   return response;
 }
 
 export async function updateGeneralActivity(payload) {
-  const response = await apiClient.put(`/activity/general`, payload);
+  const response = await apiClient.put("/activity/general", payload);
   return response;
-}
-
-/* ── shared error normaliser ─────────────────────────────────── */
-function buildError(error) {
-  if (error.response) {
-    const status = error.response.status;
-    if (status === 401 || status === 403)
-      return new Error("Session expired. Please log in again.");
-    if (status === 404) return new Error("Resource not found.");
-    if (status >= 500)
-      return new Error("Server error. Please try again later.");
-  }
-  if (error.request)
-    return new Error(
-      "Unable to reach the server. Please check your network connection.",
-    );
-  return error;
 }

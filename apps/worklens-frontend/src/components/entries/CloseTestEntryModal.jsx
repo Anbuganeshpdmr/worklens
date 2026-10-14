@@ -89,12 +89,21 @@ export default function CloseTestEntryModal({
       notifyEntryChange(); // Notify that an entry has changed
       setError(null);
       onClose();
-    } catch (error) {
-      // Don't close this modal
-      // Global error handling will show the error
-      console.error("API failed", error.message);
-      setError(error.message);
-    }
+      } catch (err) {
+      console.error("API failed:", err.response?.data || err.message);
+
+  const errorMessage =
+    err.response?.data?.message ||
+    err.response?.data?.error ||
+    err.response?.data?.detail ||
+    (typeof err.response?.data === "string"
+      ? err.response.data
+      : null) ||
+    err.message ||
+    "Failed to close test entry.";
+
+  setError(errorMessage);
+}
   };
 
   return (
@@ -115,11 +124,20 @@ export default function CloseTestEntryModal({
 
               <div className="modal-body">
                 {error && (
-                  <div className="alert alert-danger" role="alert">
-                    {error}
+                  <div className="modal-error-message" role="alert">
+                    <span>{error}</span>
+
+                    <button
+                      type="button"
+                      className="modal-error-close"
+                      onClick={() => setError(null)}
+                      aria-label="Dismiss error"
+                    >
+                      &times;
+                    </button>
                   </div>
                 )}
-                <p>Hello from the modal</p>
+                {/*<p>Hello from the modal</p>*/}
                 {/* Remarks */}
                 <div className="mb-3">
                   <label className="form-label">Remarks</label>

@@ -2,25 +2,31 @@ import { useState } from "react";
 import ModalSelect from "../components/ModalSelect";
 import "../styles/Modal.css";
 
-function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
+function AddSprintModal({
+  isOpen,
+  onClose,
+  onSave,
+  projects,
+  isLoading,
+}) {
   const [selectedProject, setSelectedProject] = useState("");
   const [sprintName, setSprintName] = useState("");
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState("");
-  const projectOptions = [
-    ...projects.map((project) => ({
-      value: String(project.projectId),
-      label: project.projectName,
-    })),
-  ];
+
+  const projectOptions = projects.map((project) => ({
+    value: String(project.projectId),
+    label: project.projectName,
+  }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newErrors = {};
 
     if (!selectedProject.trim()) {
       newErrors.project = "Project is required.";
     }
+
     if (!sprintName.trim()) {
       newErrors.sprintName = "Sprint name is required.";
     }
@@ -31,21 +37,17 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
     }
 
     try {
-      console.log("Selected Project ID:", selectedProject);
-      console.log("Sprint Name:", sprintName.trim());
       await onSave(selectedProject, sprintName.trim());
-      const projectName = projects.find((p) => p.id === selectedProject)?.projectName || selectedProject;
-      setSuccess(`Sprint "${sprintName.trim()}" created in project "${projectName}" successfully!`);
+
       setSelectedProject("");
       setSprintName("");
       setErrors({});
-      
-      // Close modal after 2 seconds
-      setTimeout(() => {
-        handleClose();
-      }, 2000);
+
+      onClose();
     } catch (err) {
-      setErrors({ submit: err.message || "Failed to create sprint." });
+      setErrors({
+        submit: err.message || "Failed to create sprint.",
+      });
     }
   };
 
@@ -53,7 +55,6 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
     setSelectedProject("");
     setSprintName("");
     setErrors({});
-    setSuccess("");
     onClose();
   };
 
@@ -66,17 +67,21 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleOverlayClick}>
+    <div
+      className="modal-overlay"
+      onClick={handleOverlayClick}
+    >
       <div
         className="modal-dialog"
         style={{
-        pointerEvents: "auto",
-        position: "relative",
-        zIndex: 1001,
+          pointerEvents: "auto",
+          position: "relative",
+          zIndex: 1001,
         }}
       >
         <div className="modal-header">
           <h2 className="modal-title">Add Sprint</h2>
+
           <button
             type="button"
             className="modal-close-btn"
@@ -90,81 +95,89 @@ function AddSprintModal({ isOpen, onClose, onSave, projects, isLoading }) {
 
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
-            {success && (
-              <div className="modal-success-message">
-                <span className="modal-success-icon">✓</span>
-                {success}
+            <div className="modal-form-group">
+              <label
+                htmlFor="projectSelect"
+                className="modal-label"
+              >
+                Project
+              </label>
+
+              <ModalSelect
+                id="projectSelect"
+                value={selectedProject}
+                onChange={setSelectedProject}
+                options={projectOptions}
+                placeholder="Select a project"
+                ariaLabel="Project"
+                className={
+                  errors.project ? "modal-input--error" : ""
+                }
+                disabled={isLoading || projects.length === 0}
+                autoFocus
+              />
+
+              {errors.project && (
+                <div className="modal-error-message">
+                  {errors.project}
+                </div>
+              )}
+            </div>
+
+            <div className="modal-form-group">
+              <label
+                htmlFor="sprintName"
+                className="modal-label"
+              >
+                Sprint Name
+              </label>
+
+              <input
+                id="sprintName"
+                type="text"
+                className={`modal-input${
+                  errors.sprintName
+                    ? " modal-input--error"
+                    : ""
+                }`}
+                placeholder="Enter sprint name"
+                value={sprintName}
+                onChange={(e) => setSprintName(e.target.value)}
+                disabled={isLoading}
+              />
+
+              {errors.sprintName && (
+                <div className="modal-error-message">
+                  {errors.sprintName}
+                </div>
+              )}
+            </div>
+
+            {errors.submit && (
+              <div className="modal-error-message modal-error-message--block">
+                {errors.submit}
               </div>
-            )}
-
-            {!success && (
-              <>
-                <div className="modal-form-group">
-                  <label htmlFor="projectSelect" className="modal-label">
-                    Project
-                  </label>
-                  <ModalSelect
-                    id="projectSelect"
-                    value={selectedProject}
-                    onChange={setSelectedProject}
-                    options={projectOptions}
-                    placeholder="Select a project"
-                    ariaLabel="Project"
-                    className={errors.project ? "modal-input--error" : ""}
-                    disabled={isLoading || projects.length === 0}
-                    autoFocus
-                  />
-                  {errors.project && (
-                    <div className="modal-error-message">{errors.project}</div>
-                  )}
-                </div>
-
-                <div className="modal-form-group">
-                  <label htmlFor="sprintName" className="modal-label">
-                    Sprint Name
-                  </label>
-                  <input
-                    id="sprintName"
-                    type="text"
-                    className={`modal-input${errors.sprintName ? " modal-input--error" : ""}`}
-                    placeholder="Enter sprint name"
-                    value={sprintName}
-                    onChange={(e) => setSprintName(e.target.value)}
-                    disabled={isLoading}
-                  />
-                  {errors.sprintName && (
-                    <div className="modal-error-message">{errors.sprintName}</div>
-                  )}
-                </div>
-
-                {errors.submit && (
-                  <div className="modal-error-message modal-error-message--block">
-                    {errors.submit}
-                  </div>
-                )}
-              </>
             )}
           </div>
 
-          {!success && (
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="modal-btn modal-btn--secondary"
-                onClick={handleClose}
-                disabled={isLoading}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="modal-btn modal-btn--primary"
-                disabled={isLoading}
-              >
-                {isLoading ? "Saving..." : "Save"}
-              </button>
-            </div>
-          )}
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="modal-btn modal-btn--secondary"
+              onClick={handleClose}
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              className="modal-btn modal-btn--primary"
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving..." : "Save"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
