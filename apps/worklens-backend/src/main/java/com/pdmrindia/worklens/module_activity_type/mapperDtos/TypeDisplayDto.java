@@ -11,4 +11,5 @@ public class TypeDisplayDto {
     private String name;
     private String colourCode;
     private boolean isMandatory;
+    private boolean isGeneral;
 }

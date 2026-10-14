@@ -11,4 +11,5 @@ public class CategoryDisplayDto {
     private String name;
     private String colourCode;
     private boolean isMandatory;
+    private boolean isWork;
 }

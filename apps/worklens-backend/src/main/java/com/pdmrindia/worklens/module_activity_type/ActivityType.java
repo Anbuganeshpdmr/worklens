@@ -1,6 +1,5 @@
 package com.pdmrindia.worklens.module_activity_type;
 
-import com.pdmrindia.worklens.module_category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +10,6 @@ import lombok.Setter;
 @Table(name = "activity_types", uniqueConstraints = {
         @UniqueConstraint(name = "uk_activity_type_name", columnNames = "name"),
         @UniqueConstraint(name = "uk_activity_type_colour_code", columnNames = "colour_code"),
-        /*@UniqueConstraint(name = "uk_category_activity",columnNames = {
-                "name","category_id"
-        })*/
 })
 public class ActivityType {
 
@@ -28,4 +24,7 @@ public class ActivityType {
     private String colourCode;
 
     private boolean isMandatory;
+
+    @Column(nullable = false)
+    private boolean general = false;
 }

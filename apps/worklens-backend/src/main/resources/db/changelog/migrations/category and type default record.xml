@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <!--    1. Set General Type -->
+    <changeSet id="set-general-type" author="anbu">
+
+        <sql>
+            ALTER TABLE activity_types
+            ADD COLUMN general BOOLEAN NOT NULL DEFAULT FALSE;
+
+            ALTER TABLE activity_types
+            ADD COLUMN unique_general TINYINT
+            GENERATED ALWAYS AS (
+            CASE WHEN general = TRUE THEN 1 ELSE NULL END
+            ) STORED;
+
+            ALTER TABLE activity_types
+            ADD CONSTRAINT uq_activity_types_unique_general
+            UNIQUE (unique_general);
+        </sql>
+
+    </changeSet>
+
+    <!--    2. Set Work Category -->
+    <changeSet id="set-work-category" author="anbu">
+
+        <sql>
+            ALTER TABLE categories
+            ADD COLUMN work BOOLEAN NOT NULL DEFAULT FALSE;
+
+            ALTER TABLE categories
+            ADD COLUMN unique_work TINYINT
+            GENERATED ALWAYS AS (
+            CASE WHEN work = TRUE THEN 1 ELSE NULL END
+            ) STORED;
+
+            ALTER TABLE categories
+            ADD CONSTRAINT uq_categories_unique_work
+            UNIQUE (unique_work);
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

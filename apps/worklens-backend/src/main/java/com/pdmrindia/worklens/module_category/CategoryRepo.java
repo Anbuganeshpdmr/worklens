@@ -10,4 +10,6 @@ public interface CategoryRepo extends JpaRepository<Category,Integer> {
     Optional<Category> findByName(String name);
 
     Optional<Category> findByNameAndIsMandatory(String name, boolean isMandatory);
+
+    Optional<Category> findByWorkTrue();
 }

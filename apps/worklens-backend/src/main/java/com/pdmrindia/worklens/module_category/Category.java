@@ -1,12 +1,9 @@
 package com.pdmrindia.worklens.module_category;
 
-import com.pdmrindia.worklens.module_activity_type.ActivityType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -28,5 +25,8 @@ public class Category {
     private String colourCode;
 
     private boolean isMandatory;
+
+    @Column(nullable = false)
+    private boolean work = false;
 
 }

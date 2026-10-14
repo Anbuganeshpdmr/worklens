@@ -12,6 +12,7 @@ public class CategoryDisplayDtoMapper {
         dto.setMandatory(category.isMandatory());
         dto.setName(category.getName());
         dto.setColourCode(category.getColourCode());
+        dto.setWork(category.isWork());
         return dto;
     }
 

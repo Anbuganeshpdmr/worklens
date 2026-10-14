@@ -15,7 +15,9 @@ public enum DatabaseConstraint {
     UK_SPRINT_ACTIVITY("uk_sprint_activity", "Associated Sprint And Activity already present"),
     UK_ROLE_NAME("uk_role_name", "The Role name already exists"),
     UK_CATEGORY_NAME("uk_category_name", "Category already exists"),
-    UK_CATEGORY_COLOUR("uk_category_colour_code", "Category colour already exists");
+    UK_CATEGORY_COLOUR("uk_category_colour_code", "Category colour already exists"),
+    UK_WORK_CATEGORY("uq_categories_unique_work", "Multiple work categories not allowed"),
+    UK_GENERAL_TYPE("uq_activity_types_unique_general", "Multiple general types not allowed");
 
     private final String constraintName;
     private final String errorMessage;

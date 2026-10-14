@@ -5,6 +5,7 @@ import com.pdmrindia.worklens.module_category.mapperDtos.NewCategoryDto;
 import com.pdmrindia.worklens.module_category.mapperDtos.UpdateCategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,5 +53,20 @@ public class CategoryService {
             category.setName(updateCategoryDto.getName());
         }
         return categoryRepo.save(category);
+    }
+
+    @Transactional
+    public void setWorkCategory(Integer categoryId) {
+
+        categoryRepo.findByWorkTrue()
+                .ifPresent(category -> {
+                    category.setWork(false);
+                    categoryRepo.save(category);
+                });
+
+        Category newCategory = getCategoryById(categoryId);
+
+        newCategory.setWork(true);
+        categoryRepo.save(newCategory);
     }
 }

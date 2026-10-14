@@ -59,4 +59,11 @@ public class ActivityTypeController {
         Category testCategory = categoryService.getCategoryByName("sprint-testing");
         return activityTypeService.getTypesByCategory(testCategory.getId()).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
     }*/
+
+    @PreAuthorize(Permissions.FHTL)
+    @PostMapping("type/general/{id}")
+    public List<TypeDisplayDto> updateGeneralType(@PathVariable("id") Integer id){
+        activityTypeService.setGeneralType(id);
+        return activityTypeRepo.findAll().stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
+    }
 }

@@ -7,6 +7,7 @@ import com.pdmrindia.worklens.module_category.Category;
 import com.pdmrindia.worklens.module_category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -73,7 +74,17 @@ public class ActivityTypeService {
         return activityTypeRepo.findByName(name).orElseThrow(()->new ActivityTypeException.NoSuchTypeException("No Such Activity Type"));
     }
 
-    /*public List<ActivityType> getTypesByCategory(int categoryId){
-        return activityTypeRepo.findByCategory(getCategory(categoryId));
-    }*/
+    @Transactional
+    public void setGeneralType(Integer typeId){
+        activityTypeRepo.findByGeneralTrue()
+                .ifPresent(type->{
+                    type.setGeneral(false);
+                    activityTypeRepo.save(type);
+                });
+
+        ActivityType newType = getTypeById(typeId);
+
+        newType.setGeneral(true);
+        activityTypeRepo.save(newType);
+    }
 }

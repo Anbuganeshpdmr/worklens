@@ -1,6 +1,7 @@
 package com.pdmrindia.worklens.module_category;
 
 import com.pdmrindia.worklens.config.Permissions;
+import com.pdmrindia.worklens.module_activity_type.mapperDtos.TypeDisplayDto;
 import com.pdmrindia.worklens.module_category.mapperDtos.CategoryDisplayDto;
 import com.pdmrindia.worklens.module_category.mapperDtos.CategoryDisplayDtoMapper;
 import com.pdmrindia.worklens.module_category.mapperDtos.NewCategoryDto;
@@ -52,5 +53,12 @@ public class CategoryController {
     @GetMapping("/category/{id}")
     public CategoryDisplayDto getCategory(@PathVariable("id") int id){
         return categoryDisplayDtoMapper.getCategoryDisplayDto(categoryService.getCategoryById(id));
+    }
+
+    @PreAuthorize(Permissions.FHTL)
+    @PostMapping("category/work/{id}")
+    public List<CategoryDisplayDto> updateWorkCategory(@PathVariable("id") Integer id){
+        categoryService.setWorkCategory(id);
+        return categoryRepo.findAll().stream().map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
     }
 }
