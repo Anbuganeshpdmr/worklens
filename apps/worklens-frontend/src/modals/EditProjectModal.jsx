@@ -140,6 +140,23 @@ function EditProjectModal({
 
             <div className="modal-form-group">
               <label
+                htmlFor="openProjectId"
+                className="modal-label"
+              >
+                Open Project - Project ID
+              </label>
+
+              <input
+                id="openProjectId"
+                type="text"
+                className="modal-input"
+                placeholder="Enter Project ID"
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label
                 htmlFor="editProjectStatus"
                 className="modal-label"
               >

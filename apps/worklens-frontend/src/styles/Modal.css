@@ -353,3 +353,35 @@ white-space: nowrap;
     width: 100%;
   }
 }
+
+.modal-error-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5aeb5;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.modal-error-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #842029;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+
+.modal-error-close:hover {
+  opacity: 1;
+}

@@ -72,3 +72,13 @@ export const fetchProfileData = async () => {
   const res = await api.get("/me");
   return res.data;
 }
+
+// OPENPROJECT CREDENTIALS (DUMMY API)
+export const saveOpenProjectCredentials = async (credentials) => {
+  console.log("OpenProject Username:", credentials.username);
+  console.log("OpenProject Password:", credentials.password);
+  return {
+    success: true,
+    message: "OpenProject credentials submitted successfully",
+  };
+};

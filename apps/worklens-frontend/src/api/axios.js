@@ -17,19 +17,21 @@ customApiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Redirect to login on 401
+// Redirect to login on 401, except when the login request itself fails.
 customApiClient.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    if (error.response?.status === 401) {
+    const requestPath = error.config?.url?.split("?")[0].replace(/\/+$/, "");
+    const isLoginRequest = requestPath === "/login";
+
+    if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem("token");
       localStorage.removeItem("userInfo");
       window.location.href = "/";
     }
 
-    commonApiErrorHandler(error);
-    //return Promise.reject(error);
+    return Promise.reject(commonApiErrorHandler(error));
   },
 );
 

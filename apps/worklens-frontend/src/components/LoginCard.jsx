@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { UserRound, KeyRound, Eye, EyeOff, CircleHelp } from "lucide-react";
 import { login } from "../api/auth";
 import { useUser } from "../context/UserContext";
+import { normalizeRole } from "./Sidebar";
 import "../styles/LoginCard.css";
 
 function LoginCard() {
@@ -35,7 +36,12 @@ function LoginCard() {
 
       console.log("Logged in user:", userInfo);
 
-      navigate("/home", { replace: true });
+      navigate(
+        normalizeRole(userInfo?.role) === "ADMIN"
+          ? "/user-management"
+          : "/home",
+        { replace: true },
+      );
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
     } finally {

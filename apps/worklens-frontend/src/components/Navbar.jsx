@@ -7,6 +7,7 @@ import { useEntryContext } from "../context/EntryContext";
 import { getOpenEntry } from "../api/entry";
 import { getMyDp } from "../api/user";
 import { flattenEntry } from "./entries/entryMapper";
+import { normalizeRole } from "./Sidebar";
 
 const QUOTE_INTERVAL = 2 * 60 * 1000;
 
@@ -65,6 +66,8 @@ function Navbar({ onMenuClick }) {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const quoteIntervalRef = useRef(null);
 
+  const normalizedRole = normalizeRole(user?.role);
+  const isAdmin = normalizedRole === "ADMIN";
   const { entryVersion } = useEntryContext();
 
   const displayName =
@@ -85,22 +88,10 @@ function Navbar({ onMenuClick }) {
   }, [startQuoteInterval]);
 
   useEffect(() => {
-    // Greeting based on current time
-    updateGreeting(setGreeting);
+    if (isAdmin) {
+      return;
+    }
 
-    // Quote settings
-    loadQuote(setQuote);
-
-    // Start auto-reload interval
-    startQuoteInterval();
-
-    // Cleanup timer
-    return () => {
-      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
-    };
-  }, [startQuoteInterval]);
-
-  useEffect(() => {
     const fetchOpenEntry = async () => {
       try {
         setEntryError(null);
@@ -119,7 +110,23 @@ function Navbar({ onMenuClick }) {
     };
 
     fetchOpenEntry();
-  }, [entryVersion]);
+  }, [entryVersion, isAdmin]);
+
+  useEffect(() => {
+    // Greeting based on current time
+    updateGreeting(setGreeting);
+
+    // Quote settings
+    loadQuote(setQuote);
+
+    // Start auto-reload interval
+    startQuoteInterval();
+
+    // Cleanup timer
+    return () => {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    };
+  }, [startQuoteInterval]);
 
   useEffect(() => {
   let cancelled = false;
@@ -206,22 +213,23 @@ function Navbar({ onMenuClick }) {
           {quote}
         </div>
 
-        {/* entry timer */}
-        <div className="navbar__timer">
-          {entryError ? (
-            <span className="timer-error" title={entryError}>
-              <AlarmClock size={17} strokeWidth={1.8} className="timer-error__icon" />
-              No active entry
-            </span>
-          ) : openEntry ? (
-            <Timer key={openEntry.id} entry={openEntry} />
-          ) : (
-            <span className="timer-inactive">
-              <TimerIcon size={17} strokeWidth={1.8} />
-              No active entry
-            </span>
-          )}
-        </div>
+        {!isAdmin && (
+          <div className="navbar__timer">
+            {entryError ? (
+              <span className="timer-error" title={entryError}>
+                <AlarmClock size={17} strokeWidth={1.8} className="timer-error__icon" />
+                No active entry
+              </span>
+            ) : openEntry ? (
+              <Timer key={openEntry.id} entry={openEntry} />
+            ) : (
+              <span className="timer-inactive">
+                <TimerIcon size={17} strokeWidth={1.8} />
+                No active entry
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Profile */}
         <div className="navbar__profile">
@@ -240,7 +248,7 @@ function Navbar({ onMenuClick }) {
 }
 
 function Timer({ entry }) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
