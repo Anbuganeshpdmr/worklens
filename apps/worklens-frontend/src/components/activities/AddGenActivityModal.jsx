@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../../api/category";
+import { getCommonCategories } from "../../api/category";
 
 export default function AddGenActivityModal({ onClose, handleSave }) {
   const [category, setCategory] = useState(null);
@@ -14,7 +14,7 @@ export default function AddGenActivityModal({ onClose, handleSave }) {
 
   const getAllCategories = async () => {
     try {
-      const response = await getCategories();
+      const response = await getCommonCategories();
       console.log("Fetched Categories:", response);
       setCategories(response);
     } catch (error) {

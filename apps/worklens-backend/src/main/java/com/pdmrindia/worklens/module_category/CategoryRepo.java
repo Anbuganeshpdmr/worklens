@@ -2,6 +2,7 @@ package com.pdmrindia.worklens.module_category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepo extends JpaRepository<Category,Integer> {
@@ -12,4 +13,6 @@ public interface CategoryRepo extends JpaRepository<Category,Integer> {
     Optional<Category> findByNameAndIsMandatory(String name, boolean isMandatory);
 
     Optional<Category> findByWorkTrue();
+
+    List<Category> findByWorkFalse();
 }

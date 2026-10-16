@@ -38,32 +38,20 @@ public class ActivityTypeController {
     }
 
     @PreAuthorize(Permissions.FHTLUSER)
-    @GetMapping("/type/{typeId}")
-    public TypeDisplayDto getType(@PathVariable("typeId") int id){
-        return typeDisplayDtoMapper.getTypeDisplayDto(activityTypeService.getTypeById(id));
-    }
-
-    @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/type")
     public List<TypeDisplayDto> getAllTypes(){
         return activityTypeRepo.findAll().stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
     }
 
-    /*@GetMapping("/type/category/{categoryId}")
-    public List<TypeDisplayDto> getCategoryTypes(@PathVariable("categoryId") int id){
-        return activityTypeService.getTypesByCategory(id).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
-    }*/
-
-    /*@GetMapping("/type/test-category")
-    public List<TypeDisplayDto> getTestCategoryTypes(){
-        Category testCategory = categoryService.getCategoryByName("sprint-testing");
-        return activityTypeService.getTypesByCategory(testCategory.getId()).stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
-    }*/
-
     @PreAuthorize(Permissions.FHTL)
-    @PostMapping("type/general/{id}")
+    @PostMapping("/type/general/{id}")
     public List<TypeDisplayDto> updateGeneralType(@PathVariable("id") Integer id){
         activityTypeService.setGeneralType(id);
         return activityTypeRepo.findAll().stream().map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
+    }
+
+    @GetMapping("/type/common")
+    public List<TypeDisplayDto> getCommonTypes(){
+        return activityTypeRepo.findAll().stream().filter(type-> !type.isGeneral()).map(typeDisplayDtoMapper::getTypeDisplayDto).toList();
     }
 }

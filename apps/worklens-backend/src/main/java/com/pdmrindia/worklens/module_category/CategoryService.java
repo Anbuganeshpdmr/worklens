@@ -69,4 +69,13 @@ public class CategoryService {
         newCategory.setWork(true);
         categoryRepo.save(newCategory);
     }
+
+    public Category getWorkCategory(){
+        return categoryRepo.findByWorkTrue()
+                .orElseThrow(()->new CategoryException.NoSuchCategoryException("No Work Category set"));
+    }
+
+    public List<Category> getCommonCategories(){
+        return categoryRepo.findByWorkFalse();
+    }
 }

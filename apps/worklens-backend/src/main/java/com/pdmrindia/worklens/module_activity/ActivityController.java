@@ -74,8 +74,9 @@ public class ActivityController {
 
     @PreAuthorize(Permissions.FHTLUSER)
     @GetMapping("/activity/general")
-    public List<ActivityDisplayDto> getNonTestActivities(){
-        List<Activity> activityList = activityRepo.findByActivityType(activityTypeService.getTypeByName("general"));
+    public List<ActivityDisplayDto> getGeneralActivities(){
+        List<Activity> activityList = activityRepo.findByCategoryNot(categoryService.getWorkCategory());
+        //List<Activity> activityList = activityRepo.findByActivityType(activityTypeService.getGeneralType());
         return activityList.stream().map(activityDisplayDtoMapper::getActivityDisplayDto).toList();
     }
 

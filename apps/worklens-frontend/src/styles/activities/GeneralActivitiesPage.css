@@ -7,12 +7,14 @@
 .gen-act-page {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
   width: 100%;
-  padding: 28px 32px 48px;
+  padding: 24px 32px 32px;
   background: #fbf8f5;
   box-sizing: border-box;
   text-align: left;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* --- Page Header --- */
@@ -25,6 +27,7 @@
   padding-bottom: 22px;
   border-bottom: 1px solid #e5d7c7;
   margin-bottom: 22px;
+  flex-shrink: 0;
 }
 
 .gen-act-header__content {
@@ -126,6 +129,7 @@
   color: #991b1b;
   font-size: 13.5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
 }
 
 .gen-act-alert__content {
@@ -158,6 +162,7 @@
   padding: 16px 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 6px rgba(95, 81, 71, 0.05);
+  flex-shrink: 0;
 }
 
 .gen-act-search-header__main {
@@ -477,11 +482,44 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(95, 81, 71, 0.08);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 280px;
+  max-height: calc(100vh - 280px);
 }
 
 .gen-act-table-responsive {
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Scrollbars */
+.gen-act-page::-webkit-scrollbar,
+.gen-act-table-responsive::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.gen-act-page::-webkit-scrollbar-track,
+.gen-act-table-responsive::-webkit-scrollbar-track {
+  background: #fbf8f5;
+  border-radius: 4px;
+}
+
+.gen-act-page::-webkit-scrollbar-thumb,
+.gen-act-table-responsive::-webkit-scrollbar-thumb {
+  background: #dcc3aa;
+  border-radius: 4px;
+}
+
+.gen-act-page::-webkit-scrollbar-thumb:hover,
+.gen-act-table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #810b38;
 }
 
 .gen-act-table {
@@ -493,11 +531,17 @@
 
 /* Rich, Grounded Table Header */
 .gen-act-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   background: #ede2d4;
   border-bottom: 2px solid #c9aa8c;
 }
 
 .gen-act-table th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   padding: 13px 18px;
   font-size: 11.5px;
   font-weight: 700;
@@ -505,6 +549,8 @@
   letter-spacing: 0.07em;
   color: #4a3b32;
   white-space: nowrap;
+  background: #ede2d4;
+  box-shadow: 0 1px 0 #c9aa8c;
 }
 
 .gen-act-table th.th-actions {

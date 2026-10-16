@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UpdateGeneralActivityDto {
     private Integer activityId;
-    //private Integer typeId;
+    private Integer typeId;
     private Integer categoryId;
     private String title;
     private String description;

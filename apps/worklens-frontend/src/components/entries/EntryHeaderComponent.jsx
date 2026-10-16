@@ -6,7 +6,7 @@ import {
 } from "../reports/CritreriaOptions";
 import { getActiveProjects } from "../../api/projects";
 import { getSprints } from "../../api/sprints";
-import { getTypes } from "../../api/types";
+import { getTypes } from "../../api/type";
 import { getCategories } from "../../api/category";
 import { getStatusByRecord } from "../../api/status";
 import { getUsers } from "../../api/user";

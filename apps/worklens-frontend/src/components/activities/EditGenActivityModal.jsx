@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../../api/category";
+import { getCommonCategories } from "../../api/category";
+import { getTypes } from "../../api/type";
 
 export default function EditGenActivityModal({
   onClose,
@@ -10,10 +11,12 @@ export default function EditGenActivityModal({
   const [title, setTitle] = useState(activity?.title);
   const [description, setDescription] = useState(activity?.description);
   const [categories, setCategories] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [type, setType] = useState(activity?.activityTypeId);
 
-  const getAllCategories = async () => {
+  const getCategories = async () => {
     try {
-      const response = await getCategories();
+      const response = await getCommonCategories();
       console.log("Fetched Categories:", response);
       setCategories(response);
     } catch (error) {
@@ -22,14 +25,27 @@ export default function EditGenActivityModal({
     }
   };
 
+  const getActivityTypes = async () => {
+    try {
+      const response = await getTypes();
+      console.log("Fetched Types:", response);
+      setTypes(response);
+    } catch (error) {
+      console.error("Failed to fetch types", error);
+      //return { data: [] };
+    }
+  };
+
   useEffect(() => {
-    getAllCategories();
+    getCategories();
+    getActivityTypes();
   }, []);
 
   const handleEditActivity = (e) => {
     e.preventDefault();
     handleEdit({
       categoryId: category,
+      typeId: type,
       title,
       description,
       activityId: activity.activityId,
@@ -102,6 +118,28 @@ export default function EditGenActivityModal({
                       setDescription(e.target.value);
                     }}
                   />
+                </div>
+
+                {/* Types */}
+                <div className="mb-3">
+                  <label className="form-label">Types</label>
+                  <select
+                    className="form-control"
+                    value={type ?? ""}
+                    onChange={(e) => {
+                      setType(
+                        e.target.value === "" ? null : Number(e.target.value),
+                      );
+                    }}
+                    required
+                  >
+                    <option value="">Select Type</option>
+                    {types.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

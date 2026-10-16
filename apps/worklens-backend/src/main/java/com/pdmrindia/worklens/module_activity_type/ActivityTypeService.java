@@ -26,9 +26,6 @@ public class ActivityTypeService {
             activityType.setColourCode(newTypeDto.getColourCode());
             activityType.setMandatory(true);
 
-            /*if(activityTypeRepo.findByNameAndCategory(newTypeDto.getName(),category).isPresent()){
-                continue;
-            }*/
             if(activityTypeRepo.findByNameAndIsMandatory(newTypeDto.getName(),true).isPresent()){
                 continue;
             }
@@ -86,5 +83,14 @@ public class ActivityTypeService {
 
         newType.setGeneral(true);
         activityTypeRepo.save(newType);
+    }
+
+    public ActivityType getGeneralType(){
+        return activityTypeRepo.findByGeneralTrue()
+                .orElseThrow(()->new ActivityTypeException.NoSuchTypeException("No General Type Set"));
+    }
+
+    public List<ActivityType> getCommonTypes(){
+        return activityTypeRepo.findByGeneralFalse();
     }
 }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 //import { getStatusByRecord } from "../../api/status";
 import { getStatuses } from "../../api/status";
-import { getTypes } from "../../api/types";
+import { getCommonTypes } from "../../api/type";
 import { getCategories } from "../../api/category";
 import { createTestActivity, updateTestActivity } from "../../api/activities";
- 
+
 export default function Editor({
   activity,
   existingParentActivityId,
@@ -14,7 +14,7 @@ export default function Editor({
   onSaveSuccess,
 }) {
   const isEditMode = activity !== null;
- 
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [parentActivityId, setParentActivityId] = useState(null);
@@ -22,12 +22,12 @@ export default function Editor({
   //const [currentStatus, setCurrentStatus] = useState(null);
   const [type, setType] = useState(null);
   const [category, setCategory] = useState(null);
- 
+
   const [error, setError] = useState(null);
   //const [statuses, setStatuses] = useState([]);
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
- 
+
   useEffect(() => {
     if (activity) {
       // EDIT
@@ -48,15 +48,15 @@ export default function Editor({
       setType(null);
       setCategory(null);
     }
- 
+
     // Newly loaded form has no unsaved changes
     onDirtyChange?.(false);
   }, [activity, existingParentActivityId, onDirtyChange]);
- 
+
   const markDirty = () => {
     onDirtyChange?.(true);
   };
- 
+
   /* Resets the fields to their initial values */
   const resetForm = () => {
     if (activity) {
@@ -78,10 +78,10 @@ export default function Editor({
       setType(null);
       setCategory(null);
     }
- 
+
     onDirtyChange?.(false);
   };
- 
+
   const handleSave = async (e) => {
     e.preventDefault();
     if (isEditMode) {
@@ -89,7 +89,7 @@ export default function Editor({
       const editedActivity = {
         activityId: activity.activityId,
         version: activity.version,
- 
+
         title,
         description,
         parentActivityId,
@@ -129,7 +129,7 @@ export default function Editor({
     }
     onDirtyChange?.(false);
   };
- 
+
   const getActivityStatuses = async () => {
     try {
       //const response = await getStatusByRecord("activity");
@@ -142,10 +142,10 @@ export default function Editor({
       return [];
     }
   };
- 
+
   const getActivityTypes = async () => {
     try {
-      const response = await getTypes();
+      const response = await getCommonTypes();
       console.log("Fetched activity types:", response);
       return response;
     } catch (error) {
@@ -153,7 +153,7 @@ export default function Editor({
       return { data: [] };
     }
   };
- 
+
   const getAllCategories = async () => {
     try {
       const response = await getCategories();
@@ -164,7 +164,7 @@ export default function Editor({
       return { data: [] };
     }
   };
- 
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -174,7 +174,7 @@ export default function Editor({
             getActivityTypes(),
             getAllCategories(),
           ]);
- 
+
         //setStatuses(statusResponse);
         setTypes(typeResponse);
         setCategories(categoryResponse);
@@ -183,10 +183,10 @@ export default function Editor({
         console.error("Failed to load editor options", error);
       }
     };
- 
+
     fetchOptions();
   }, []);
- 
+
   return (
     <div>
       {error && window.alert(error.message)}
@@ -209,7 +209,7 @@ export default function Editor({
               required
             />
           </div>
- 
+
           {/* Description */}
           <div className="mb-3">
             <label className="form-label">Description</label>
@@ -223,11 +223,11 @@ export default function Editor({
               }}
             />
           </div>
- 
+
           {/* Parent Activity ID */}
           <div className="mb-3">
             <label className="form-label">Parent Activity ID</label>
- 
+
             <input
               type="number"
               min="0"
@@ -242,7 +242,7 @@ export default function Editor({
               }}
             />
           </div>
- 
+
           {/* External Ticket ID */}
           <div className="mb-3">
             <label className="form-label">External Ticket ID</label>
@@ -260,7 +260,7 @@ export default function Editor({
               }}
             />
           </div>
- 
+
           {/* Current Status */}
           {/* <div className="mb-3">
             <label className="form-label">Current Status</label>
@@ -283,7 +283,7 @@ export default function Editor({
               ))}
             </select>
           </div> */}
- 
+
           {/* Type */}
           <div className="mb-3">
             <label className="form-label">Type</label>
@@ -304,7 +304,7 @@ export default function Editor({
               ))}
             </select>
           </div>
- 
+
           {/* Category */}
           <div className="mb-3">
             <label className="form-label">Category</label>
@@ -317,7 +317,7 @@ export default function Editor({
                 );
                 markDirty();
               }}
-              required
+              //required
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
@@ -327,7 +327,7 @@ export default function Editor({
               ))}
             </select>
           </div>
- 
+
           <div className="editor-footer">
             <button
               type="submit"
@@ -336,7 +336,7 @@ export default function Editor({
             >
               Save
             </button>
- 
+
             <button
               type="button"
               className="btn btn-secondary"
@@ -344,7 +344,7 @@ export default function Editor({
             >
               Reset
             </button>
- 
+
             <button
               type="button"
               className="btn btn-outline-secondary"
@@ -358,5 +358,3 @@ export default function Editor({
     </div>
   );
 }
- 
- 

@@ -41,24 +41,15 @@ public class CategoryController {
         return categoryRepo.findAll().stream().map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
     }
 
-    @PreAuthorize(Permissions.FHTLUSER)
-    @GetMapping("/category/non-test")
-    public List<CategoryDisplayDto> getNonTestCategories(){
-        return categoryRepo.findAll().stream()
-                .filter(c->(!c.getName().toLowerCase().contains("sprint-testing")))
-                .map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
-    }
-
-    @PreAuthorize(Permissions.FHTLUSER)
-    @GetMapping("/category/{id}")
-    public CategoryDisplayDto getCategory(@PathVariable("id") int id){
-        return categoryDisplayDtoMapper.getCategoryDisplayDto(categoryService.getCategoryById(id));
-    }
-
     @PreAuthorize(Permissions.FHTL)
-    @PostMapping("category/work/{id}")
+    @PostMapping("/category/work/{id}")
     public List<CategoryDisplayDto> updateWorkCategory(@PathVariable("id") Integer id){
         categoryService.setWorkCategory(id);
         return categoryRepo.findAll().stream().map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
+    }
+
+    @GetMapping("/category/common")
+    public List<CategoryDisplayDto> getCommonCategories(){
+        return categoryRepo.findAll().stream().filter(category -> !category.isWork()).map(categoryDisplayDtoMapper::getCategoryDisplayDto).toList();
     }
 }

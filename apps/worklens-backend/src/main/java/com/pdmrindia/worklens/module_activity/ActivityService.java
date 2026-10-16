@@ -38,13 +38,7 @@ public class ActivityService {
 
         ActivityType type = activityTypeService.getTypeById(newWorkActivityDto.getTypeId());
 
-        Category category;
-        if(newWorkActivityDto.getCategoryId() != null){
-            category = categoryService.getCategoryById(newWorkActivityDto.getCategoryId());
-        }else{
-            category = categoryService.getCategoryByName("sprint-testing");
-        }
-
+        Category category = categoryService.getWorkCategory();
         activity.setCategory(category);
 
         activity.setActivityType(type);
@@ -52,7 +46,6 @@ public class ActivityService {
         activity.setCreatedOn(Instant.now());
 
         Status thisStatus = statusService.getRecordStatusByName(Record.ACTIVITY,"ready");
-        //Status thisStatus = statusService.getStatusById(newWorkActivityDto.getStatusId());
         statusService.validateRecordStatusOfRecord(Record.ACTIVITY,thisStatus);
         activity.setStatus(thisStatus);
 
@@ -68,7 +61,6 @@ public class ActivityService {
         if(newWorkActivityDto.getParentActivityId() != null){
             Activity parentActivity = getActivityById(newWorkActivityDto.getParentActivityId());
             validateParentActivityProject(parentActivity,project);
-            //validateParentActivityHierarchy()
             activity.setParentActivity(parentActivity);
             parentActivity.getChildActivities().add(activity);
         }
@@ -85,9 +77,6 @@ public class ActivityService {
 
         //  Edit fields
         ActivityType type = activityTypeService.getTypeById(updateWorkActivityDto.getTypeId());
-        /*if(!type.getCategory().getName().toLowerCase().contains("sprint-testing")){
-            throw new ActivityException.TestCategoryMismatchException("Select type from testing category");
-        }*/
         activity.setActivityType(type);
 
         Category category = categoryService.getCategoryById(updateWorkActivityDto.getCategoryId());
@@ -148,7 +137,7 @@ public class ActivityService {
     public Activity createNewGeneralActivity(NewGeneralActivityDto newGeneralActivityDto){
         Activity activity = new Activity();
 
-        ActivityType type = activityTypeService.getTypeByName("general");
+        ActivityType type = activityTypeService.getGeneralType();
         activity.setActivityType(type);
 
         Category category = categoryService.getCategoryById(newGeneralActivityDto.getCategoryId());
@@ -176,6 +165,9 @@ public class ActivityService {
 
         Category category = categoryService.getCategoryById(updateGeneralActivityDto.getCategoryId());
         activity.setCategory(category);
+
+        ActivityType type = activityTypeService.getTypeById(updateGeneralActivityDto.getTypeId());
+        activity.setActivityType(type);
 
         activity.setUpdatedBy(currentUserService.user());
         activity.setUpdatedOn(Instant.now());

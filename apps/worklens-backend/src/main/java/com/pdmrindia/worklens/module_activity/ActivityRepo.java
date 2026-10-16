@@ -18,6 +18,8 @@ public interface ActivityRepo extends JpaRepository<Activity, Integer> {
 
     List<Activity> findByCategory(Category category);
 
+    List<Activity> findByCategoryNot(Category category);
+
     //List<Activity> findByActivityType_CategoryNot(Category category);
 
     List<Activity> findByParentActivity(Activity activity);
